@@ -7,7 +7,7 @@
 
 
 <div class="home" id="home"></div>
-<input id="user_locationnew_mobile" type="text" class="hidden">
+<input id="user_locationnew_mobile" type="hidden" class="hidden">
 
 
 
