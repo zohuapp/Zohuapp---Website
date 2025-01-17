@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
@@ -14,10 +16,10 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $route = \Route::currentRouteName();
-        if(!isset($_COOKIE['address_name']) && $route != "set-location"){
-    		\Redirect::to('set-location')->send();
-      	}
+        $route = Route::currentRouteName();
+        if (!isset($_COOKIE['address_name']) && $route != "set-location") {
+            Redirect::to('set-location')->send();
+        }
     }
 
     /**
@@ -31,7 +33,7 @@ class HomeController extends Controller
     }
     public function setLocation()
     {
-    	return view('layer');
+        return view('layer');
     }
     public function notification()
     {
@@ -39,7 +41,7 @@ class HomeController extends Controller
     }
     public function storeFirebaseService(Request $request)
     {
-        if (!empty($request->serviceJson) && !Storage::disk('local')->has('firebase/credentials.json')) {
+        if (!empty($request->serviceJson) && Storage::disk('local')->exists('firebase/credentials.json') == false) {
             Storage::disk('local')->put('firebase/credentials.json', file_get_contents(base64_decode($request->serviceJson)));
         }
     }

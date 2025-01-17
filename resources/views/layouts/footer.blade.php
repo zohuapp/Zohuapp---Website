@@ -224,9 +224,9 @@
         measurementId: "{{ config('firebase.measurementId') }}"
     }
 
-    firebase.initializeApp(firebaseConfig);
+    const app1 = firebase.initializeApp(firebaseConfig, 'myFirstApp');
 
-    var database = firebase.firestore();
+    var database = app1.firestore();
 
     var globalSettingsRef = database.collection('settings').doc('globalSettings');
     globalSettingsRef.get().then(async function(globalSettingsSnapshots) {
@@ -263,7 +263,7 @@
 
     var place = [];
 
-    var database = firebase.firestore();
+    var database = app1.firestore();
 
     var googleMapKey = '';
 
@@ -477,7 +477,7 @@
 
 
                     var location = new google.maps.LatLng(pos['lat'], pos[
-                    'lng']); // turn coordinates into an object
+                        'lng']); // turn coordinates into an object
 
                     geocoder.geocode({
                         'latLng': location
@@ -563,7 +563,7 @@
         $user_uuid = $user_uuid->uuid;
     }
     ?>
-    var database = firebase.firestore();
+    var database = app1.firestore();
 
     var googleMapKey = '';
     var googleMapKeySettingHeader = database.collection('settings').doc("googleMapKey");
@@ -935,9 +935,8 @@
 </script>
 
 
-<script type="text/javascript" src="{{ asset('js/rocket-loader.min.js') }}"></script>
-<script type="text/javascript">
-    var database = firebase.firestore();
+ <script type="text/javascript">
+    var database = app1.firestore();
     var currentCurrency = "";
     var currencyAtRight = false;
     var decimal_degits = 0;
@@ -957,7 +956,7 @@
 <?php if (Auth::user()) { ?>
 
 <script type="text/javascript">
-    var database = firebase.firestore();
+    var database = app1.firestore();
 
 
     var route1 = '<?php echo route('my_order'); ?>';
@@ -1175,7 +1174,7 @@
             deliveryCharge = parseFloat(deliveryCharge).toFixed(decimal_degits) + "" + currentCurrency;
             totalAmount = parseFloat(totalAmount).toFixed(decimal_degits) + "" + currentCurrency;
             specialdiscountamount = parseFloat(specialdiscountamount).toFixed(decimal_degits) + "" +
-            currentCurrency;
+                currentCurrency;
             tipAmount = parseFloat(tipAmount).toFixed(decimal_degits) + "" + currentCurrency;
 
         } else {
@@ -1184,7 +1183,7 @@
             deliveryCharge = currentCurrency + "" + parseFloat(deliveryCharge).toFixed(decimal_degits);
             totalAmount = currentCurrency + "" + parseFloat(totalAmount).toFixed(decimal_degits);
             specialdiscountamount = currentCurrency + "" + parseFloat(specialdiscountamount).toFixed(
-            decimal_degits);
+                decimal_degits);
             tipAmount = currentCurrency + "" + parseFloat(tipAmount).toFixed(decimal_degits);
 
         }

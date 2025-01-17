@@ -35,7 +35,7 @@ Route::get('terms', [App\Http\Controllers\CmsController::class, 'termsofuse'])->
 
 Route::get('deliveryofsupport', [App\Http\Controllers\CmsController::class, 'deliveryofsupport'])->name('deliveryofsupport');
 
-Route::post('takeaway', [App\Http\Controllers\PaymentController::class, 'takeawayOption'])->name('takeaway');
+// Route::post('takeaway', [App\Http\Controllers\PaymentController::class, 'takeawayOption'])->name('takeaway');
 
 Route::get('my_order', [App\Http\Controllers\OrderController::class, 'index'])->name('my_order');
 
@@ -149,9 +149,9 @@ Route::get('lang/change', [App\Http\Controllers\LangController::class, 'change']
 
 Route::get('forgot-password', [App\Http\Controllers\Auth\LoginController::class, 'forgotPassword'])->name('forgot-password');
 
-Route::get('/notifications/view/{id}', [App\Http\Controllers\DynamicNotificationController::class, 'view'])->name('notifications.view');
+// Route::get('/notifications/view/{id}', [App\Http\Controllers\DynamicNotificationController::class, 'view'])->name('notifications.view');
 
-Route::get('notifications', [App\Http\Controllers\DynamicNotificationController::class, 'index'])->name('notifications.index');
+// Route::get('notifications', [App\Http\Controllers\DynamicNotificationController::class, 'index'])->name('notifications.index');
 
 Route::get('delivery-address', [App\Http\Controllers\DeliveryAddressController::class, 'index'])->name('delivery-address.index');
 Route::post('store-firebase-service', [App\Http\Controllers\HomeController::class,'storeFirebaseService'])->name('store-firebase-service');
