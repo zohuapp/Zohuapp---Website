@@ -1,18 +1,16 @@
 @include('auth.default')
 
-
-<?php
-$countries = file_get_contents(asset('countriesdata.json'));
-$countries = json_decode($countries);
-$countries = (array) $countries;
-$newcountries = [];
-$newcountriesjs = [];
-foreach ($countries as $keycountry => $valuecountry) {
-    $newcountries[$valuecountry->phoneCode] = $valuecountry;
-    $newcountriesjs[$valuecountry->phoneCode] = $valuecountry->code;
-}
-
-?>
+@php
+    $countries = file_get_contents(asset('countriesdata.json'));
+    $countries = json_decode($countries);
+    $countries = (array) $countries;
+    $newcountries = [];
+    $newcountriesjs = [];
+    foreach ($countries as $keycountry => $valuecountry) {
+        $newcountries[$valuecountry->phoneCode] = $valuecountry;
+        $newcountriesjs[$valuecountry->phoneCode] = $valuecountry->code;
+    }
+@endphp
 
 <link href="{{ asset('vendor/select2/dist/css/select2.min.css') }}" rel="stylesheet">
 <link href="{{ asset('/css/font-awesome.min.css') }}" rel="stylesheet">
@@ -43,6 +41,7 @@ foreach ($countries as $keycountry => $valuecountry) {
 
                 <div class="error" id="field_error"></div>
 
+                {{-- sendOTP method will be executed on the below form submission --}}
                 <form class="mt-3 mb-4" action="javascript:void(0)" onsubmit="sendOTP()">
                     <div id="password_required_new"></div>
                     <div class="form-group" id="fullName_div">
@@ -57,11 +56,17 @@ foreach ($countries as $keycountry => $valuecountry) {
                         <label for="phoneNumber" class="text-dark">{{ trans('lang.user_phone') }}</label>
                         <div class="col-xs-12">
                             <select name="country" id="country_selector">
-                                <?php foreach ($newcountries as $keycy => $valuecy) { ?>
-                                <?php $selected = ''; ?>
-                                <option <?php echo $selected; ?> code="<?php echo $valuecy->code; ?>" value="<?php echo $keycy; ?>">
-                                    +<?php echo $valuecy->phoneCode . '(' . $valuecy->countryName . ')'; ?></option>
-                                <?php } ?>
+                                @foreach ($newcountries as $keycy => $valuecy)
+                                    @if ($valuecy->code === 'ES')
+                                        <option selected code="{{ $valuecy->code }}"
+                                            value="{{ $keycy }}">
+                                            +{{ $valuecy->phoneCode . '(' . $valuecy->countryName . ')' }}</option>
+                                    @else
+                                        <option code="{{ $valuecy->code }}"
+                                            value="{{ $keycy }}">
+                                            +{{ $valuecy->phoneCode . '(' . $valuecy->countryName . ')' }}</option>
+                                    @endif
+                                @endforeach
                             </select>
                             <input class="form-control" placeholder="{{ trans('lang.user_phone_help') }}"
                                 id="mobileNumber" type="phone" name="mobileNumber" value="{{ old('mobileNumber') }}"
@@ -268,7 +273,7 @@ foreach ($countries as $keycountry => $valuecountry) {
             googleMapKey = placeholderImageHeaderData.key;
             const script = document.createElement('script');
             script.src = "https://maps.googleapis.com/maps/api/js?key=" + googleMapKey +
-            "&libraries=places";
+                "&libraries=places";
             script.onload = function() {
                 initialize();
             };
@@ -291,7 +296,7 @@ foreach ($countries as $keycountry => $valuecountry) {
                         radius: position.coords.accuracy
                     });
                     var location = new google.maps.LatLng(pos['lat'], pos[
-                    'lng']); // turn coordinates into an object
+                        'lng']); // turn coordinates into an object
                     geocoder.geocode({
                         'latLng': location
                     }, async function(results, status) {
@@ -414,19 +419,24 @@ foreach ($countries as $keycountry => $valuecountry) {
 
     });
 
+    // Start of sign-up form and send otp method
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-        'size': 'invisible',
-        'callback': (response) => {}
+        'size': 'normal',
+        'callback': (response) => {
+            console.log(response);
+        }
     });
 
+    // sendOTP method will be triggerd on sign-up form submission
     function sendOTP() {
 
-        $('#overlay').show();
+        // $('#overlay').show();
+        // check if recaptcha is not verified so verify it again
         if (!window.recaptchaVerifier) {
             jQuery("#recaptcha-container").show();
 
             window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-                'size': 'invisible',
+                'size': 'normal',
                 'callback': (response) => {
 
                 }
@@ -462,6 +472,8 @@ foreach ($countries as $keycountry => $valuecountry) {
                             }
                         }).catch(function(error) {
                             console.error("Error during signInWithPhoneNumber:", error);
+                            // throw new Error("Error during signInWithPhoneNumber:", error);
+
                             $('#overlay').hide();
                             alert("Failed to send OTP. Please try again.");
                         });

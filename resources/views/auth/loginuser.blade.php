@@ -1,18 +1,18 @@
 @include('auth.default')
 
-<?php
-$countries = file_get_contents(asset('countriesdata.json'));
-$countries = json_decode($countries);
-$countries = (array) $countries;
-$newcountries = array();
-$newcountriesjs = array();
-foreach ($countries as $keycountry => $valuecountry) {
-    $newcountries[$valuecountry->phoneCode] = $valuecountry;
-    $newcountriesjs[$valuecountry->phoneCode] = $valuecountry->code;
-}
-?>
-<link href="{{ asset('vendor/select2/dist/css/select2.min.css')}}" rel="stylesheet">
-<link href="{{ asset('/css/font-awesome.min.css')}}" rel="stylesheet">
+@php
+    $countries = file_get_contents(asset('countriesdata.json'));
+    $countries = json_decode($countries);
+    $countries = (array) $countries;
+    $newcountries = [];
+    $newcountriesjs = [];
+    foreach ($countries as $keycountry => $valuecountry) {
+        $newcountries[$valuecountry->phoneCode] = $valuecountry;
+        $newcountriesjs[$valuecountry->phoneCode] = $valuecountry->code;
+    }
+@endphp
+<link href="{{ asset('vendor/select2/dist/css/select2.min.css') }}" rel="stylesheet">
+<link href="{{ asset('/css/font-awesome.min.css') }}" rel="stylesheet">
 <style>
     #phone {
         padding-left: 40% !important;
@@ -31,40 +31,46 @@ foreach ($countries as $keycountry => $valuecountry) {
     <div class="d-flex align-items-center justify-content-center vh-100">
         <div class="col-md-6">
             <div class="col-10 mx-auto card p-3">
-                <h3 class="text-dark my-0 mb-3">{{trans('lang.login')}}</h3>
-                <p class="text-50">{{trans('lang.sign_in_to_continue')}}</p>
+                <h3 class="text-dark my-0 mb-3">{{ trans('lang.login') }}</h3>
+                <p class="text-50">{{ trans('lang.sign_in_to_continue') }}</p>
                 <div class="error" id="error"></div>
 
-                <form class="form-horizontal form-material" name="loginwithphon" id="login-with-phone-box" action="#">
+                <form class="form-horizontal form-material" name="loginwithphon" id="login-with-phone-box"
+                    action="#">
                     @csrf
                     <div class="box-title m-b-20">{{ __('Login') }}</div>
                     <div class="form-group " id="phone-box">
                         <div class="col-xs-12">
 
                             <select name="country" id="country_selector">
-                                <?php foreach ($newcountries as $keycy => $valuecy) { ?>
-                                    <?php    $selected = ""; ?>
-                                    <option <?php    echo $selected; ?> code="<?php    echo $valuecy->code; ?>"
-                                        value="<?php    echo $keycy; ?>">
-                                        +<?php    echo $valuecy->phoneCode . "(" . $valuecy->countryName . ")"; ?></option>
-                                <?php } ?>
+                                @foreach ($newcountries as $keycy => $valuecy)
+                                    @if ($valuecy->code === 'ES')
+                                        <option selected code="{{ $valuecy->code }}" value="{{ $keycy }}">
+                                            +{{ $valuecy->phoneCode . '(' . $valuecy->countryName . ')' }}</option>
+                                    @else
+                                        <option code="{{ $valuecy->code }}" value="{{ $keycy }}">
+                                            +{{ $valuecy->phoneCode . '(' . $valuecy->countryName . ')' }}</option>
+                                    @endif
+                                @endforeach
                             </select>
-                            <input class="form-control" placeholder="{{trans('lang.user_phone')}}" id="phone"
+                            <input class="form-control" placeholder="{{ trans('lang.user_phone') }}" id="phone"
                                 type="phone" class="form-control" name="phone" value="{{ old('phone') }}" required
-                               onkeypress="return chkAlphabets2(event,'phone_number_err')" autocomplete="phone" autofocus>
+                                onkeypress="return chkAlphabets2(event,'phone_number_err')" autocomplete="phone"
+                                autofocus>
                             <div id="phone_number_err"></div>
                         </div>
                         @error('phone')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
                         @enderror
                     </div>
                     <div class="error font-weight-bold text-center" id="password_required_new"></div>
                     <div class="form-group " id="otp-box" style="display:none;">
-                        <input class="form-control" placeholder="{{trans('lang.otp')}}" id="verificationcode"
+                        <input class="form-control" placeholder="{{ trans('lang.otp') }}" id="verificationcode"
                             type="text" class="fo
-                               rm-control" name="otp" value="{{ old('otp') }}" required autocomplete="otp" autofocus>
+                               rm-control" name="otp"
+                            value="{{ old('otp') }}" required autocomplete="otp" autofocus>
                     </div>
                     <div id="recaptcha-container" style="display:none;"></div>
                     <div class="error" id="password_required_new1"></div>
@@ -72,15 +78,15 @@ foreach ($countries as $keycountry => $valuecountry) {
                     <div class="form-group text-center m-t-20">
                         <div class="col-xs-12">
                             <button type="button" style="display:none;" onclick="applicationVerifier()" id="verify_btn"
-                                class="btn btn-dark btn-lg btn-block text-uppercase waves-effect waves-light btn btn-primary remove_hover">{{trans('lang.otp_verify')}}</button>
+                                class="btn btn-dark btn-lg btn-block text-uppercase waves-effect waves-light btn btn-primary remove_hover">{{ trans('lang.otp_verify') }}</button>
                             <button type="button" onclick="sendOTP()" id="sendotp_btn"
-                                class="btn btn-dark btn-lg btn-block text-uppercase waves-effect waves-light btn btn-primary remove_hover">{{trans('lang.otp_send')}}</button>
+                                class="btn btn-dark btn-lg btn-block text-uppercase waves-effect waves-light btn btn-primary remove_hover">{{ trans('lang.otp_send') }}</button>
                             <div class="or-line mb-3 mt-3">
                                 <span>OR</span>
                             </div>
 
-                            <a href="{{route('signup')}}"
-                                class="btn btn-primary btn-lg btn-block remove_hover">{{trans('lang.sign_up')}}</a>
+                            <a href="{{ route('signup') }}"
+                                class="btn btn-primary btn-lg btn-block remove_hover">{{ trans('lang.sign_up') }}</a>
 
 
 
@@ -124,8 +130,7 @@ foreach ($countries as $keycountry => $valuecountry) {
 
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
         'size': 'invisible',
-        'callback': (response) => {
-        }
+        'callback': (response) => {}
     });
 
     const appVerifier = window.recaptchaVerifier;
@@ -136,90 +141,95 @@ foreach ($countries as $keycountry => $valuecountry) {
             var phoneNumber = '+' + jQuery("#country_selector").val() + '' + jQuery("#phone").val();
             var phone = jQuery("#phone").val();
 
-            database.collection("users").where("phoneNumber", "==", phone).where("role", "==", 'customer').get().then(async function (snapshots) {
-                if (snapshots.docs.length) {
-                    var userData = snapshots.docs[0].data();
+            database.collection("users").where("phoneNumber", "==", phone).where("role", "==", 'customer').get().then(
+                async function(snapshots) {
+                    if (snapshots.docs.length) {
+                        var userData = snapshots.docs[0].data();
 
-                    if (userData.active == true) {
+                        if (userData.active == true) {
 
-                        firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
-                            .then(function (confirmationResult) {
-                                window.confirmationResult = confirmationResult;
-                                if (confirmationResult.verificationId) {
+                            firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+                                .then(function(confirmationResult) {
+                                    window.confirmationResult = confirmationResult;
+                                    if (confirmationResult.verificationId) {
 
-                                    jQuery("#phone-box").hide();
-                                    jQuery("#recaptcha-container").hide();
-                                    jQuery("#otp-box").show();
-                                    jQuery("#verify_btn").show();
-                                }
-                            });
+                                        jQuery("#phone-box").hide();
+                                        jQuery("#recaptcha-container").hide();
+                                        jQuery("#otp-box").show();
+                                        jQuery("#verify_btn").show();
+                                    }
+                                });
+                        } else {
+                            $("#password_required_new1").html(
+                                "{{ trans('lang.account_disable_contact_admin') }}");
+                        }
+                    } else {
+                        jQuery("#password_required_new").html("{{ trans('lang.user_not_found') }}");
                     }
-                    else {
-                        $("#password_required_new1").html("{{trans('lang.account_disable_contact_admin')}}");
-                    }
-                } else {
-                    jQuery("#password_required_new").html("{{trans('lang.user_not_found')}}");
-                }
-            });
+                });
         } else {
-            jQuery("#password_required_new").html("{{trans('lang.please_enter_phone_number')}}");
+            jQuery("#password_required_new").html("{{ trans('lang.please_enter_phone_number') }}");
 
         }
     }
 
     function applicationVerifier() {
         window.confirmationResult.confirm(document.getElementById("verificationcode").value)
-            .then(function (result) {
+            .then(function(result) {
 
-                database.collection("users").where('phoneNumber', '==', (result.user.phoneNumber).substring(3)).get().then(async function (snapshots_login) {
-                    userData = snapshots_login.docs[0].data();
-                    if (userData) {
-                        if (userData.role == "customer") {
-                            var uid = result.user.uid;
-                            var user = result.user.uid;
-                            var firstName = userData.firstName;
+                database.collection("users").where('phoneNumber', '==', (result.user.phoneNumber).substring(3))
+                    .get().then(async function(snapshots_login) {
+                        userData = snapshots_login.docs[0].data();
+                        if (userData) {
+                            if (userData.role == "customer") {
+                                var uid = result.user.uid;
+                                var user = result.user.uid;
+                                var firstName = userData.firstName;
 
-                            var lastName = userData.lastName;
-                            var imageURL = userData.profilePictureURL;
-                            if (userData.hasOwnProperty('shippingAddress')) {
-                                userData.shippingAddress.forEach(element => {
-                                    if (element.isDefault == true) {
-                                        setCookie('address_lat', element.location.latitude, 365);
-                                        setCookie('address_lng', element.location.longitude, 365);
+                                var lastName = userData.lastName;
+                                var imageURL = userData.profilePictureURL;
+                                if (userData.hasOwnProperty('shippingAddress')) {
+                                    userData.shippingAddress.forEach(element => {
+                                        if (element.isDefault == true) {
+                                            setCookie('address_lat', element.location.latitude,
+                                                365);
+                                            setCookie('address_lng', element.location.longitude,
+                                                365);
+                                        }
+                                    });
+                                }
+
+
+                                var url = "{{ route('setToken') }}";
+                                $.ajax({
+                                    type: 'POST',
+                                    url: url,
+                                    data: {
+                                        id: uid,
+                                        userId: user,
+                                        email: userData.phoneNumber,
+                                        password: '',
+                                        firstName: firstName,
+                                        lastName: lastName,
+                                        profilePicture: imageURL
+                                    },
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    },
+                                    success: function(data) {
+                                        if (data.access) {
+                                            window.location = "{{ url('/') }}";
+                                        }
                                     }
                                 });
+                            } else {
+                                jQuery("#password_required_new").html(
+                                    "{{ trans('lang.user_not_found') }}");
                             }
-
-
-                            var url = "{{route('setToken')}}";
-                            $.ajax({
-                                type: 'POST',
-                                url: url,
-                                data: {
-                                    id: uid,
-                                    userId: user,
-                                    email: userData.phoneNumber,
-                                    password: '',
-                                    firstName: firstName,
-                                    lastName: lastName,
-                                    profilePicture: imageURL
-                                },
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                },
-                                success: function (data) {
-                                    if (data.access) {
-                                        window.location = "{{url('/')}}";
-                                    }
-                                }
-                            });
-                        } else {
-                            jQuery("#password_required_new").html("{{trans('lang.user_not_found')}}");
                         }
-                    }
-                })
-            }).catch(function (error) {
-                jQuery("#password_required_new").html("{{trans('lang.invalid_otp')}}");
+                    })
+            }).catch(function(error) {
+                jQuery("#password_required_new").html("{{ trans('lang.invalid_otp') }}");
             });
     }
 
@@ -234,7 +244,8 @@ foreach ($countries as $keycountry => $valuecountry) {
         }
         var baseUrl = "<?php echo URL::to('/'); ?>/flags/120/";
         var $state = $(
-            '<span><img src="' + baseUrl + '/' + newcountriesjs[state.element.value].toLowerCase() + '.png" class="img-flag" /> ' + state.text + '</span>'
+            '<span><img src="' + baseUrl + '/' + newcountriesjs[state.element.value].toLowerCase() +
+            '.png" class="img-flag" /> ' + state.text + '</span>'
         );
         return $state;
     }
@@ -253,6 +264,7 @@ foreach ($countries as $keycountry => $valuecountry) {
 
         return $state;
     }
+
     function setCookie(name, value, days) {
         var expires = "";
         if (days) {
@@ -262,18 +274,17 @@ foreach ($countries as $keycountry => $valuecountry) {
         }
         document.cookie = name + "=" + (value || "") + expires + "; path=/";
     }
+
     function chkAlphabets2(event, msg) {
-        if (!(event.which >= 48 && event.which <= 57)
-        ) {
+        if (!(event.which >= 48 && event.which <= 57)) {
             document.getElementById(msg).innerHTML = "Accept only Number";
             return false;
-        }
-        else {
+        } else {
             document.getElementById(msg).innerHTML = "";
             return true;
         }
     }
-    jQuery(document).ready(function () {
+    jQuery(document).ready(function() {
 
         jQuery("#country_selector").select2({
             templateResult: formatState,
