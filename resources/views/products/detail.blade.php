@@ -3,12 +3,12 @@
 
 @include('layouts.header')
 @php
-$cityToCountry = file_get_contents(asset('tz-cities-to-countries.json'));
-$cityToCountry = json_decode($cityToCountry, true);
-$countriesJs = array();
-foreach ($cityToCountry as $key => $value) {
-    $countriesJs[$key] = $value;
-}
+    $cityToCountry = file_get_contents(asset('tz-cities-to-countries.json'));
+    $cityToCountry = json_decode($cityToCountry, true);
+    $countriesJs = [];
+    foreach ($cityToCountry as $key => $value) {
+        $countriesJs[$key] = $value;
+    }
 @endphp
 
 <div class="rentalcar-detail-page pt-5 product-detail-page mb-4">
@@ -42,9 +42,9 @@ foreach ($cityToCountry as $key => $value) {
                             <div id="customers_overview"></div>
                             <div class="see_all_review_div" style="display:none">
                                 <button
-                                    class="btn btn-primary btn-block btn-sm see_all_reviews">{{trans('lang.see_all_reviews')}}</button>
+                                    class="btn btn-primary btn-block btn-sm see_all_reviews">{{ trans('lang.see_all_reviews') }}</button>
                             </div>
-                            <!-- <p class="no_review_fount" style="display:none">{{trans('lang.no_review_found')}}</p>  -->
+                            <!-- <p class="no_review_fount" style="display:none">{{ trans('lang.no_review_found') }}</p>  -->
                         </div>
                     </div>
 
@@ -52,16 +52,16 @@ foreach ($cityToCountry as $key => $value) {
 
                         <div class="shipping-detail card p-4 mb-4">
                             <div class="shipping-details-bottom-border pb-3">
-                                <img class="mr-2" src="{{url('img/Payment.png')}}" alt="">
-                                <span>{{trans('lang.safe_payment')}}</span>
+                                <img class="mr-2" src="{{ url('img/Payment.png') }}" alt="">
+                                <span>{{ trans('lang.safe_payment') }}</span>
                             </div>
                             <div class="shipping-details-bottom-border pb-3">
-                                <img class="mr-2" src="{{url('img/money.png')}}" alt="">
-                                <span>{{trans('lang.return_policy')}}</span>
+                                <img class="mr-2" src="{{ url('img/money.png') }}" alt="">
+                                <span>{{ trans('lang.return_policy') }}</span>
                             </div>
                             <div class="shipping-details-bottom-border">
-                                <img class="mr-2" src="{{url('img/Genuine.png')}}" alt="">
-                                <span>{{trans('lang.authentic_products')}}</span>
+                                <img class="mr-2" src="{{ url('img/Genuine.png') }}" alt="">
+                                <span>{{ trans('lang.authentic_products') }}</span>
                             </div>
                         </div>
 
@@ -70,7 +70,7 @@ foreach ($cityToCountry as $key => $value) {
                         <div class="more-from-store">
                             <div class="card p-4 mb-4">
                                 <div class="more-fromd-flex justify-content-center">
-                                    <h3> {{trans('lang.most_selling_products')}}</h3>
+                                    <h3> {{ trans('lang.most_selling_products') }}</h3>
                                 </div>
                                 <div class="top-rated-product" id="top-rated-product"></div>
                             </div>
@@ -107,14 +107,14 @@ foreach ($cityToCountry as $key => $value) {
                 <div class="col-md-12 d-flex social-icon">
                     <div class="col-md-3"><a href="javascript:void(0)" onclick="copyToClipboard()"><i
                                 class="fa fa-copy fa-lg"></i></a>
-                        <div class="code-copied" style="display:none">{{trans('lang.copied')}}</div>
+                        <div class="code-copied" style="display:none">{{ trans('lang.copied') }}</div>
                     </div>
 
                     <div class="col-md-3"><a href="javascript:void(0)" target="_blank" name="whatsapp-share"
                             class="whatsapp-share"><i class="fa fa-whatsapp fa-lg"></i></a>
                     </div>
                     <div class="col-md-3">
-                        <a href="mailto:?subject=Check out this product&body={{url('product/' . $id) }}"
+                        <a href="mailto:?subject=Check out this product&body={{ url('product/' . $id) }}"
                             id="share-email">
                             <i class="fa fa-envelope-o"></i></a>
                     </div>
@@ -136,7 +136,7 @@ foreach ($cityToCountry as $key => $value) {
 <script src="https://unpkg.com/geofirestore/dist/geofirestore.js"></script>
 
 <script src="https://cdn.firebase.com/libs/geofire/5.0.1/geofire.min.js"></script>
-<script type="text/javascript" src="{{asset('vendor/slick/slick.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('vendor/slick/slick.min.js') }}"></script>
 
 <script type="text/javascript">
     cityToCountry = '<?php echo json_encode($countriesJs); ?>';
@@ -149,7 +149,7 @@ foreach ($cityToCountry as $key => $value) {
 
     var productsRef = database.collection('vendor_products').doc(id);
 
-    var firestore = firebase.firestore();
+    var firestore = app1.firestore();
     var geoFirestore = new GeoFirestore(firestore);
 
     var review_pagesize = 5;
@@ -162,7 +162,7 @@ foreach ($cityToCountry as $key => $value) {
 
     var taxValue = [];
     var reftaxSetting = database.collection('tax').where('country', '==', userCountry).where('enable', '==', true);
-    reftaxSetting.get().then(async function (snapshots) {
+    reftaxSetting.get().then(async function(snapshots) {
         if (snapshots.docs.length > 0) {
             snapshots.docs.forEach((val) => {
                 val = val.data();
@@ -182,7 +182,7 @@ foreach ($cityToCountry as $key => $value) {
     });
 
     var DeliveryCharge = database.collection('settings').doc('DeliveryCharge');
-    DeliveryCharge.get().then(async function (deliveryChargeSnapshots) {
+    DeliveryCharge.get().then(async function(deliveryChargeSnapshots) {
         deliveryChargemain = deliveryChargeSnapshots.data();
 
         deliveryCharge = deliveryChargemain.amount;
@@ -194,7 +194,7 @@ foreach ($cityToCountry as $key => $value) {
     var deliveryChargemain = [];
 
     var refReviewAttributes = database.collection('review_attributes');
-    refReviewAttributes.get().then(async function (snapshots) {
+    refReviewAttributes.get().then(async function(snapshots) {
         if (snapshots != undefined) {
             snapshots.forEach((doc) => {
                 var data = doc.data();
@@ -202,36 +202,36 @@ foreach ($cityToCountry as $key => $value) {
             });
         }
     });
-    $(document).ready(async function () {
+    $(document).ready(async function() {
 
         await getProductDetail();
-       
-        $(document).on('swipe, afterChange', '.nav-slider', function (event, slick, direction) {
+
+        $(document).on('swipe, afterChange', '.nav-slider', function(event, slick, direction) {
             $('.main-slider').slick('slickGoTo', slick.currentSlide);
         });
 
-        $(document).on('click', '.nav-slider .product-image', function () {
+        $(document).on('click', '.nav-slider .product-image', function() {
             $('.main-slider').slick('slickGoTo', $(this).data('slick-index'));
         });
 
-        $(document).on('click', '.attribute_list .attribute-drp .attribute-selection', function () {
+        $(document).on('click', '.attribute_list .attribute-drp .attribute-selection', function() {
             var product = $(this).parent().parent().parent().data('product');
             $('.attribute_price_div').removeClass('d-none');
             $('.product_price_div').addClass('d-none');
             getVariantPrice(product);
         });
 
-        $(document).on('click', '.top-rated-product .store-product', function () {
+        $(document).on('click', '.top-rated-product .store-product', function() {
             var pid = $(this).data('product-id');
-            var view_product_details = "{{ route('productDetail', ':id')}}";
+            var view_product_details = "{{ route('productDetail', ':id') }}";
             view_product_details = view_product_details.replace(':id', pid);
             window.location.href = view_product_details;
         });
 
-        $(document).on("click", '.add-to-cart', function (event) {
+        $(document).on("click", '.add-to-cart', function(event) {
 
-            @guest
-                window.location.href = '<?php    echo route('login'); ?>';
+                @guest
+                window.location.href = '<?php echo route('login'); ?>';
                 return false;
             @endguest
 
@@ -241,7 +241,10 @@ foreach ($cityToCountry as $key => $value) {
             var quantity = $('input[name="quantity_' + id + '"]').val();
 
             if (quantity == 0) {
-                Swal.fire({ text: "{{trans('lang.invalid_qty')}}", icon: "error" });
+                Swal.fire({
+                    text: "{{ trans('lang.invalid_qty') }}",
+                    icon: "error"
+                });
                 return false;
             }
             var description = $('input[name="description_' + id + '"]').val();
@@ -258,8 +261,7 @@ foreach ($cityToCountry as $key => $value) {
             if (dis_price != '0' && dis_price != 0) {
                 item_price = dis_price;
             }
-            var ItemActualPrice = item_price;
-            price = item_price;
+            var ItemActualPrice = item_price; price = item_price;
             var stock_quantity = $('#quantity_' + id).val();
 
             var variant_info = {};
@@ -278,7 +280,10 @@ foreach ($cityToCountry as $key => $value) {
                 var variant_qty = parseFloat(element.attr('data-vqty'));
 
                 if (quantity > variant_qty && variant_qty != -1) {
-                    Swal.fire({ text: "{{trans('lang.invalid_stock_qty')}}", icon: "error" });
+                    Swal.fire({
+                        text: "{{ trans('lang.invalid_stock_qty') }}",
+                        icon: "error"
+                    });
                     return false;
                 }
                 variant_info['variant_id'] = variant_id;
@@ -293,16 +298,20 @@ foreach ($cityToCountry as $key => $value) {
                 dis_price = 0;
             } else {
 
-                if (stock_quantity != undefined && stock_quantity != -1 && parseInt(quantity) > parseInt(stock_quantity)) {
+                if (stock_quantity != undefined && stock_quantity != -1 && parseInt(quantity) >
+                    parseInt(stock_quantity)) {
 
-                    Swal.fire({ text: "{{trans('lang.invalid_stock_qty')}}", icon: "error" });
+                    Swal.fire({
+                        text: "{{ trans('lang.invalid_stock_qty') }}",
+                        icon: "error"
+                    });
                     return false;
                 }
             }
 
 
-            var category_id = $('input[name="category_id_' + id + '"]').val();
-            setCookie('deliveryChargemain', JSON.stringify(deliveryChargemain), 356);
+            var category_id = $('input[name="category_id_' + id + '"]').val(); setCookie(
+                'deliveryChargemain', JSON.stringify(deliveryChargemain), 356);
 
             price = price * quantity;
             var image = $('input[name="image_' + id + '"]').val();
@@ -335,7 +344,7 @@ foreach ($cityToCountry as $key => $value) {
                     unit: unit
 
                 },
-                success: function (data) {
+                success: function(data) {
                     data = JSON.parse(data);
                     $('#cart_list').html(data.html);
                     loadcurrency();
@@ -344,142 +353,150 @@ foreach ($cityToCountry as $key => $value) {
                     if ($elem.hasClass('booknow')) {
                         window.location.href = '<?php echo route('checkout'); ?>';
                     } else {
-                        Swal.fire({ text: "{{trans('lang.added_tocart')}}", icon: "success" });
+                        Swal.fire({
+                            text: "{{ trans('lang.added_tocart') }}",
+                            icon: "success"
+                        });
                     }
                 }
             });
         });
 
 
-        $(document).on("click", '.remove_item', function (event) {
-            var id = $(this).attr('data-id');
-            var vendor_id = $(this).attr('data-vendor');
-            $.ajax({
-                type: 'POST',
-                url: "<?php echo route('remove-from-cart'); ?>",
-                data: { _token: '<?php echo csrf_token() ?>', vendor_id: vendor_id, id: id },
-                success: function (data) {
-                    data = JSON.parse(data);
-                    $('#cart_list').html(data.html);
-                    loadcurrency();
-                }
-            });
+    $(document).on("click", '.remove_item', function(event) {
+        var id = $(this).attr('data-id');
+        var vendor_id = $(this).attr('data-vendor');
+        $.ajax({
+            type: 'POST',
+            url: "<?php echo route('remove-from-cart'); ?>",
+            data: {
+                _token: '<?php echo csrf_token(); ?>',
+                vendor_id: vendor_id,
+                id: id
+            },
+            success: function(data) {
+                data = JSON.parse(data);
+                $('#cart_list').html(data.html);
+                loadcurrency();
+            }
         });
+    });
 
-        $(document).on("click", '.count-number-input-cart', function (event) {
-            var id = $(this).attr('data-id');
-            var vendor_id = $(this).attr('data-vendor');
-            var quantity = $('.count_number_' + id).val();
-            $.ajax({
-                type: 'POST',
-                url: "<?php echo route('change-quantity-cart'); ?>",
-                data: {
-                    _token: '<?php echo csrf_token() ?>',
-                    vendor_id: vendor_id,
-                    id: id,
-                    quantity: quantity,
-                },
-                success: function (data) {
-                    data = JSON.parse(data);
-                    $('#cart_list').html(data.html);
-                    loadcurrency();
-                }
-            });
+    $(document).on("click", '.count-number-input-cart', function(event) {
+        var id = $(this).attr('data-id');
+        var vendor_id = $(this).attr('data-vendor');
+        var quantity = $('.count_number_' + id).val();
+        $.ajax({
+            type: 'POST',
+            url: "<?php echo route('change-quantity-cart'); ?>",
+            data: {
+                _token: '<?php echo csrf_token(); ?>',
+                vendor_id: vendor_id,
+                id: id,
+                quantity: quantity,
+            },
+            success: function(data) {
+                data = JSON.parse(data);
+                $('#cart_list').html(data.html);
+                loadcurrency();
+            }
         });
+    });
 
-        $(document).on("click", '#apply-coupon-code', function (event) {
-            var coupon_code = $("#coupon_code").val();
-            var vendor_id = $('input[name="vendor_id"]').val();
-            var endOfToday = new Date();
-            var couponCodeRef = database.collection('coupons').where('code', "==", coupon_code).where('isEnabled', "==", true).where('expiresAt', ">=", endOfToday);
+    $(document).on("click", '#apply-coupon-code', function(event) {
+        var coupon_code = $("#coupon_code").val();
+        var vendor_id = $('input[name="vendor_id"]').val();
+        var endOfToday = new Date();
+        var couponCodeRef = database.collection('coupons').where('code', "==", coupon_code).where(
+            'isEnabled', "==", true).where('expiresAt', ">=", endOfToday);
 
-            couponCodeRef.get().then(async function (couponSnapshots) {
-                if (couponSnapshots.docs && couponSnapshots.docs.length) {
-                    var coupondata = couponSnapshots.docs[0].data();
-                    if (coupondata.vendorID != undefined && coupondata.vendorID != '') {
-                        if (coupondata.vendorID == vendor_id) {
-                            discount = coupondata.discount;
-                            coupon_id = coupondata.id;
-                            discountType = coupondata.discountType;
-
-                            $.ajax({
-                                type: 'POST',
-                                url: "<?php echo route('apply-coupon'); ?>",
-                                data: {
-                                    _token: '<?php echo csrf_token() ?>',
-                                    coupon_code: coupon_code,
-                                    discount: discount,
-                                    discountType: discountType,
-                                    coupon_id: coupondata.id,
-                                },
-
-                                success: function (data) {
-                                    data = JSON.parse(data);
-                                    $('#cart_list').html(data.html);
-                                    loadcurrency();
-                                }
-                            });
-                        } else {
-                            alert("Coupon code is not valid.");
-                            $("#coupon_code").val('');
-                        }
-
-                    } else {
+        couponCodeRef.get().then(async function(couponSnapshots) {
+            if (couponSnapshots.docs && couponSnapshots.docs.length) {
+                var coupondata = couponSnapshots.docs[0].data();
+                if (coupondata.vendorID != undefined && coupondata.vendorID != '') {
+                    if (coupondata.vendorID == vendor_id) {
                         discount = coupondata.discount;
+                        coupon_id = coupondata.id;
                         discountType = coupondata.discountType;
+
                         $.ajax({
                             type: 'POST',
                             url: "<?php echo route('apply-coupon'); ?>",
                             data: {
-                                _token: '<?php echo csrf_token() ?>',
+                                _token: '<?php echo csrf_token(); ?>',
                                 coupon_code: coupon_code,
                                 discount: discount,
                                 discountType: discountType,
                                 coupon_id: coupondata.id,
                             },
 
-                            success: function (data) {
+                            success: function(data) {
                                 data = JSON.parse(data);
                                 $('#cart_list').html(data.html);
                                 loadcurrency();
                             }
                         });
+                    } else {
+                        alert("Coupon code is not valid.");
+                        $("#coupon_code").val('');
                     }
 
                 } else {
-                    alert("Coupon code is not valid.");
-                    $("#coupon_code").val('');
+                    discount = coupondata.discount;
+                    discountType = coupondata.discountType;
+                    $.ajax({
+                        type: 'POST',
+                        url: "<?php echo route('apply-coupon'); ?>",
+                        data: {
+                            _token: '<?php echo csrf_token(); ?>',
+                            coupon_code: coupon_code,
+                            discount: discount,
+                            discountType: discountType,
+                            coupon_id: coupondata.id,
+                        },
+
+                        success: function(data) {
+                            data = JSON.parse(data);
+                            $('#cart_list').html(data.html);
+                            loadcurrency();
+                        }
+                    });
                 }
-            });
-        });
 
-        $(document).on("click", '#Other_tip', function (event) {
-            $("#tip_amount").val('');
-            $("#add_tip_box").show();
-        });
-
-        $(document).on("click", '.addon-checkbox', function (event) {
-            if ($(this).is(':checked')) {
-                $(this).next().addClass('active');
             } else {
-                $(this).next().removeClass('active');
+                alert("Coupon code is not valid.");
+                $("#coupon_code").val('');
             }
         });
+    });
 
-        $(document).on("click", '.this_tip', function (event) {
-            var this_tip = $(this).val();
-            var data = $(this);
-            $("#tip_amount").val(this_tip);
-            $("#add_tip_box").hide();
-            if ((data).is('.tip_checked')) {
-                data.removeClass('tip_checked');
-                $(this).prop('checked', false);
-                tipAmountChange('minus');
-            } else {
-                $(this).addClass('tip_checked');
-                tipAmountChange('plus');
-            }
-        });
+    $(document).on("click", '#Other_tip', function(event) {
+        $("#tip_amount").val('');
+        $("#add_tip_box").show();
+    });
+
+    $(document).on("click", '.addon-checkbox', function(event) {
+        if ($(this).is(':checked')) {
+            $(this).next().addClass('active');
+        } else {
+            $(this).next().removeClass('active');
+        }
+    });
+
+    $(document).on("click", '.this_tip', function(event) {
+        var this_tip = $(this).val();
+        var data = $(this);
+        $("#tip_amount").val(this_tip);
+        $("#add_tip_box").hide();
+        if ((data).is('.tip_checked')) {
+            data.removeClass('tip_checked');
+            $(this).prop('checked', false);
+            tipAmountChange('minus');
+        } else {
+            $(this).addClass('tip_checked');
+            tipAmountChange('plus');
+        }
+    });
     });
 
     function tipAmountChange(type = "plus") {
@@ -487,8 +504,12 @@ foreach ($cityToCountry as $key => $value) {
         $.ajax({
             type: 'POST',
             url: "<?php echo route('order-tip-add'); ?>",
-            data: { _token: '<?php echo csrf_token() ?>', tip: this_tip, type: type },
-            success: function (data) {
+            data: {
+                _token: '<?php echo csrf_token(); ?>',
+                tip: this_tip,
+                type: type
+            },
+            success: function(data) {
                 data = JSON.parse(data);
                 $('#cart_list').html(data.html);
                 loadcurrency();
@@ -498,7 +519,7 @@ foreach ($cityToCountry as $key => $value) {
 
     function getProductDetail() {
         $("#overlay").show();
-        productsRef.get().then(async function (snapshots) {
+        productsRef.get().then(async function(snapshots) {
             if (snapshots != undefined) {
                 var html = '';
                 html = await buildHTML(snapshots);
@@ -534,14 +555,15 @@ foreach ($cityToCountry as $key => $value) {
 
     }
 
- 
+
     function buildOverviewsHTML(vendorProduct) {
 
-        var reviewhtml = '<h3>{{trans("lang.overview")}}</h3>';
+        var reviewhtml = '<h3>{{ trans('lang.overview') }}</h3>';
 
 
 
-        reviewhtml += '<div class="customers-overview-list"><ul><li><label>Brand:</label><span class="brand"></span></li>';
+        reviewhtml +=
+            '<div class="customers-overview-list"><ul><li><label>Brand:</label><span class="brand"></span></li>';
         database.collection('brands').doc(vendorProduct.brandID).get().then((result) => {
             var brand_name = result.exists ? result.data().title : '';
             if (brand_name) {
@@ -563,7 +585,16 @@ foreach ($cityToCountry as $key => $value) {
             day: "numeric"
         });
 
-        reviewhtml += '<li><label>Shelf Life:</label><span class="shelf_life">' + vendorProduct.shelf_life + '</span></li><li><label>Country:</label><span class="country">' + vendorProduct.country + '</span></li><li><label>FSSAI License:</label><span class="fssai_license">' + vendorProduct.license_fssai + '</span></li><li><label>Expiry Date:</label><span class="expiry_date">' + expiry + '</span></li><li><label>Packaging Type:</label><span class="packaging_type">' + vendorProduct.packaging_type + '</span></li><li><label>Seller FSSAI:</label><span class="seller_fssai">' + vendorProduct.seller_fssai + '</span></li><li><label>HSN Code:</label><span class="hsn_code">' + vendorProduct.hsn_code + '</span></li><li><label>Unit:</label><span class="unit">' + vendorProduct.unit + '</span></li><li><label>Disclaimer:</label><span class="disclaimer">' + vendorProduct.disclaimer + '</span></li>';
+        reviewhtml += '<li><label>Shelf Life:</label><span class="shelf_life">' + vendorProduct.shelf_life +
+            '</span></li><li><label>Country:</label><span class="country">' + vendorProduct.country +
+            '</span></li><li><label>FSSAI License:</label><span class="fssai_license">' + vendorProduct.license_fssai +
+            '</span></li><li><label>Expiry Date:</label><span class="expiry_date">' + expiry +
+            '</span></li><li><label>Packaging Type:</label><span class="packaging_type">' + vendorProduct
+            .packaging_type + '</span></li><li><label>Seller FSSAI:</label><span class="seller_fssai">' + vendorProduct
+            .seller_fssai + '</span></li><li><label>HSN Code:</label><span class="hsn_code">' + vendorProduct.hsn_code +
+            '</span></li><li><label>Unit:</label><span class="unit">' + vendorProduct.unit +
+            '</span></li><li><label>Disclaimer:</label><span class="disclaimer">' + vendorProduct.disclaimer +
+            '</span></li>';
 
 
 
@@ -578,35 +609,46 @@ foreach ($cityToCountry as $key => $value) {
         } else {
             var user_id = '';
         }
-        
-        await database.collection('favorite_item').where('product_id', '==', productID).where('user_id', '==', user_id).get().then(async function (favoriteItemsnapshots) {
+
+        await database.collection('favorite_item').where('product_id', '==', productID).where('user_id', '==',
+            user_id).get().then(async function(favoriteItemsnapshots) {
 
             if (favoriteItemsnapshots.docs.length > 0) {
-               
-                $('.addToFavorite').html('<i class="font-weight-bold fa fa-heart" style="color:red"></i> {{trans("lang.add_to_wishlist")}}');
+
+                $('.addToFavorite').html(
+                    '<i class="font-weight-bold fa fa-heart" style="color:red"></i> {{ trans('lang.add_to_wishlist') }}'
+                );
             } else {
-                
-                $('.addToFavorite').html('<i class="font-weight-bold feather-heart" ></i> {{trans("lang.add_to_wishlist")}}');
+
+                $('.addToFavorite').html(
+                    '<i class="font-weight-bold feather-heart" ></i> {{ trans('lang.add_to_wishlist') }}'
+                );
             }
         });
     }
 
 
-    $(document).on("click", "a[name='loginAlert']", function (e) {
-        Swal.fire({ text: "{{trans('lang.login_to_add_favorite')}}", icon: "error" });
+    $(document).on("click", "a[name='loginAlert']", function(e) {
+        Swal.fire({
+            text: "{{ trans('lang.login_to_add_favorite') }}",
+            icon: "error"
+        });
 
     });
-    $(document).on("click", "a[name='addToFavorite']", function (e) {
+    $(document).on("click", "a[name='addToFavorite']", function(e) {
 
         var user_id = user_uuid;
         var store_id = this.id;
         var product_id = '<?php echo $id; ?>';
 
-        database.collection('favorite_item').where('product_id', '==', product_id).where('user_id', '==', user_id).get().then(async function (favoriteItemsnapshots) {
+        database.collection('favorite_item').where('product_id', '==', product_id).where('user_id', '==',
+            user_id).get().then(async function(favoriteItemsnapshots) {
             if (favoriteItemsnapshots.docs.length > 0) {
                 var id = favoriteItemsnapshots.docs[0].id;
-                database.collection('favorite_item').doc(id).delete().then(function () {
-                    $('.addToFavorite').html('<i class="font-weight-bold feather-heart" ></i> {{trans("lang.add_to_wishlist")}}');
+                database.collection('favorite_item').doc(id).delete().then(function() {
+                    $('.addToFavorite').html(
+                        '<i class="font-weight-bold feather-heart" ></i> {{ trans('lang.add_to_wishlist') }}'
+                    );
                 });
             } else {
                 var id = "<?php echo uniqid(); ?>";
@@ -614,8 +656,10 @@ foreach ($cityToCountry as $key => $value) {
                     'store_id': store_id,
                     'user_id': user_id,
                     'product_id': product_id
-                }).then(function (result) {
-                    $('.addToFavorite').html('<i class="font-weight-bold fa fa-heart" style="color:red"></i>  {{trans("lang.add_to_wishlist")}}');
+                }).then(function(result) {
+                    $('.addToFavorite').html(
+                        '<i class="font-weight-bold fa fa-heart" style="color:red"></i>  {{ trans('lang.add_to_wishlist') }}'
+                    );
                 });
             }
         });
@@ -628,7 +672,7 @@ foreach ($cityToCountry as $key => $value) {
         var vendorProduct = snapshots.data();
         if (vendorProduct != undefined) {
             var productID = vendorProduct.id;
-           
+
             <?php if (Auth::check()) { ?>
             setTimeout(() => {
                 checkFavoriteProduct(productID);
@@ -645,7 +689,8 @@ foreach ($cityToCountry as $key => $value) {
             var html = '';
 
             var price = vendorProduct.price;
-            if (vendorProduct.hasOwnProperty('discount') && vendorProduct.discount != '' && vendorProduct.discount != '0') {
+            if (vendorProduct.hasOwnProperty('discount') && vendorProduct.discount != '' && vendorProduct
+                .discount != '0') {
                 var dis_price = parseFloat(parseFloat(or_price) * parseFloat(vendorProduct.discount)) / 100;
                 price = price - dis_price;
             }
@@ -656,7 +701,7 @@ foreach ($cityToCountry as $key => $value) {
                 photo = placeholderImage;
             }
 
-            var view_product_details = "{{ route('productDetail', ':id')}}";
+            var view_product_details = "{{ route('productDetail', ':id') }}";
             view_product_details = view_product_details.replace(':id', 'id=' + vendorProduct.id);
 
             html = html + '<div class="col-md-6 rent-cardet-left">';
@@ -664,20 +709,25 @@ foreach ($cityToCountry as $key => $value) {
                 html = html + '<div class="main-slider">';
                 vendorProduct.photos.forEach((photo) => {
                     html = html + '<div class="product-image">';
-                    html = html + '<img alt="#" src="' + photo + '" onerror="this.onerror=null;this.src=\'' + placeholderImage + '\'" class="img-fluid item-img w-100">';
+                    html = html + '<img alt="#" src="' + photo +
+                        '" onerror="this.onerror=null;this.src=\'' + placeholderImage +
+                        '\'" class="img-fluid item-img w-100">';
                     html = html + '</div>';
                 });
                 html = html + '</div>';
                 html = html + '<div class="nav-slider">';
                 vendorProduct.photos.forEach((photo) => {
                     html = html + '<div class="product-image">';
-                    html = html + '<img alt="#" src="' + photo + '" onerror="this.onerror=null;this.src=\'' + placeholderImage + '\'" class="img-fluid item-img w-100">';
+                    html = html + '<img alt="#" src="' + photo +
+                        '" onerror="this.onerror=null;this.src=\'' + placeholderImage +
+                        '\'" class="img-fluid item-img w-100">';
                     html = html + '</div>';
                 });
                 html = html + '</div>';
             } else {
                 html = html + '<div class="product-image">';
-                html = html + '<img alt="#" src="' + photo + '" onerror="this.onerror=null;this.src=\'' + placeholderImage + '\'" class="img-fluid item-img w-100">';
+                html = html + '<img alt="#" src="' + photo + '" onerror="this.onerror=null;this.src=\'' +
+                    placeholderImage + '\'" class="img-fluid item-img w-100">';
                 html = html + '</div>';
             }
             html = html + '</div>';
@@ -695,7 +745,8 @@ foreach ($cityToCountry as $key => $value) {
             html = html + '<h2>' + vendorProduct.name + '</h2>';
             var rating = 0;
             var reviewsCount = 0;
-            if (vendorProduct.hasOwnProperty('reviewsSum') && vendorProduct.reviewsSum != 0 && vendorProduct.hasOwnProperty('reviewsCount') && vendorProduct.reviewsCount != 0) {
+            if (vendorProduct.hasOwnProperty('reviewsSum') && vendorProduct.reviewsSum != 0 && vendorProduct
+                .hasOwnProperty('reviewsCount') && vendorProduct.reviewsCount != 0) {
                 rating = (vendorProduct.reviewsSum / vendorProduct.reviewsCount);
                 rating = Math.round(rating * 10) / 10;
                 reviewsCount = vendorProduct.reviewsCount;
@@ -723,7 +774,8 @@ foreach ($cityToCountry as $key => $value) {
             vendorProduct.price = parseFloat(vendorProduct.price);
             html = html + '<div class="product_price_div">';
 
-            if (vendorProduct.hasOwnProperty('discount') && vendorProduct.discount != '' && vendorProduct.discount != '0') {
+            if (vendorProduct.hasOwnProperty('discount') && vendorProduct.discount != '' && vendorProduct
+                .discount != '0') {
 
                 var disPrice = (parseFloat(vendorProduct.discount) * parseFloat(vendorProduct.price)) / 100;
                 disPrice = vendorProduct.price - disPrice;
@@ -737,7 +789,8 @@ foreach ($cityToCountry as $key => $value) {
                     dis_price = currentCurrency + "" + disPrice.toFixed(decimal_degits);
                 }
                 html = html + '<span class="price">' + dis_price + '  <s>' + or_price + '</s></span>';
-                html += '<input type="hidden" id="dis_price_' + vendorProduct.id + '" name="dis_price_' + vendorProduct.id + '" value="' + disPrice + '">';
+                html += '<input type="hidden" id="dis_price_' + vendorProduct.id + '" name="dis_price_' +
+                    vendorProduct.id + '" value="' + disPrice + '">';
 
             } else {
                 var or_price = '';
@@ -747,15 +800,18 @@ foreach ($cityToCountry as $key => $value) {
                     or_price = currentCurrency + "" + vendorProduct.price.toFixed(decimal_degits);
                 }
                 html = html + '<span class="price">' + or_price + '</span>';
-                html += '<input type="hidden" id="dis_price_' + vendorProduct.id + '" name="dis_price_' + vendorProduct.id + '" value="0">';
+                html += '<input type="hidden" id="dis_price_' + vendorProduct.id + '" name="dis_price_' +
+                    vendorProduct.id + '" value="0">';
 
             }
 
             if (vendorProduct.hasOwnProperty('quantity')) {
                 if (vendorProduct.quantity == -1) {
-                    html = html + '<span id="variant_qty">{{trans("lang.qty_left")}}: {{trans("lang.unlimited")}}</span>';
+                    html = html +
+                        '<span id="variant_qty">{{ trans('lang.qty_left') }}: {{ trans('lang.unlimited') }}</span>';
                 } else {
-                    html = html + '<span id="variant_qty">{{trans("lang.qty_left")}}: ' + vendorProduct.quantity + '</span>';
+                    html = html + '<span id="variant_qty">{{ trans('lang.qty_left') }}: ' + vendorProduct
+                        .quantity + '</span>';
                 }
             }
             html = html + '</div>';
@@ -773,7 +829,7 @@ foreach ($cityToCountry as $key => $value) {
                     if (brand_name) {
 
                         html = html + '<div class="brand mt-2 mb-3">';
-                        html = html + '<h3>{{trans("lang.brand")}} | ' + brand_name + '</h3>';
+                        html = html + '<h3>{{ trans('lang.brand') }} | ' + brand_name + '</h3>';
 
                         html = html + '</div>';
                     }
@@ -786,56 +842,79 @@ foreach ($cityToCountry as $key => $value) {
 
 
 
-            if (vendorProduct.item_attribute != null && vendorProduct.item_attribute != "" && vendorProduct.item_attribute.attributes.length > 0 && vendorProduct.item_attribute.variants.length > 0) {
+            if (vendorProduct.item_attribute != null && vendorProduct.item_attribute != "" && vendorProduct
+                .item_attribute.attributes.length > 0 && vendorProduct.item_attribute.variants.length > 0) {
                 var attributes = vendorProduct.item_attribute.attributes;
                 var variants = vendorProduct.item_attribute.variants;
-                 html = html + '<div class="attributes mt-2 mb-0">';
+                html = html + '<div class="attributes mt-2 mb-0">';
                 html = html + '<div class="v-boxariants">';
-                html = html + '<div class="attribute_list" id="attribute-list-' + vendorProduct.id + '" data-pid="' + vendorProduct.id + '" data-product="' + btoa(encodeURIComponent(JSON.stringify(vendorProduct))) + '"></div>';
+                html = html + '<div class="attribute_list" id="attribute-list-' + vendorProduct.id +
+                    '" data-pid="' + vendorProduct.id + '" data-product="' + btoa(encodeURIComponent(JSON.stringify(
+                        vendorProduct))) + '"></div>';
                 html = html + '</div>';
                 html = html + '</div>';
                 getVariantsHtml(vendorProduct, attributes, variants)
             }
-                
-                if (vendorProduct.quantity == 0) {
-                    html = html + '<div class="unlimited-product-bar"><p class="quantity-status-bar">{{trans("lang.products_sold_out")}}</p><div class="product-progress"><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:' + (100 - vendorProduct.quantity) + '%"></div></div><span class="qty-bar-val">{{trans("lang.not_available")}}</span></div></div>';
-                }else if(vendorProduct.quantity == -1){
-                    html = html + '<div class="unlimited-product-bar d-none"><p class="quantity-status-bar"></p><div class="product-progress"><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div></div><span class="qty-bar-val"></span></div></div>';
 
-                }
-                else {
-                    html = html + '<div class="unlimited-product-bar"><p class="quantity-status-bar">{{trans("lang.products_almost_sold_out")}}</p><div class="product-progress"><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:' + (100 - vendorProduct.quantity) + '%"></div></div><span class="qty-bar-val"">' + vendorProduct.quantity + '' + ' {{trans("lang.available")}}</span></div></div>';
-                }
-                html = html + '</div>';
+            if (vendorProduct.quantity == 0) {
+                html = html +
+                    '<div class="unlimited-product-bar"><p class="quantity-status-bar">{{ trans('lang.products_sold_out') }}</p><div class="product-progress"><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:' +
+                    (100 - vendorProduct.quantity) +
+                    '%"></div></div><span class="qty-bar-val">{{ trans('lang.not_available') }}</span></div></div>';
+            } else if (vendorProduct.quantity == -1) {
+                html = html +
+                    '<div class="unlimited-product-bar d-none"><p class="quantity-status-bar"></p><div class="product-progress"><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div></div><span class="qty-bar-val"></span></div></div>';
+
+            } else {
+                html = html +
+                    '<div class="unlimited-product-bar"><p class="quantity-status-bar">{{ trans('lang.products_almost_sold_out') }}</p><div class="product-progress"><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:' +
+                    (100 - vendorProduct.quantity) + '%"></div></div><span class="qty-bar-val"">' + vendorProduct
+                    .quantity + '' + ' {{ trans('lang.available') }}</span></div></div>';
+            }
+            html = html + '</div>';
 
             html = html + '<div class="quantity mt-2 mb-3">';
             html += '<div class="d-flex align-items-center product-item-box">';
-            var label_qty = "{{trans('lang.quantity')}}";
+            var label_qty = "{{ trans('lang.quantity') }}";
             html += '<h3 class="m-0">' + label_qty + '</h3>';
             html += '<div class="ml-auto">';
             html += '<span class="count-number">';
-            html += '<button type="button" class="btn-sm left dec btn btn-outline-secondary food_count_decrese"><i class="feather-minus"></i></button>';
-            html += '<input class="count-number-input" name="quantity_' + vendorProduct.id + '" type="text"  value="1">';
-            html += '<button type="button" class="btn-sm right inc btn btn-outline-secondary"><i class="feather-plus"></i></button>';
+            html +=
+                '<button type="button" class="btn-sm left dec btn btn-outline-secondary food_count_decrese"><i class="feather-minus"></i></button>';
+            html += '<input class="count-number-input" name="quantity_' + vendorProduct.id +
+                '" type="text"  value="1">';
+            html +=
+                '<button type="button" class="btn-sm right inc btn btn-outline-secondary"><i class="feather-plus"></i></button>';
             html += '</span>';
             html += '</div>';
             html += '</div>';
             html = html + '</div>';
 
             html = html + '<div class="addtocart mt-2 mb-3">';
-            html += "<button data-id='" + String(vendorProduct.id) + "' type='button' class='add-to-cart btn btn-dark btn-lg btn-block' ><i class='feather-shopping-cart'></i> {{trans('lang.add_to_cart')}}</button>";
-            html += '<input type="hidden" name="name_' + vendorProduct.id + '" id="name_' + vendorProduct.id + '" value="' + vendorProduct.name + '">';
-            html += '<input type="hidden" id="price_' + vendorProduct.id + '" name="price_' + vendorProduct.id + '" value="' + vendorProduct.price + '">';
-            html += '<input type="hidden" id="discount_' + vendorProduct.id + '" name="discount_' + vendorProduct.id + '" value="' + vendorProduct.discount + '">';
-            html += '<input type="hidden" id="quantity_' + vendorProduct.id + '" name="quantity_' + vendorProduct.id + '" value="' + vendorProduct.quantity + '">';
-            html += '<input type="hidden" id="description_' + vendorProduct.id + '" name="description_' + vendorProduct.id + '" value="' + vendorProduct.description + '">';
-            html += '<input type="hidden" id="hsn_code_' + vendorProduct.id + '" name="hsn_code_' + vendorProduct.id + '" value="' + vendorProduct.hsn_code + '">';
-            html += '<input type="hidden" id="unit_' + vendorProduct.id + '" name="unit_' + vendorProduct.id + '" value="' + vendorProduct.unit + '">';
+            html += "<button data-id='" + String(vendorProduct.id) +
+                "' type='button' class='add-to-cart btn btn-dark btn-lg btn-block' ><i class='feather-shopping-cart'></i> {{ trans('lang.add_to_cart') }}</button>";
+            html += '<input type="hidden" name="name_' + vendorProduct.id + '" id="name_' + vendorProduct.id +
+                '" value="' + vendorProduct.name + '">';
+            html += '<input type="hidden" id="price_' + vendorProduct.id + '" name="price_' + vendorProduct.id +
+                '" value="' + vendorProduct.price + '">';
+            html += '<input type="hidden" id="discount_' + vendorProduct.id + '" name="discount_' + vendorProduct
+                .id + '" value="' + vendorProduct.discount + '">';
+            html += '<input type="hidden" id="quantity_' + vendorProduct.id + '" name="quantity_' + vendorProduct
+                .id + '" value="' + vendorProduct.quantity + '">';
+            html += '<input type="hidden" id="description_' + vendorProduct.id + '" name="description_' +
+                vendorProduct.id + '" value="' + vendorProduct.description + '">';
+            html += '<input type="hidden" id="hsn_code_' + vendorProduct.id + '" name="hsn_code_' + vendorProduct
+                .id + '" value="' + vendorProduct.hsn_code + '">';
+            html += '<input type="hidden" id="unit_' + vendorProduct.id + '" name="unit_' + vendorProduct.id +
+                '" value="' + vendorProduct.unit + '">';
 
-            html += '<input type="hidden" id="image_' + vendorProduct.id + '" name="image_' + vendorProduct.id + '" value="' + vendorProduct.photo + '">';
-            html += '<input type="hidden" id="category_id_' + vendorProduct.id + '" name="category_id_' + vendorProduct.id + '" value="' + vendorProduct.categoryID + '">';
+            html += '<input type="hidden" id="image_' + vendorProduct.id + '" name="image_' + vendorProduct.id +
+                '" value="' + vendorProduct.photo + '">';
+            html += '<input type="hidden" id="category_id_' + vendorProduct.id + '" name="category_id_' +
+                vendorProduct.id + '" value="' + vendorProduct.categoryID + '">';
 
-            html += "<button data-id='" + String(vendorProduct.id) + "' type='button' class='add-to-cart btn btn-primary btn-lg btn-block booknow' ><i class='feather-shopping-bag'></i> {{trans('lang.book_now')}}</button>";
+            html += "<button data-id='" + String(vendorProduct.id) +
+                "' type='button' class='add-to-cart btn btn-primary btn-lg btn-block booknow' ><i class='feather-shopping-bag'></i> {{ trans('lang.book_now') }}</button>";
             html = html + '<div class="description mt-2 mb-3">';
 
             html = html + '</div>';
@@ -845,22 +924,26 @@ foreach ($cityToCountry as $key => $value) {
             html = html + '<div class="add-to-favorite">';
 
             @auth
-                html = html + '<a  name="addToFavorite"  class="count addToFavorite" href="javascript:void(0)"><i  class="font-weight-bold feather-heart"></i> {{trans("lang.add_to_wishlist")}}</a>';
-            @else
-                html = html + '<a  name="loginAlert" class="loginAlert count" href="javascript:void(0)"><i  class="font-weight-bold feather-heart"></i>{{trans("lang.add_to_wishlist")}}</a>';
-            @endauth
+            html = html +
+                '<a  name="addToFavorite"  class="count addToFavorite" href="javascript:void(0)"><i  class="font-weight-bold feather-heart"></i> {{ trans('lang.add_to_wishlist') }}</a>';
+        @else
+            html = html +
+                '<a  name="loginAlert" class="loginAlert count" href="javascript:void(0)"><i  class="font-weight-bold feather-heart"></i>{{ trans('lang.add_to_wishlist') }}</a>';
+        @endauth
 
-            html = html + '</div>';
-            html = html + '<div class="share-btn">';
-            var route1 = '{{route("productDetail", ":id")}}';
-            route1 = route1.replace(':id', vendorProduct.id);
+        html = html + '</div>';
+        html = html + '<div class="share-btn">';
+        var route1 = '{{ route('productDetail', ':id') }}';
+        route1 = route1.replace(':id', vendorProduct.id);
 
-            html = html + '<a  data-toggle="modal" data-target="#socialShare"  name="social-share-icon" data-url="' + route1 + '" data-name="' + vendorProduct.name + '" class="share-btn" href="javascript:void(0)"><i  class="font-weight-bold feather-share-2"></i> {{trans("lang.share_this_product")}}</a>';
-            html = html + '</div>';
-            html = html + '</div>';
-            return html;
-           
-        }
+        html = html + '<a  data-toggle="modal" data-target="#socialShare"  name="social-share-icon" data-url="' +
+            route1 + '" data-name="' + vendorProduct.name +
+            '" class="share-btn" href="javascript:void(0)"><i  class="font-weight-bold feather-share-2"></i> {{ trans('lang.share_this_product') }}</a>';
+        html = html + '</div>';
+        html = html + '</div>';
+        return html;
+
+    }
     }
 
     function getBrandData(brandID) {
@@ -882,8 +965,7 @@ foreach ($cityToCountry as $key => $value) {
                     slidesToScroll: 1,
                     prevArrow: '<a class="slick-prev"><i class="fas fa-arrow-left" alt="Arrow Icon"></i></a>',
                     nextArrow: '<a class="slick-next"><i class="fas fa-arrow-right" alt="Arrow Icon"></i></a>',
-                    responsive: [
-                        {
+                    responsive: [{
                             breakpoint: 1200,
                             settings: {
                                 slidesToShow: 3,
@@ -926,7 +1008,8 @@ foreach ($cityToCountry as $key => $value) {
     async function getRelatedProducts(vendorProduct) {
         var html = '';
 
-        database.collection('vendor_products').where('categoryID', "==", vendorProduct.categoryID).where("publish", "==", true).where('id', "!=", vendorProduct.id).limit(4).get().then(async function (snapshots) {
+        database.collection('vendor_products').where('categoryID', "==", vendorProduct.categoryID).where("publish",
+            "==", true).where('id', "!=", vendorProduct.id).limit(4).get().then(async function(snapshots) {
             if (snapshots.docs.length > 0) {
                 html = buildHTMLRelatedProducts(snapshots, vendorProduct.categoryID);
                 slickcatCarousel("related_product");
@@ -936,9 +1019,10 @@ foreach ($cityToCountry as $key => $value) {
             if (html != '') {
                 append_list.innerHTML = html;
             } else {
-                html = html + '<div class="title d-flex align-items-center"><h3>{{trans("lang.related_products")}}</h3></div>';
+                html = html +
+                    '<div class="title d-flex align-items-center"><h3>{{ trans('lang.related_products') }}</h3></div>';
                 html = html + '<div class="row">';
-                html = html + '<p class="font-weight-bold">{{trans("lang.not_product_found")}}</p>';
+                html = html + '<p class="font-weight-bold">{{ trans('lang.not_product_found') }}</p>';
                 html = html + '</div>';
                 append_list.innerHTML = html;
             }
@@ -960,32 +1044,35 @@ foreach ($cityToCountry as $key => $value) {
         var count = 0;
         var popularFoodCount = 0;
 
-        var view_product_details = "{{ route('productList', [':type', ':id'])}}";
+        var view_product_details = "{{ route('productList', [':type', ':id']) }}";
         view_product_details = view_product_details.replace(':type', 'category');
         view_product_details = view_product_details.replace(':id', cat_id);
 
 
 
-        html = html + '<div class="title d-flex align-items-center"><h3>{{trans("lang.related_products")}}</h3>';
-        html = html + '<span class="see-all ml-auto"><a href="' + view_product_details + '">{{trans("lang.view_all")}}</a></span></div>';
+        html = html + '<div class="title d-flex align-items-center"><h3>{{ trans('lang.related_products') }}</h3>';
+        html = html + '<span class="see-all ml-auto"><a href="' + view_product_details +
+            '">{{ trans('lang.view_all') }}</a></span></div>';
         html = html + '<div class="row">';
 
         alldata.forEach((listval) => {
 
             var val = listval;
             var vendor_id_single = val.id;
-            var view_vendor_details = "{{ route('productDetail', ':id')}}";
+            var view_vendor_details = "{{ route('productDetail', ':id') }}";
             view_vendor_details = view_vendor_details.replace(':id', vendor_id_single);
 
             var rating = 0;
             var reviewsCount = 0;
-            if (val.hasOwnProperty('reviewsSum') && val.reviewsSum != 0 && val.hasOwnProperty('reviewsCount') && val.reviewsCount != 0) {
+            if (val.hasOwnProperty('reviewsSum') && val.reviewsSum != 0 && val.hasOwnProperty('reviewsCount') &&
+                val.reviewsCount != 0) {
                 rating = (val.reviewsSum / val.reviewsCount);
                 rating = Math.round(rating * 10) / 10;
                 reviewsCount = val.reviewsCount;
             }
 
-            html = html + '<div class="col-md-3 product-list"><div class="list-card position-relative"><div class="list-card-image">';
+            html = html +
+                '<div class="col-md-3 product-list"><div class="list-card position-relative"><div class="list-card-image">';
 
             if (val.photo) {
                 photo = val.photo;
@@ -993,8 +1080,12 @@ foreach ($cityToCountry as $key => $value) {
                 photo = placeholderImage;
             }
 
-            html = html + '<a href="' + view_vendor_details + '"><img alt="#" src="' + photo + '" onerror="this.onerror=null;this.src=\'' + placeholderImage + '\'" class="img-fluid item-img w-100"></a></div><div class="py-2 position-relative"><div class="list-card-body position-relative"><h6 class="product-title mb-1"><a href="' + view_vendor_details + '" class="text-black">' + val.name + '</a></h6>';
-            html = html + '<h6 class="mb-1 popular_food_category_ pro-cat" id="popular_food_category_' + val.categoryID + '_' + val.id + '" ></h6>';
+            html = html + '<a href="' + view_vendor_details + '"><img alt="#" src="' + photo +
+                '" onerror="this.onerror=null;this.src=\'' + placeholderImage +
+                '\'" class="img-fluid item-img w-100"></a></div><div class="py-2 position-relative"><div class="list-card-body position-relative"><h6 class="product-title mb-1"><a href="' +
+                view_vendor_details + '" class="text-black">' + val.name + '</a></h6>';
+            html = html + '<h6 class="mb-1 popular_food_category_ pro-cat" id="popular_food_category_' + val
+                .categoryID + '_' + val.id + '" ></h6>';
 
             val.price = parseFloat(val.price);
             if (val.hasOwnProperty('discount') && val.discount != '' && val.discount != '0') {
@@ -1023,7 +1114,9 @@ foreach ($cityToCountry as $key => $value) {
                 html = html + '<span class="pro-price">' + or_price + '</span>'
             }
 
-            html = html + '<div class="star position-relative mt-3"><span class="badge badge-success" style="display:contents"><i class="feather-star"></i>' + rating + ' (' + reviewsCount + ')</span></div>';
+            html = html +
+                '<div class="star position-relative mt-3"><span class="badge badge-success" style="display:contents"><i class="feather-star"></i>' +
+                rating + ' (' + reviewsCount + ')</span></div>';
 
             html = html + '</div>';
 
@@ -1038,12 +1131,12 @@ foreach ($cityToCountry as $key => $value) {
         var html = '';
         var append_list = document.getElementById('top-rated-product');
         append_list.innerHTML = '';
-        database.collection('orders').get().then(async function (snapshots) {
+        database.collection('orders').get().then(async function(snapshots) {
             if (snapshots.docs.length > 0) {
                 var productFreq = {};
                 snapshots.docs.forEach(listval => {
                     var data = listval.data();
-                    
+
                     data.products.forEach(product => {
                         if (product.category_id == vendorProduct.categoryID) {
                             var productId = product.id;
@@ -1061,23 +1154,27 @@ foreach ($cityToCountry as $key => $value) {
                 topProducts.forEach(element => {
                     mostSellingProduct.push(element.productId);
                 });
-                database.collection('vendor_products').where('id', 'in', mostSellingProduct).limit(3).get().then(async function (snapshots) {
+                database.collection('vendor_products').where('id', 'in', mostSellingProduct).limit(3)
+                    .get().then(async function(snapshots) {
 
-                    if (snapshots.docs.length > 0) {
+                        if (snapshots.docs.length > 0) {
 
-                        append_list.innerHTML = await buildHTMLTopRatedProducts(snapshots);
+                            append_list.innerHTML = await buildHTMLTopRatedProducts(snapshots);
 
-                    } else {
-                        append_list.innerHTML = '<p class="font-weight-bold">{{trans("lang.not_product_found")}}</p>';
+                        } else {
+                            append_list.innerHTML =
+                                '<p class="font-weight-bold">{{ trans('lang.not_product_found') }}</p>';
 
-                    }
-                })
+                        }
+                    })
             } else {
-                append_list.innerHTML = '<p class="font-weight-bold">{{trans("lang.not_product_found")}}</p>';
+                append_list.innerHTML =
+                    '<p class="font-weight-bold">{{ trans('lang.not_product_found') }}</p>';
 
             }
         })
     }
+
     function buildHTMLTopRatedProducts(snapshots) {
         var html = '';
 
@@ -1092,12 +1189,13 @@ foreach ($cityToCountry as $key => $value) {
 
             var val = listval;
             var product_id_single = val.id;
-            var view_product_details = "{{ route('productDetail', ':id')}}";
+            var view_product_details = "{{ route('productDetail', ':id') }}";
             view_product_details = view_product_details.replace(':id', product_id_single);
 
             var rating = 0;
             var reviewsCount = 0;
-            if (val.hasOwnProperty('reviewsSum') && val.reviewsSum != 0 && val.hasOwnProperty('reviewsCount') && val.reviewsCount != 0) {
+            if (val.hasOwnProperty('reviewsSum') && val.reviewsSum != 0 && val.hasOwnProperty('reviewsCount') &&
+                val.reviewsCount != 0) {
                 rating = (val.reviewsSum / val.reviewsCount);
                 rating = Math.round(rating * 10) / 10;
                 reviewsCount = val.reviewsCount;
@@ -1133,7 +1231,8 @@ foreach ($cityToCountry as $key => $value) {
             html = html + '<div class="store-product" data-product-id="' + product_id_single + '">';
             html = html + '<div class="product-content">';
             html = html + '<div class="store-image">';
-            html = html + '<img src="' + photo + '" onerror="this.onerror=null;this.src=\'' + placeholderImage + '\'">';
+            html = html + '<img src="' + photo + '" onerror="this.onerror=null;this.src=\'' + placeholderImage +
+                '\'">';
             html = html + '</div>';
             html = html + '<div class="product-detail">';
             html = html + '<div class="basic">';
@@ -1160,6 +1259,7 @@ foreach ($cityToCountry as $key => $value) {
         return html;
 
     }
+
     function slickCarousel() {
         $('.main-slider').slick({
             slidesToShow: 1,
@@ -1177,7 +1277,7 @@ foreach ($cityToCountry as $key => $value) {
 
         for (attribute of attributes) {
             var attributeHtmlRes = getAttributeHtml(vendorProduct, attribute);
-            var attributeHtml = await attributeHtmlRes.then(function (html) {
+            var attributeHtml = await attributeHtmlRes.then(function(html) {
                 return html;
             })
             attributesHtml += attributeHtml;
@@ -1186,7 +1286,7 @@ foreach ($cityToCountry as $key => $value) {
 
         var variation_info = {};
         var variation_sku = '';
-        $('#attribute-list-' + vendorProduct.id + ' .attribute-drp').each(function () {
+        $('#attribute-list-' + vendorProduct.id + ' .attribute-drp').each(function() {
             variant_title = $(this).data('atitle') + '-';
             variation_sku += $(this).find('input[type="radio"]:checked').val() + '-';
             variation_info[$(this).data('atitle')] = $(this).find('input[type="radio"]:checked').val();
@@ -1194,7 +1294,7 @@ foreach ($cityToCountry as $key => $value) {
         variation_sku = variation_sku.replace(/-$/, "");
 
         if (variation_sku) {
-            var variant_info = $.map(vendorProduct.item_attribute.variants, function (v, i) {
+            var variant_info = $.map(vendorProduct.item_attribute.variants, function(v, i) {
                 if (v.variant_sku == variation_sku) {
                     return v;
                 }
@@ -1219,11 +1319,14 @@ foreach ($cityToCountry as $key => $value) {
                 $('#variation_info_' + vendorProduct.id).find('#variant_price').attr('data-vqty', variant_quantity);
                 $('#variation_info_' + vendorProduct.id).find('#variant_price').attr('data-vsku', variant_sku);
                 $('#variation_info_' + vendorProduct.id).find('#variant_price').attr('data-vimg', variant_img);
-                $('#variation_info_' + vendorProduct.id).find('#variant_price').attr('data-vinfo', JSON.stringify(variation_info));
+                $('#variation_info_' + vendorProduct.id).find('#variant_price').attr('data-vinfo', JSON.stringify(
+                    variation_info));
                 if (variant_quantity == '-1') {
-                    $('#variation_info_' + vendorProduct.id).find('#variant_qty').html('{{trans("lang.qty_left")}}: {{trans("lang.unlimited")}}');
+                    $('#variation_info_' + vendorProduct.id).find('#variant_qty').html(
+                        '{{ trans('lang.qty_left') }}: {{ trans('lang.unlimited') }}');
                 } else {
-                    $('#variation_info_' + vendorProduct.id).find('#variant_qty').html('{{trans("lang.qty_left")}}: ' + variant_quantity);
+                    $('#variation_info_' + vendorProduct.id).find('#variant_qty').html(
+                        '{{ trans('lang.qty_left') }}: ' + variant_quantity);
                 }
 
             }
@@ -1234,17 +1337,23 @@ foreach ($cityToCountry as $key => $value) {
 
         var html = '';
         var vendorAttributesRef = database.collection('vendor_attributes').where('id', "==", attribute.attribute_id);
-        attributeHtmlRes = vendorAttributesRef.get().then(async function (attributeRef) {
+        attributeHtmlRes = vendorAttributesRef.get().then(async function(attributeRef) {
             var attributeInfo = attributeRef.docs[0].data();
-            html += '<div class="attribute-drp" data-aid="' + attribute.attribute_id + '" data-atitle="' + attributeInfo.title + '">';
+            html += '<div class="attribute-drp" data-aid="' + attribute.attribute_id + '" data-atitle="' +
+                attributeInfo.title + '">';
             html += '<h3 class="attribute-label">' + attributeInfo.title + '</h3>';
             html += '<div class="attribute-options">';
-            $.each(attribute.attribute_options, function (i, option) {
+            $.each(attribute.attribute_options, function(i, option) {
 
                 ischecked = '';
-                html += '<div class="custom-control custom-radio border-bottom py-2 attribute-selection">';
-                html += '<input type="radio" id="attribute-' + attribute.attribute_id + '-' + option + '" name="attribute-options-' + attribute.attribute_id + '" value="' + option + '" ' + ischecked + ' class="custom-control-input">';
-                html += '<label class="custom-control-label attribute-' + attribute.attribute_id + '-' + option + '" for="attribute-' + attribute.attribute_id + '-' + option + '">' + option + '</label>';
+                html +=
+                    '<div class="custom-control custom-radio border-bottom py-2 attribute-selection">';
+                html += '<input type="radio" id="attribute-' + attribute.attribute_id + '-' +
+                    option + '" name="attribute-options-' + attribute.attribute_id + '" value="' +
+                    option + '" ' + ischecked + ' class="custom-control-input">';
+                html += '<label class="custom-control-label attribute-' + attribute.attribute_id +
+                    '-' + option + '" for="attribute-' + attribute.attribute_id + '-' + option +
+                    '">' + option + '</label>';
                 html += '</div>';
             });
             html += '</div>';
@@ -1258,14 +1367,14 @@ foreach ($cityToCountry as $key => $value) {
         var vendorProduct = $.parseJSON(decodeURIComponent(atob(vendorProduct)));
         var variation_info = {};
         var variation_sku = '';
-        $('#attribute-list-' + vendorProduct.id + ' .attribute-drp').each(function () {
+        $('#attribute-list-' + vendorProduct.id + ' .attribute-drp').each(function() {
             var aid = $(this).parent().parent().data('aid');
             variation_sku += $(this).find('input[type="radio"]:checked').val() + '-';
             variation_info[$(this).data('atitle')] = $(this).find('input[type="radio"]:checked').val();
         });
         variation_sku = variation_sku.replace(/-$/, "");
         if (variation_sku) {
-            var variant_info = $.map(vendorProduct.item_attribute.variants, function (v, i) {
+            var variant_info = $.map(vendorProduct.item_attribute.variants, function(v, i) {
                 if (v.variant_sku == variation_sku) {
                     return v;
                 }
@@ -1295,51 +1404,55 @@ foreach ($cityToCountry as $key => $value) {
                 $('#variation_info_' + vendorProduct.id).find('#variant_price').attr('data-vsku', variant_sku);
                 $('#variation_info_' + vendorProduct.id).find('#variant_price').attr('data-vimg', variant_image);
 
-                $('#variation_info_' + vendorProduct.id).find('#variant_price').attr('data-vinfo', JSON.stringify(variation_info));
+                $('#variation_info_' + vendorProduct.id).find('#variant_price').attr('data-vinfo', JSON.stringify(
+                    variation_info));
                 if (variant_quantity == '-1') {
-                    $('#variation_info_' + vendorProduct.id).find('#variant_qty').html('{{trans("lang.qty_left")}}: {{trans("lang.unlimited")}}');
+                    $('#variation_info_' + vendorProduct.id).find('#variant_qty').html(
+                        '{{ trans('lang.qty_left') }}: {{ trans('lang.unlimited') }}');
                 } else {
-                    $('#variation_info_' + vendorProduct.id).find('#variant_qty').html('{{trans("lang.qty_left")}}: ' + variant_quantity);
+                    $('#variation_info_' + vendorProduct.id).find('#variant_qty').html(
+                        '{{ trans('lang.qty_left') }}: ' + variant_quantity);
                 }
-                    if (parseFloat(variant_quantity) == 0) {
-                        $('.unlimited-product-bar').removeClass('d-none');
-                        $('.quantity-status-bar').html('{{trans("lang.products_sold_out")}}');
-                        $('.qty-bar-val').html('{{trans("lang.not_available")}}')
-                    } else if(parseFloat(variant_quantity) == -1){
-                        $('.unlimited-product-bar').addClass('d-none');
-                    }
-                    else {
-                        $('.unlimited-product-bar').removeClass('d-none');
-                        $('.quantity-status-bar').html('{{trans("lang.products_almost_sold_out")}}');
-                        $('.qty-bar-val').html(parseFloat(variant_quantity) + ' {{trans("lang.available")}}')
-                    }
-                    $('.progress-bar').css('width', (100 - parseFloat(variant_quantity) + '%'));
+                if (parseFloat(variant_quantity) == 0) {
+                    $('.unlimited-product-bar').removeClass('d-none');
+                    $('.quantity-status-bar').html('{{ trans('lang.products_sold_out') }}');
+                    $('.qty-bar-val').html('{{ trans('lang.not_available') }}')
+                } else if (parseFloat(variant_quantity) == -1) {
+                    $('.unlimited-product-bar').addClass('d-none');
+                } else {
+                    $('.unlimited-product-bar').removeClass('d-none');
+                    $('.quantity-status-bar').html('{{ trans('lang.products_almost_sold_out') }}');
+                    $('.qty-bar-val').html(parseFloat(variant_quantity) + ' {{ trans('lang.available') }}')
+                }
+                $('.progress-bar').css('width', (100 - parseFloat(variant_quantity) + '%'));
 
             }
         }
     }
-    $(document).on("click", "a[name='social-share-icon']", async function (e) {
+    $(document).on("click", "a[name='social-share-icon']", async function(e) {
         var productUrl = $(this).attr('data-url');
         var productName = $(this).attr('data-name');
         $('#productUrl').val(productUrl);
         $('#productName').val(productName);
         $('#product_info').html(productName);
     });
-    $(document).on("click", "a[name='whatsapp-share']", async function (e) {
+    $(document).on("click", "a[name='whatsapp-share']", async function(e) {
         var productUrl = $('#productUrl').val();
         var productName = $('#productName').val();
         html = productName + " \n" + productUrl;
         $(this).attr('href', 'https://api.whatsapp.com/send?text=' + html + '');
 
     })
-    $(document).on("click", "a[name='email-share']", async function (e) {
+    $(document).on("click", "a[name='email-share']", async function(e) {
         e.preventDefault();
         var productUrl = $('#productUrl').val();
         var subject = $('#productName').val();
-        var mailtoLink = 'mailto:?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(productUrl);
+        var mailtoLink = 'mailto:?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(
+            productUrl);
         $(this).attr('href', mailtoLink);
         window.location.href = mailtoLink;
     })
+
     function copyToClipboard() {
         var productUrl = $('#productUrl').val();
         var productName = $('#productName').val();
@@ -1348,12 +1461,11 @@ foreach ($cityToCountry as $key => $value) {
         navigator.clipboard.writeText(html);
         $(".code-copied").show();
         setTimeout(
-            function () {
+            function() {
                 $(".code-copied").hide();
             }, 4000);
 
     }
-
 </script>
 
 @include('layouts.nav')
