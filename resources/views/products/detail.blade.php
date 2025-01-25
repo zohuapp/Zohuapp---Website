@@ -585,16 +585,19 @@
             day: "numeric"
         });
 
-        reviewhtml += '<li><label>Shelf Life:</label><span class="shelf_life">' + vendorProduct.shelf_life +
-            '</span></li><li><label>Country:</label><span class="country">' + vendorProduct.country +
-            '</span></li><li><label>FSSAI License:</label><span class="fssai_license">' + vendorProduct.license_fssai +
-            '</span></li><li><label>Expiry Date:</label><span class="expiry_date">' + expiry +
-            '</span></li><li><label>Packaging Type:</label><span class="packaging_type">' + vendorProduct
-            .packaging_type + '</span></li><li><label>Seller FSSAI:</label><span class="seller_fssai">' + vendorProduct
-            .seller_fssai + '</span></li><li><label>HSN Code:</label><span class="hsn_code">' + vendorProduct.hsn_code +
-            '</span></li><li><label>Unit:</label><span class="unit">' + vendorProduct.unit +
-            '</span></li><li><label>Disclaimer:</label><span class="disclaimer">' + vendorProduct.disclaimer +
-            '</span></li>';
+        // reviewhtml += '<li><label>Shelf Life:</label><span class="shelf_life">' + vendorProduct.shelf_life +
+        //     '</span></li><li><label>Country:</label><span class="country">' + vendorProduct.country +
+        //     '</span></li><li><label>FSSAI License:</label><span class="fssai_license">' + vendorProduct.license_fssai +
+        //     '</span></li><li><label>Expiry Date:</label><span class="expiry_date">' + expiry +
+        //     '</span></li><li><label>Packaging Type:</label><span class="packaging_type">' + vendorProduct
+        //     .packaging_type + '</span></li><li><label>Seller FSSAI:</label><span class="seller_fssai">' + vendorProduct
+        //     .seller_fssai + '</span></li><li><label>HSN Code:</label><span class="hsn_code">' + vendorProduct.hsn_code +
+        //     '</span></li><li><label>Unit:</label><span class="unit">' + vendorProduct.unit +
+        //     '</span></li><li><label>Disclaimer:</label><span class="disclaimer">' + vendorProduct.disclaimer +
+        //     '</span></li>';
+
+        // displaying only the country information
+        reviewhtml += '<li><label>Country:</label><span class="country">' + vendorProduct.country + '</span></li><li>';
 
 
 
