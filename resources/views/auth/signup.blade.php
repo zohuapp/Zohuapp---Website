@@ -1,7 +1,7 @@
 @include('auth.default')
 
 @php
-    $countries = file_get_contents(asset('countriesdata.json'));
+    $countries = file_get_contents(public_path('countriesdata.json'));
     $countries = json_decode($countries);
     $countries = (array) $countries;
     $newcountries = [];

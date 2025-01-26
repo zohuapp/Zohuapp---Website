@@ -19,7 +19,10 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => [
+        'http://websitepanelclient.test',
+        'https://zohuapp.com',
+    ],
 
     'allowed_origins_patterns' => [],
 
