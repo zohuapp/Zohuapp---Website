@@ -3394,9 +3394,9 @@ color: #333;
 }
 
 .multi-vendore-content.ecommerce-content .top-cat-list .cat-link span img {
-border-radius: 100%;
+/* border-radius: 100%; */
 margin-bottom: 0 !important;
-object-fit: cover;
+object-fit: contain;
 display: inline-block;
 width: 100px;
 height: 100px;
