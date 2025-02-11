@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -39,12 +40,11 @@ class LoginController extends Controller
     }
     public function forgotPassword()
     {
-        if (\Auth::check()) {
+        if (Auth::check()) {
             return redirect(route('profile'));
         } else {
 
             return view('auth.forgot_password');
         }
     }
-
 }

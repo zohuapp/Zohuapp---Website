@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Session;
 use Illuminate\Support\Facades\Storage;
 use Google\Client as Google_Client;
+
 class ProductController extends Controller
 {
     /**
@@ -16,21 +17,17 @@ class ProductController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-       
-    }
+    public function __construct() {}
 
 
     /**
      * Write code on Method
      *
-     * @return response()
      */
     public function productDetail($id)
     {
         $cart = session()->get('cart', []);
-        return view('products.detail', ['id' => $id, 'cart' => $cart]);
+        return view('products.detail', compact('id', 'cart'));
     }
 
     public function productList($type, $id)
@@ -64,7 +61,6 @@ class ProductController extends Controller
         $cart = Session::get('cart', []);
 
         if (@$cart['item']) {
-
         } else {
 
             $cart['item'] = array();
@@ -95,18 +91,16 @@ class ProductController extends Controller
                 }
 
                 $cart['deliverykm'] = $kmradius;
-                $minutes = round($kmradius * 1.2);  
+                $minutes = round($kmradius * 1.2);
 
-                $hr = $minutes/60;
-                $mins = $minutes%60;
-                if(intVal($hr)<=0){
+                $hr = $minutes / 60;
+                $mins = $minutes % 60;
+                if (intVal($hr) <= 0) {
                     $total_hr = intVal($mins) . " minutes";
-
                 } else {
                     $total_hr = intVal($hr) . " hour" . " " . intVal($mins) . " minutes";
                 }
-                $cart['estimatedTime'] = $total_hr;    
-
+                $cart['estimatedTime'] = $total_hr;
             }
         }
         $cart['deliverycharge'] = @$cart['deliverychargemain'];
@@ -180,14 +174,10 @@ class ProductController extends Controller
                     if ($value['type'] == 'percentage') {
 
                         $specialOfferDiscount = ($total_item_price * $value['discount']) / 100;
-
                     } else {
                         $specialOfferDiscount = $value['discount'];
-
                     }
                 }
-
-
             }
         }
 
@@ -333,7 +323,6 @@ class ProductController extends Controller
                 "variant_info" => @$req['variant_info'],
                 "category_id" => @$req['category_id'],
             ];
-
         }
 
         $cart['restaurant']['id'] = @$vendor_id;
@@ -371,14 +360,10 @@ class ProductController extends Controller
                     if ($value['type'] == 'percentage') {
 
                         $specialOfferDiscount = ($total_item_price * $value['discount']) / 100;
-
                     } else {
                         $specialOfferDiscount = $value['discount'];
-
                     }
                 }
-
-
             }
         }
 
@@ -401,7 +386,6 @@ class ProductController extends Controller
             }
             $tax = $totalTaxAmount;
             $tax_label = '';
-
         }
         $cart['tax_label'] = $tax_label;
         $cart['tax'] = $tax;
@@ -419,14 +403,14 @@ class ProductController extends Controller
      *
      * @return response()
      */
-   
+
 
     /**
      * Write code on Method
      *
      * @return response()
      */
-   
+
     /**
      * Write code on Method
      *
@@ -450,7 +434,6 @@ class ProductController extends Controller
                     Session::put('cart', $cart);
                     Session::save();
                 }
-
             } else {
                 $cart['item'][$id]['quantity'] = $req['quantity'];
                 $cart['item'][$id]['price'] = $cart['item'][$id]['item_price'] * $cart['item'][$id]['quantity'];
@@ -508,8 +491,6 @@ class ProductController extends Controller
                 Session::put('cart', $cart);
                 Session::save();
             }
-
-
         }
         $cart = Session::get('cart');
 
@@ -571,10 +552,8 @@ class ProductController extends Controller
 
                 if ($specialOfferType == "amount") {
                     $specialOfferDiscount = $cart['specialOfferDiscount'];
-
                 } else {
                     $specialOfferDiscount = ($total_item_price * $specialOfferDiscountVal) / 100;
-
                 }
             }
 
@@ -594,7 +573,6 @@ class ProductController extends Controller
                 }
                 $tax = $totalTaxAmount;
                 $tax_label = '';
-
             }
             $cart['tax_label'] = $tax_label;
             $cart['tax'] = $tax;
@@ -615,17 +593,17 @@ class ProductController extends Controller
     public
     function applyCoupon(Request $request)
     {
-            $cart = Session::get('cart');
-            $cart['coupon']['coupon_code'] = $request->coupon_code;
-            $cart['coupon']['coupon_id'] = $request->coupon_id;
-            $cart['coupon']['discount'] = $request->discount;
-            $cart['coupon']['discountType'] = $request->discountType;
+        $cart = Session::get('cart');
+        $cart['coupon']['coupon_code'] = $request->coupon_code;
+        $cart['coupon']['coupon_id'] = $request->coupon_id;
+        $cart['coupon']['discount'] = $request->discount;
+        $cart['coupon']['discountType'] = $request->discountType;
 
-            Session::put('cart', $cart);
-            Session::save();
-            $res = array('status' => true, 'html' => view('store.cart_item', ['cart' => $cart])->render());
-            echo json_encode($res);
-            exit;
+        Session::put('cart', $cart);
+        Session::save();
+        $res = array('status' => true, 'html' => view('store.cart_item', ['cart' => $cart])->render());
+        echo json_encode($res);
+        exit;
     }
 
     /**
@@ -640,9 +618,9 @@ class ProductController extends Controller
         Session::put('cart', $cart);
         Session::put('success', 'Your order has been successful!');
 
-        if(Storage::disk('local')->has('firebase/credentials.json')){
-            
-            $client= new Google_Client();
+        if (Storage::disk('local')->has('firebase/credentials.json')) {
+
+            $client = new Google_Client();
             $client->setAuthConfig(storage_path('app/firebase/credentials.json'));
             $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
             $client->refreshTokenWithAssertion();
@@ -650,11 +628,11 @@ class ProductController extends Controller
             $access_token = $client_token['access_token'];
 
             $fcm_token = $request->fcm;
-            
-            if(!empty($access_token) && !empty($fcm_token)){
+
+            if (!empty($access_token) && !empty($fcm_token)) {
 
                 $projectId = env('FIREBASE_PROJECT_ID');
-                $url = 'https://fcm.googleapis.com/v1/projects/'.$projectId.'/messages:send';
+                $url = 'https://fcm.googleapis.com/v1/projects/' . $projectId . '/messages:send';
 
                 $data = [
                     'message' => [
@@ -673,7 +651,7 @@ class ProductController extends Controller
 
                 $headers = array(
                     'Content-Type: application/json',
-                    'Authorization: Bearer '.$access_token
+                    'Authorization: Bearer ' . $access_token
                 );
 
                 $ch = curl_init();
@@ -684,26 +662,24 @@ class ProductController extends Controller
                 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-                
+
                 $result = curl_exec($ch);
                 if ($result === FALSE) {
                     die('FCM Send Error: ' . curl_error($ch));
                 }
                 curl_close($ch);
-                $result=json_decode($result);
+                $result = json_decode($result);
 
                 $response = array();
                 $response['success'] = true;
                 $response['message'] = 'Notification successfully sent.';
                 $response['result'] = $result;
-
-            }else{
+            } else {
                 $response = array();
                 $response['success'] = false;
                 $response['message'] = 'Missing sender id or token to send notification.';
             }
-
-        }else{
+        } else {
             $response = array();
             $response['success'] = false;
             $response['message'] = 'Firebase credentials file not found.';
@@ -712,9 +688,8 @@ class ProductController extends Controller
         Session::save();
 
         $order_response = array('status' => true, 'order_complete' => true, 'html' => view('store.cart_item', ['cart' => $cart, 'order_complete' => true, 'is_checkout' => 1])->render(), 'response' => $response);
-       
-        return response()->json($order_response);
 
+        return response()->json($order_response);
     }
 
     /**
@@ -732,56 +707,50 @@ class ProductController extends Controller
                 unset($cart['item'][$request->id]);
 
                 $total_item_price = 0;
-              
+
                 foreach ($cart['item'] as $key_cart => $value_cart) {
 
-                        $total_one_item_price = $value_cart['item_price'] * $value_cart['quantity'];
-                        $total_item_price = $total_item_price + $total_one_item_price;
+                    $total_one_item_price = $value_cart['item_price'] * $value_cart['quantity'];
+                    $total_item_price = $total_item_price + $total_one_item_price;
+                }
+
+                $discount_amount = 0;
+                /*Disctount*/
+
+                if (@$cart['coupon'] && $cart['coupon']['discountType']) {
+                    $discountType = $cart['coupon']['discountType'];
+                    $coupon_code = $cart['coupon']['coupon_code'];
+                    $coupon_id = @$cart['coupon']['coupon_id'];
+                    $discount = $cart['coupon']['discount'];
+                    if ($discountType == "Fix Price") {
+                        $discount_amount = $cart['coupon']['discount'];
+                        if ($discount_amount > $total_item_price) {
+                            $discount_amount = $total_item_price;
+                        }
+                    } else {
+                        $discount_amount = $cart['coupon']['discount'];
+                        $discount_amount = ($total_item_price * $discount_amount) / 100;
+                        if ($discount_amount > $total_item_price) {
+                            $discount_amount = $total;
+                        }
                     }
+                }
 
-                    $discount_amount = 0;
-                    /*Disctount*/
+                $total_item_price = $total_item_price - $discount_amount;
 
-                    if (@$cart['coupon'] && $cart['coupon']['discountType']) {
-                        $discountType = $cart['coupon']['discountType'];
-                        $coupon_code = $cart['coupon']['coupon_code'];
-                        $coupon_id = @$cart['coupon']['coupon_id'];
-                        $discount = $cart['coupon']['discount'];
-                        if ($discountType == "Fix Price") {
-                            $discount_amount = $cart['coupon']['discount'];
-                            if ($discount_amount > $total_item_price) {
-                                $discount_amount = $total_item_price;
-                            }
-
+                if (is_array($cart['taxValue'])) {
+                    $totalTaxAmount = 0;
+                    foreach ($cart['taxValue'] as $val) {
+                        if ($val['type'] == 'percentage') {
+                            $tax = ($val['tax'] * $total_item_price) / 100;
                         } else {
-                            $discount_amount = $cart['coupon']['discount'];
-                            $discount_amount = ($total_item_price * $discount_amount) / 100;
-                            if ($discount_amount > $total_item_price) {
-                                $discount_amount = $total;
-                            }
-
+                            $tax = $val['tax'];
                         }
-
+                        $totalTaxAmount += floatval($tax);
                     }
-
-                    $total_item_price = $total_item_price - $discount_amount;
-
-                    if (is_array($cart['taxValue'])) {
-                        $totalTaxAmount = 0;
-                        foreach ($cart['taxValue'] as $val) {
-                            if ($val['type'] == 'percentage') {
-                                $tax = ($val['tax'] * $total_item_price) / 100;
-                            } else {
-                                $tax = $val['tax'];
-                            }
-                            $totalTaxAmount += floatval($tax);
-                        }
-                        $tax = $totalTaxAmount;
-                        $tax_label = '';
-
-
-                    }
-                   
+                    $tax = $totalTaxAmount;
+                    $tax_label = '';
+                }
             }
 
             Session::put('cart', $cart);
@@ -793,5 +762,4 @@ class ProductController extends Controller
         echo json_encode($res);
         exit;
     }
-
 }

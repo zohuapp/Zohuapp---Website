@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,14 +14,18 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+// authentication routes
+Auth::routes();
 
+// other routes
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('set-location', [App\Http\Controllers\HomeController::class, 'setLocation'])->name('set-location');
 
-Route::get('login', [App\Http\Controllers\LoginController::class, 'login'])->name('login');
+// Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('login/create', [LoginController::class, 'login'])->name('login.create');
 
-Route::get('signup', [App\Http\Controllers\LoginController::class, 'signup'])->name('signup');
+// Route::get('signup', [App\Http\Controllers\LoginController::class, 'signup'])->name('signup');
 
 Route::get('search', [App\Http\Controllers\SearchController::class, 'index'])->name('search');
 

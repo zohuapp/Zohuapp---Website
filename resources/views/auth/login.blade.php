@@ -1,73 +1,401 @@
-@extends('layouts.app')
+@include('auth.default')
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+{{-- @php
+    $countries = file_get_contents(public_path('countriesdata.json'));
+    $countries = json_decode($countries);
+    $countries = (array) $countries;
+    $newcountries = [];
+    $newcountriesjs = [];
+    foreach ($countries as $keycountry => $valuecountry) {
+        $newcountries[$valuecountry->phoneCode] = $valuecountry;
+        $newcountriesjs[$valuecountry->phoneCode] = $valuecountry->code;
+    }
+@endphp --}}
+{{-- <link href="{{ asset('vendor/select2/dist/css/select2.min.css') }}" rel="stylesheet"> --}}
+{{-- <link href="{{ asset('/css/font-awesome.min.css') }}" rel="stylesheet"> --}}
+<style>
+    #phone {
+        padding-left: 40% !important;
+    }
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
+    #select2-country_selector-container {
+        max-width: fit-content;
+    }
 
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('E-Mail Address') }}</label>
+    .select2-container--open .select2-dropdown {
+        min-width: 227px;
+    }
+</style>
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+<div class="login-page vh-100">
+    <div class="d-flex align-items-center justify-content-center vh-100">
+        <div class="col-md-6">
+            <div class="col-10 mx-auto card p-3">
+                <h3 class="text-dark text-center my-0 mb-3">{{ trans('lang.login') }}</h3>
+                {{-- <p class="text-50">{{ trans('lang.sign_in_to_continue') }}</p> --}}
+                <div class="error" id="error"></div>
 
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                <form class="form-horizontal form-material pt-4" method="POST"
+                    id="login-form">
+                    @csrf
+                    {{-- <div class="box-title m-b-20">{{ __('Login') }}</div> --}}
+                    <div class="form-group " id="phone-box">
+                        {{-- <div class="mb-3"> --}}
+                        {{-- email input --}}
+                        <label for="userEmail" class="form-label">Email Address</label>
+                        <input type="email" name="email" class="form-control" id="userEmail" required
+                            aria-describedby="emailHelp">
+                        <span id="emailHelp" class="form-text">We'll never share your email with anyone else.</span>
+                        @error('email')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                        {{-- </div> --}}
+                        {{-- <div class="col-xs-12"> --}}
+
+                        {{-- <select name="country" id="country_selector">
+                                @foreach ($newcountries as $keycy => $valuecy)
+                                    @if ($valuecy->code === 'ES')
+                                        <option selected code="{{ $valuecy->code }}" value="{{ $keycy }}">
+                                            +{{ $valuecy->phoneCode . '(' . $valuecy->countryName . ')' }}</option>
+                                    @else
+                                        <option code="{{ $valuecy->code }}" value="{{ $keycy }}">
+                                            +{{ $valuecy->phoneCode . '(' . $valuecy->countryName . ')' }}</option>
+                                    @endif
+                                @endforeach
+                            </select> --}}
+                        {{-- <input class="form-control" placeholder="{{ trans('lang.user_phone') }}" id="phone"
+                                type="phone" class="form-control" name="phone" value="{{ old('phone') }}" required
+                                onkeypress="return chkAlphabets2(event,'phone_number_err')" autocomplete="phone"
+                                autofocus>
+                            <div id="phone_number_err"></div>
+                        </div> --}}
+                        {{-- @error('phone')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror --}}
+                    </div>
+                    {{-- password input --}}
+                    <div class="form-group">
+                        <label for="userPassword" class="form-label">Password</label>
+                        <input type="password" name="password" class="form-control" required id="userPassword">
+                        @error('password')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+
+                    <div class="error font-weight-bold text-center" id="password_required_new"></div>
+
+                    {{-- <div class="form-group" id="otp-box" style="display:none;">
+                        <input class="form-control" placeholder="{{ trans('lang.otp') }}" id="verificationcode"
+                            type="text" class="fo
+                               rm-control" name="otp"
+                            value="{{ old('otp') }}" required autocomplete="otp" autofocus>
+                    </div>
+                    <div id="recaptcha-container" style="display:none;"></div>
+                    <div class="error" id="password_required_new1"></div> --}}
+
+                    <div class="form-group text-center m-t-20">
+                        <div class="col-xs-12">
+                            {{-- <button type="button" style="display:none;" onclick="applicationVerifier()" id="verify_btn"
+                                class="btn btn-dark btn-lg btn-block text-uppercase waves-effect waves-light btn btn-primary remove_hover">{{ trans('lang.otp_verify') }}</button> --}}
+                            {{--  --}}
+                            <button type="submit" onclick="signInUser()" id="sendotp_btn"
+                                class="btn btn-dark btn-lg btn-block text-uppercase waves-effect waves-light btn btn-primary remove_hover">{{ trans('lang.sign_in') }}</button>
+                            {{--  --}}
+                            <div class="or-line mb-3 mt-3">
+                                <span>OR</span>
                             </div>
+                            {{--  --}}
+                            <a href="{{ route('register') }}"
+                                class="btn btn-primary btn-lg btn-block remove_hover">{{ trans('lang.sign_up') }}
+                            </a>
+                            {{--  --}}
                         </div>
+                    </div>
+                </form>
 
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
-                </div>
             </div>
         </div>
     </div>
 </div>
-@endsection
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{{ asset('vendor/select2/dist/js/select2.min.js') }}"></script>
+<script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-firestore.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-storage.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-auth.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-database.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+
+<script src="{{ asset('js/crypto-js.js') }}"></script>
+<script src="{{ asset('js/jquery.cookie.js') }}"></script>
+<script src="{{ asset('js/jquery.validate.js') }}"></script>
+
+<script type="text/javascript">
+    var database = firebase.firestore();
+
+    // function loginWithPhoneClick() {
+    //     jQuery("#login-box").hide();
+    //     jQuery("#login-with-phone-box").show();
+    //     jQuery("#phone-box").show();
+    //     jQuery("#recaptcha-container").show();
+    //     jQuery("#sendotp_btn").show();
+    // }
+
+    // window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+    //     'size': 'invisible',
+    //     'callback': (response) => {}
+    // });
+
+    // const appVerifier = window.recaptchaVerifier;
+
+    async function signInUser() {
+
+        // const form = event.target; // Get the form element from the event object
+        // const formData = new FormData(form);
+
+        const email = $("#userEmail").val();
+        const password = $("#userPassword").val();
+
+        // console.log("email (direct access):", email);
+        // console.log("Password (direct access):", password);
+
+        try {
+            const checkUser = await firebase.firestore().collection('users') // Use firebase.firestore()
+                .where("email", "==", email)
+                .where("role", "==", email)
+                .get();
+
+            if (checkUser.docs.length > 0) { // checkUser.docs instead of checkUser.snapshots.docs
+                const userData = checkUser.docs[0].data();
+
+                if (userData.active === true) {
+                    try {
+                        const signIn = await firebase.auth().signInWithEmailAndPassword(email, password);
+                        // console.log("User signed in:", signIn.user);
+                        // Redirect or perform actions after successful sign-in
+                        // window.location.href = "/home"; // Example redirect
+                        $('#login-form').submit();
+                        return; // Stop further execution
+                    } catch (signInError) {
+                        console.error("Sign-in error:", signInError);
+                        // Handle sign-in errors (e.g., wrong password):
+                        if (signInError.code === 'auth/wrong-password') {
+                            alert("Incorrect password.");
+                        } else {
+                            alert("An error occurred during sign in. Please try again.");
+                        }
+                        return; // Stop further execution
+                    }
+                } else {
+                    alert("Your account is not active. Please contact support.");
+                    return;
+                }
+            }
+
+            // If user doesn't exist in Firestore or is not active, create the user in Firebase Auth:
+            try {
+                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+
+                // Store additional user data in Firestore (including the password if absolutely necessary – but consider not storing it due to security risks):
+                await firebase.firestore().collection('users').doc(user.uid).set({ // Use user.uid for doc ID
+                    email: email,
+                    role: "customer",
+                    'id': user.uid,
+                    active: true, // or whatever default value you want
+                });
+
+                // console.log("User signed up and data stored:", user);
+                // alert("User signed up");
+                $('#login-form').submit();
+                // window.location.href = "{{ url('/') }}"; // Redirect after successful sign-up
+                return;
+
+            } catch (signUpError) {
+                // console.error("Sign-up error:", signUpError);
+                // Handle sign-up errors (e.g., weak password, email already in use):
+                if (signUpError.code === 'auth/weak-password') {
+                    alert(signUpError.message);
+                } else if (signUpError.code === 'auth/email-already-in-use') {
+                    alert(signUpError.message);
+                } else {
+                    alert("An error occurred during sign up. Please try again.");
+                }
+            }
+
+        } catch (error) {
+            console.error("Overall error:", error);
+        }
+    }
+
+    // function sendOTP() {
+
+    //     if (jQuery("#phone").val() && jQuery("#country_selector").val()) {
+    //         var phoneNumber = '+' + jQuery("#country_selector").val() + '' + jQuery("#phone").val();
+    //         var phone = jQuery("#phone").val();
+
+    //         database.collection("users").where("phoneNumber", "==", phone).where("role", "==", 'customer').get().then(
+    //             async function(snapshots) {
+    //                 if (snapshots.docs.length) {
+    //                     var userData = snapshots.docs[0].data();
+
+    //                     if (userData.active == true) {
+
+    //                         firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+    //                             .then(function(confirmationResult) {
+    //                                 window.confirmationResult = confirmationResult;
+    //                                 if (confirmationResult.verificationId) {
+
+    //                                     jQuery("#phone-box").hide();
+    //                                     jQuery("#recaptcha-container").hide();
+    //                                     jQuery("#otp-box").show();
+    //                                     jQuery("#verify_btn").show();
+    //                                 }
+    //                             });
+    //                     } else {
+    //                         $("#password_required_new1").html(
+    //                             "{{ trans('lang.account_disable_contact_admin') }}");
+    //                     }
+    //                 } else {
+    //                     jQuery("#password_required_new").html("{{ trans('lang.user_not_found') }}");
+    //                 }
+    //             });
+    //     } else {
+    //         jQuery("#password_required_new").html("{{ trans('lang.please_enter_phone_number') }}");
+
+    //     }
+    // }
+
+    // function applicationVerifier() {
+    //     window.confirmationResult.confirm(document.getElementById("verificationcode").value)
+    //         .then(function(result) {
+
+    //             database.collection("users").where('phoneNumber', '==', (result.user.phoneNumber).substring(3))
+    //                 .get().then(async function(snapshots_login) {
+    //                     userData = snapshots_login.docs[0].data();
+    //                     if (userData) {
+    //                         if (userData.role == "customer") {
+    //                             var uid = result.user.uid;
+    //                             var user = result.user.uid;
+    //                             var firstName = userData.firstName;
+
+    //                             var lastName = userData.lastName;
+    //                             var imageURL = userData.profilePictureURL;
+    //                             if (userData.hasOwnProperty('shippingAddress')) {
+    //                                 userData.shippingAddress.forEach(element => {
+    //                                     if (element.isDefault == true) {
+    //                                         setCookie('address_lat', element.location.latitude,
+    //                                             365);
+    //                                         setCookie('address_lng', element.location.longitude,
+    //                                             365);
+    //                                     }
+    //                                 });
+    //                             }
+
+
+    //                             var url = "{{ route('setToken') }}";
+    //                             $.ajax({
+    //                                 type: 'POST',
+    //                                 url: url,
+    //                                 data: {
+    //                                     id: uid,
+    //                                     userId: user,
+    //                                     email: userData.phoneNumber,
+    //                                     password: '',
+    //                                     firstName: firstName,
+    //                                     lastName: lastName,
+    //                                     profilePicture: imageURL
+    //                                 },
+    //                                 headers: {
+    //                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //                                 },
+    //                                 success: function(data) {
+    //                                     if (data.access) {
+    //                                         window.location = "{{ url('/') }}";
+    //                                     }
+    //                                 }
+    //                             });
+    //                         } else {
+    //                             jQuery("#password_required_new").html(
+    //                                 "{{ trans('lang.user_not_found') }}");
+    //                         }
+    //                     }
+    //                 })
+    //         }).catch(function(error) {
+    //             jQuery("#password_required_new").html("{{ trans('lang.invalid_otp') }}");
+    //         });
+    // }
+
+
+    // var newcountriesjs = JSON.parse(newcountriesjs);
+
+    // function formatState(state) {
+
+    //     if (!state.id) {
+    //         return state.text;
+    //     }
+    //     var baseUrl = "<?php echo URL::to('/'); ?>/flags/120/";
+    //     var $state = $(
+    //         '<span><img src="' + baseUrl + '/' + newcountriesjs[state.element.value].toLowerCase() +
+    //         '.png" class="img-flag" /> ' + state.text + '</span>'
+    //     );
+    //     return $state;
+    // }
+
+    // function formatState2(state) {
+    //     if (!state.id) {
+    //         return state.text;
+    //     }
+
+    //     var baseUrl = "<?php echo URL::to('/'); ?>/flags/120/";
+    //     var $state = $(
+    //         '<span><img class="img-flag" /> <span></span></span>'
+    //     );
+    //     $state.find("span").text(state.text);
+    //     $state.find("img").attr("src", baseUrl + "/" + newcountriesjs[state.element.value].toLowerCase() + ".png");
+
+    //     return $state;
+    // }
+
+    // function setCookie(name, value, days) {
+    //     var expires = "";
+    //     if (days) {
+    //         var date = new Date();
+    //         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    //         expires = "; expires=" + date.toUTCString();
+    //     }
+    //     document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    // }
+
+    // function chkAlphabets2(event, msg) {
+    //     if (!(event.which >= 48 && event.which <= 57)) {
+    //         document.getElementById(msg).innerHTML = "Accept only Number";
+    //         return false;
+    //     } else {
+    //         document.getElementById(msg).innerHTML = "";
+    //         return true;
+    //     }
+    // }
+    // jQuery(document).ready(function() {
+
+    //     jQuery("#country_selector").select2({
+    //         templateResult: formatState,
+    //         templateSelection: formatState2,
+    //         placeholder: "Select Country",
+    //         allowClear: true
+    //     });
+
+    // });
+</script>

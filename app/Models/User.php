@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\VendorUsers;
 use Illuminate\Support\Facades\Auth;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -43,19 +44,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function getvendorId(){
+    public function getvendorId()
+    {
 
-        $exist = VendorUsers::where('user_id',Auth::user()->id)->first();
-        if($exist){
+        $exist = VendorUsers::where('user_id', Auth::user()->id)->first();
+        if ($exist) {
             return $exist->uuid;
-        }else{
-            $exist = VendorUsers::where('email',Auth::user()->email)->first();
-            if($exist){
+        } else {
+            $exist = VendorUsers::where('email', Auth::user()->email)->first();
+            if ($exist) {
                 return $exist->uuid;
-            }else{
+            } else {
                 return null;
             }
         }
-        
     }
 }
