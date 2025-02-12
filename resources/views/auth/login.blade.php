@@ -35,8 +35,7 @@
                 {{-- <p class="text-50">{{ trans('lang.sign_in_to_continue') }}</p> --}}
                 <div class="error" id="error"></div>
 
-                <form class="form-horizontal form-material pt-4" method="POST"
-                    id="login-form">
+                <form class="form-horizontal form-material pt-4" method="POST" id="login-form">
                     @csrf
                     {{-- <div class="box-title m-b-20">{{ __('Login') }}</div> --}}
                     <div class="form-group " id="phone-box">
@@ -89,15 +88,6 @@
                     </div>
 
                     <div class="error font-weight-bold text-center" id="password_required_new"></div>
-
-                    {{-- <div class="form-group" id="otp-box" style="display:none;">
-                        <input class="form-control" placeholder="{{ trans('lang.otp') }}" id="verificationcode"
-                            type="text" class="fo
-                               rm-control" name="otp"
-                            value="{{ old('otp') }}" required autocomplete="otp" autofocus>
-                    </div>
-                    <div id="recaptcha-container" style="display:none;"></div>
-                    <div class="error" id="password_required_new1"></div> --}}
 
                     <div class="form-group text-center m-t-20">
                         <div class="col-xs-12">
@@ -174,20 +164,43 @@
         try {
             const checkUser = await firebase.firestore().collection('users') // Use firebase.firestore()
                 .where("email", "==", email)
-                .where("role", "==", email)
+                .where("role", "==", "customer")
                 .get();
 
-            if (checkUser.docs.length > 0) { // checkUser.docs instead of checkUser.snapshots.docs
+            if (checkUser.docs.length > 0) {
                 const userData = checkUser.docs[0].data();
 
                 if (userData.active === true) {
                     try {
                         const signIn = await firebase.auth().signInWithEmailAndPassword(email, password);
-                        // console.log("User signed in:", signIn.user);
-                        // Redirect or perform actions after successful sign-in
-                        // window.location.href = "/home"; // Example redirect
-                        $('#login-form').submit();
-                        return; // Stop further execution
+                        console.log("User signed in:", signIn.user);
+                        alert("User signed in");
+
+                        const uid = signIn.user.uid;
+                        const url = "{{ route('setToken') }}";
+
+                        $.ajax({
+                            type: 'POST',
+                            url: url,
+                            data: {
+                                id: uid,
+                                userId: uid,
+                                email: userData.phoneNumber,
+                                password: '',
+                                // firstName: firstName,
+                                // lastName: lastName,
+                                // profilePicture: imageURL
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(data) {
+                                if (data.access) {
+                                    window.location = "{{ url('/') }}";
+                                }
+                            }
+                        });
+                        // return; // Stop further execution
                     } catch (signInError) {
                         console.error("Sign-in error:", signInError);
                         // Handle sign-in errors (e.g., wrong password):
@@ -201,37 +214,6 @@
                 } else {
                     alert("Your account is not active. Please contact support.");
                     return;
-                }
-            }
-
-            // If user doesn't exist in Firestore or is not active, create the user in Firebase Auth:
-            try {
-                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-
-                // Store additional user data in Firestore (including the password if absolutely necessary – but consider not storing it due to security risks):
-                await firebase.firestore().collection('users').doc(user.uid).set({ // Use user.uid for doc ID
-                    email: email,
-                    role: "customer",
-                    'id': user.uid,
-                    active: true, // or whatever default value you want
-                });
-
-                // console.log("User signed up and data stored:", user);
-                // alert("User signed up");
-                $('#login-form').submit();
-                // window.location.href = "{{ url('/') }}"; // Redirect after successful sign-up
-                return;
-
-            } catch (signUpError) {
-                // console.error("Sign-up error:", signUpError);
-                // Handle sign-up errors (e.g., weak password, email already in use):
-                if (signUpError.code === 'auth/weak-password') {
-                    alert(signUpError.message);
-                } else if (signUpError.code === 'auth/email-already-in-use') {
-                    alert(signUpError.message);
-                } else {
-                    alert("An error occurred during sign up. Please try again.");
                 }
             }
 

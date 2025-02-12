@@ -16,8 +16,6 @@ class LoginController extends Controller
 
     public function login()
     {
-        dd("Creating");
-
         if (Auth::check()) {
             return redirect(route('profile'));
         } else {
@@ -27,12 +25,10 @@ class LoginController extends Controller
 
     public function signup()
     {
-        dd("Creating");
-
         if (Auth::check()) {
             return redirect(route('profile'));
         } else {
-            return view('auth.signup');
+            return view('auth.register');
         }
     }
 }

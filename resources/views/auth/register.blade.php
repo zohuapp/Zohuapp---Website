@@ -41,98 +41,39 @@
 
                 <div class="error" id="field_error"></div>
 
-                {{-- sendOTP method will be executed on the below form submission --}}
-                <form class="mt-3 mb-4" method="POST" action="{{ route('register') }}">
-                    @csrf
+                {{-- register form --}}
+                <form class="mt-3 mb-4">
                     <div id="password_required_new"></div>
+                    {{-- full name --}}
                     <div class="form-group" id="fullName_div">
                         <label for="firstName" class="text-dark">{{ trans('lang.full_name') }}</label>
-                        <input type="text" placeholder="{{ trans('lang.full_name_help') }}" class="form-control"
-                            id="fullName" required onkeypress="return checkcharecter(event,'error2')">
+                        <input type="text" name="fullName" placeholder="{{ trans('lang.full_name_help') }}"
+                            class="form-control" id="userName" required>
                         <div id="error2" class="err"></div>
-                        <input type="hidden" id="hidden_fullName" />
                     </div>
 
-                    <div class="form-group" id="phone-box">
-                        <label for="phoneNumber" class="text-dark">{{ trans('lang.user_phone') }}</label>
-                        <div class="col-xs-12">
-                            <select name="country" id="country_selector">
-                                @foreach ($newcountries as $keycy => $valuecy)
-                                    @if ($valuecy->code === 'ES')
-                                        <option selected code="{{ $valuecy->code }}" value="{{ $keycy }}">
-                                            +{{ $valuecy->phoneCode . '(' . $valuecy->countryName . ')' }}</option>
-                                    @else
-                                        <option code="{{ $valuecy->code }}" value="{{ $keycy }}">
-                                            +{{ $valuecy->phoneCode . '(' . $valuecy->countryName . ')' }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                            <input class="form-control" placeholder="{{ trans('lang.user_phone_help') }}"
-                                id="mobileNumber" type="phone" name="mobileNumber" value="{{ old('mobileNumber') }}"
-                                required autocomplete="mobileNumber"
-                                onkeypress="return chkAlphabets2(event,'phone_number_err')">
-                            <div id="phone_number_err" class="err"></div>
-                        </div>
-
-                        @error('phone')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
+                    {{-- email --}}
                     <div class="form-group" id="email-box">
                         <label for="email" class="text-dark">{{ trans('lang.user_email') }}</label>
                         <div class="col-xs-12">
-                            <input class="form-control" placeholder="{{ trans('lang.user_email_help') }}"
-                                id="email" type="phone" name="email" value="{{ old('email') }}" required
-                                autocomplete="email">
-                        </div>
-                        @error('email')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-
-                    <div class="form-group businessDetail_div">
-                        <label for="business_address" class="text-dark">{{ trans('lang.address') }}</label>
-                        <div class="location-box">
-                            <div class="location-group">
-                                <input id="business_address" type="text"
-                                    placeholder="{{ trans('lang.business_address_help') }}" autocomplete="off"
-                                    fdprocessedid="xfcobpj" class="pac-target-input" required>
-                                <span class="locate-me" onclick="getCurrentLocation()"><img
-                                        src="https://emartweb.siswebapp.com/img/locatleme-icon.png">Locate Me</span>
-                            </div>
-                            <div id="address_error" class="err"></div>
+                            <input class="form-control" placeholder="{{ trans('lang.user_email_help') }}" id="userEmail"
+                                type="phone" name="email" value="{{ old('email') }}" required autocomplete="email">
                         </div>
                     </div>
 
-                    <div class="form-group " id="otp-box" style="display:none;">
-                        <input class="form-control" placeholder="{{ trans('lang.otp') }}" id="verificationcode"
-                            type="text" class="form-control" name="otp" value="{{ old('otp') }}"
-                            autocomplete="otp">
-                        <div class="otp_error font-weight-bold">
-                        </div>
+                    {{-- password --}}
+                    <div class="form-group">
+                        <label for="userPassword" class="form-label">Password</label>
+                        <input type="password" name="password" placeholder="{{ trans('lang.user_password_help') }}"
+                            class="form-control" required id="userPassword">
                     </div>
-                    <div id="recaptcha-container"></div>
 
-                    <button type="submit" class="btn btn-primary btn-lg btn-block send-code remove_hover">
-                        {{ trans('lang.otp_send') }}
+                    {{-- submit button --}}
+                    <button type="button" onclick="signUpUser()"
+                        class="btn btn-primary btn-lg btn-block send-code remove_hover">
+                        {{ trans('lang.sign_up') }}
                     </button>
-                    {{--  --}}
-                    <button type="button" style="display:none;" onclick="applicationVerifier()" id="verify_btn"
-                        class="btn btn-dark btn-lg btn-block text-uppercase waves-effect waves-light btn btn-primary remove_hover">{{ trans('lang.otp_verify') }}
-                    </button>
-                    {{--  --}}
-                    <button type="submit" style="display:none;"
-                        class="btn btn-primary btn-lg btn-block resend-code remove_hover" id="resend-code"
-                        onclick="sendOTP()">
-                        {{ trans('lang.otp_send') }}
-                    </button>
-
                 </form>
-
             </div>
 
             <div class="new-acc d-flex align-items-center justify-content-center mt-4 mb-3">
@@ -419,157 +360,229 @@
 
     });
 
-    // Start of sign-up form and send otp method
-    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-        'size': 'normal',
-        'callback': (response) => {
-            console.log(response);
+    async function signUpUser() {
+
+        const name = $("#userName").val();
+        const email = $("#userEmail").val();
+        const password = $("#userPassword").val();
+
+        // alert(name);
+
+        // If user doesn't exist in Firestore or is not active, create the user in Firebase Auth:
+        try {
+            const checkUser = await firebase.firestore().collection('users') // Use firebase.firestore()
+                .where("email", "==", email)
+                .where("role", "==", "customer")
+                .get();
+
+            if (checkUser.docs.length <= 0) {
+                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+
+                // Store additional user data in Firestore (including the password if absolutely necessary – but consider not storing it due to security risks):
+                await firebase.firestore().collection('users').doc(user.uid).set({ // Use user.uid for doc ID
+                    email: email,
+                    role: "customer",
+                    'id': user.uid,
+                    active: true, // or whatever default value you want
+                });
+
+                console.log("User signed up and data stored:", user);
+                alert("User signed up");
+
+                const uuid = user.uid;
+                const url = "{{ route('setToken') }}";
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        userId: uuid,
+                        id: uuid,
+                        email: email,
+                        password: password,
+                        name: name,
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+
+                    success: function(data) {
+                        if (data.access) {
+                            window.location = "{{ url('/') }}";
+                        }
+                    }
+                })
+            } else {
+                alert("Account already exists with the required credentials. Please sign In.");
+                return;
+            }
+            // return;
+
+        } catch (signUpError) {
+            // console.error("Sign-up error:", signUpError);
+            // Handle sign-up errors (e.g., weak password, email already in use):
+            if (signUpError.code === 'auth/weak-password') {
+                alert(signUpError.message);
+            } else if (signUpError.code === 'auth/email-already-in-use') {
+                alert(signUpError.message);
+            } else {
+                alert("An error occurred during sign up. Please try again.");
+            }
         }
-    });
+    }
+
+    // Start of sign-up form and send otp method
+    // window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+    //     'size': 'normal',
+    //     'callback': (response) => {
+    //         console.log(response);
+    //     }
+    // });
 
     // sendOTP method will be triggerd on sign-up form submission
-    function sendOTP() {
+    // function sendOTP() {
 
-        // $('#overlay').show();
-        // check if recaptcha is not verified so verify it again
-        if (!window.recaptchaVerifier) {
-            jQuery("#recaptcha-container").show();
+    //     // $('#overlay').show();
+    //     // check if recaptcha is not verified so verify it again
+    //     if (!window.recaptchaVerifier) {
+    //         jQuery("#recaptcha-container").show();
 
-            window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-                'size': 'normal',
-                'callback': (response) => {
+    //         window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+    //             'size': 'normal',
+    //             'callback': (response) => {
 
-                }
-            });
-        }
-        if (jQuery("#mobileNumber").val() && jQuery("#country_selector").val()) {
-            var fullPhoneNumber = '+' + jQuery("#country_selector").val() + jQuery("#mobileNumber").val();
-            var phoneNumber = jQuery("#mobileNumber").val();
+    //             }
+    //         });
+    //     }
+    //     if (jQuery("#mobileNumber").val() && jQuery("#country_selector").val()) {
+    //         var fullPhoneNumber = '+' + jQuery("#country_selector").val() + jQuery("#mobileNumber").val();
+    //         var phoneNumber = jQuery("#mobileNumber").val();
 
-            database.collection("users").where('phoneNumber', '==', phoneNumber).get().then(async function(snapshots) {
+    //         database.collection("users").where('phoneNumber', '==', phoneNumber).get().then(async function(snapshots) {
 
-                if (snapshots.docs.length > 0) {
-                    $('#overlay').hide();
-                    alert('{{ trans('lang.phone_number_already_exist') }}');
-                    return false;
-                } else {
-                    firebase.auth().signInWithPhoneNumber(fullPhoneNumber, window.recaptchaVerifier)
-                        .then(function(confirmationResult) {
-                            window.confirmationResult = confirmationResult;
-                            if (confirmationResult.verificationId) {
-                                $('#fullName_div').hide();
-                                $('#user_image_div').hide();
-                                $('#phone-box').hide();
-                                $('#email-box').hide();
-                                $('.businessDetail_div').hide();
-                                $('#send-code').hide();
-                                $('#resend-code').show();
-                                jQuery("#recaptcha-container").hide();
-                                jQuery("#otp-box").show();
-                                $('#verificationcode').attr('required', 'true');
-                                jQuery("#verify_btn").show();
-                                $('#overlay').hide();
-                            }
-                        }).catch(function(error) {
-                            console.error("Error during signInWithPhoneNumber:", error);
-                            // throw new Error("Error during signInWithPhoneNumber:", error);
+    //             if (snapshots.docs.length > 0) {
+    //                 $('#overlay').hide();
+    //                 alert('{{ trans('lang.phone_number_already_exist') }}');
+    //                 return false;
+    //             } else {
+    //                 firebase.auth().signInWithPhoneNumber(fullPhoneNumber, window.recaptchaVerifier)
+    //                     .then(function(confirmationResult) {
+    //                         window.confirmationResult = confirmationResult;
+    //                         if (confirmationResult.verificationId) {
+    //                             $('#fullName_div').hide();
+    //                             $('#user_image_div').hide();
+    //                             $('#phone-box').hide();
+    //                             $('#email-box').hide();
+    //                             $('.businessDetail_div').hide();
+    //                             $('#send-code').hide();
+    //                             $('#resend-code').show();
+    //                             jQuery("#recaptcha-container").hide();
+    //                             jQuery("#otp-box").show();
+    //                             $('#verificationcode').attr('required', 'true');
+    //                             jQuery("#verify_btn").show();
+    //                             $('#overlay').hide();
+    //                         }
+    //                     }).catch(function(error) {
+    //                         console.error("Error during signInWithPhoneNumber:", error);
+    //                         // throw new Error("Error during signInWithPhoneNumber:", error);
 
-                            $('#overlay').hide();
-                            alert("Failed to send OTP. Please try again.");
-                        });
-                }
-            })
+    //                         $('#overlay').hide();
+    //                         alert("Failed to send OTP. Please try again.");
+    //                     });
+    //             }
+    //         })
 
 
-        }
+    //     }
 
-    }
+    // }
 
-    function applicationVerifier() {
-        var code = $('#verificationcode').val();
+    // function applicationVerifier() {
+    //     var code = $('#verificationcode').val();
 
-        if (code == "") {
-            $('.otp_error').html('{{ trans('lang.please_enter_otp') }}');
-        } else {
-            window.confirmationResult.confirm(document.getElementById("verificationcode").value)
-                .then(async function(result) {
+    //     if (code == "") {
+    //         $('.otp_error').html('{{ trans('lang.please_enter_otp') }}');
+    //     } else {
+    //         window.confirmationResult.confirm(document.getElementById("verificationcode").value)
+    //             .then(async function(result) {
 
-                    var address_lat = getCookie('address_lat');
-                    var address_lng = getCookie('address_lng');
-                    var businessAddress = getCookie('address_name');
-                    var location = {
-                        latitude: parseFloat(address_lat),
-                        longitude: parseFloat(address_lng)
-                    }
-                    var adrsId = database.collection('tmp').doc().id;
-                    address = {
-                        'address': null,
-                        'addressAs': null,
-                        'isDefault': true,
-                        'landmark': null,
-                        'locality': businessAddress,
-                        'location': location,
-                        'id': adrsId,
-                        'pinCode': pincode
-                    }
+    //                 var address_lat = getCookie('address_lat');
+    //                 var address_lng = getCookie('address_lng');
+    //                 var businessAddress = getCookie('address_name');
+    //                 var location = {
+    //                     latitude: parseFloat(address_lat),
+    //                     longitude: parseFloat(address_lng)
+    //                 }
+    //                 var adrsId = database.collection('tmp').doc().id;
+    //                 address = {
+    //                     'address': null,
+    //                     'addressAs': null,
+    //                     'isDefault': true,
+    //                     'landmark': null,
+    //                     'locality': businessAddress,
+    //                     'location': location,
+    //                     'id': adrsId,
+    //                     'pinCode': pincode
+    //                 }
 
-                    shippingAdrs.push(address);
+    //                 shippingAdrs.push(address);
 
-                    var countryCode = '+' + jQuery("#country_selector").val();
-                    var email = $('#email').val();
-                    var image = " ";
-                    var location = {
-                        "latitude": parseFloat(address_lat),
-                        "longitude": parseFloat(address_lng)
-                    };
-                    var name = $("#fullName").val();
-                    var phoneNumber = jQuery("#mobileNumber").val();
-                    var uuid = result.user.uid;
+    //                 var countryCode = '+' + jQuery("#country_selector").val();
+    //                 var email = $('#email').val();
+    //                 var image = " ";
+    //                 var location = {
+    //                     "latitude": parseFloat(address_lat),
+    //                     "longitude": parseFloat(address_lng)
+    //                 };
+    //                 var name = $("#fullName").val();
+    //                 var phoneNumber = jQuery("#mobileNumber").val();
+    //                 var uuid = result.user.uid;
 
-                    database.collection("users").doc(uuid).set({
-                        'active': true,
-                        'id': uuid,
-                        'shippingAddress': shippingAdrs,
-                        'countryCode': countryCode,
-                        'createdAt': createdAtman,
-                        'email': email,
-                        'fcmToken': "",
-                        'image': image,
-                        'name': name,
-                        'phoneNumber': phoneNumber,
-                        'role': "customer",
-                        'walletAmount': "0"
-                    }).then(() => {
-                        var url = "{{ route('setToken') }}";
+    //                 database.collection("users").doc(uuid).set({
+    //                     'active': true,
+    //                     'id': uuid,
+    //                     'shippingAddress': shippingAdrs,
+    //                     'countryCode': countryCode,
+    //                     'createdAt': createdAtman,
+    //                     'email': email,
+    //                     'fcmToken': "",
+    //                     'image': image,
+    //                     'name': name,
+    //                     'phoneNumber': phoneNumber,
+    //                     'role': "customer",
+    //                     'walletAmount': "0"
+    //                 }).then(() => {
+    //                     var url = "{{ route('setToken') }}";
 
-                        $.ajax({
-                            type: 'POST',
-                            url: url,
-                            data: {
-                                userId: uuid,
-                                id: uuid,
-                                email: phoneNumber,
-                                password: "",
-                                name: name,
-                            },
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
+    //                     $.ajax({
+    //                         type: 'POST',
+    //                         url: url,
+    //                         data: {
+    //                             userId: uuid,
+    //                             id: uuid,
+    //                             email: phoneNumber,
+    //                             password: "",
+    //                             name: name,
+    //                         },
+    //                         headers: {
+    //                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //                         },
 
-                            success: function(data) {
-                                if (data.access) {
-                                    window.location = "{{ url('/') }}";
-                                }
-                            }
-                        })
-                    }).catch((error) => {
-                        $("#field_error").html(error);
-                    });
-                }).catch((error) => {
-                    $(".otp_error").html("{{ trans('lang.invalid_otp') }}");
+    //                         success: function(data) {
+    //                             if (data.access) {
+    //                                 window.location = "{{ url('/') }}";
+    //                             }
+    //                         }
+    //                     })
+    //                 }).catch((error) => {
+    //                     $("#field_error").html(error);
+    //                 });
+    //             }).catch((error) => {
+    //                 $(".otp_error").html("{{ trans('lang.invalid_otp') }}");
 
-                });
-        }
+    //             });
+    //     }
 
-    }
+    // }
 </script>

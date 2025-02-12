@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,18 +12,14 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-// authentication routes
-Auth::routes();
 
-// other routes
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('set-location', [App\Http\Controllers\HomeController::class, 'setLocation'])->name('set-location');
 
-// Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('login/create', [LoginController::class, 'login'])->name('login.create');
+Route::get('login', [App\Http\Controllers\LoginController::class, 'login'])->name('login');
 
-// Route::get('signup', [App\Http\Controllers\LoginController::class, 'signup'])->name('signup');
+Route::get('register', [App\Http\Controllers\LoginController::class, 'signup'])->name('register');
 
 Route::get('search', [App\Http\Controllers\SearchController::class, 'index'])->name('search');
 
@@ -160,4 +154,4 @@ Route::get('forgot-password', [App\Http\Controllers\Auth\LoginController::class,
 // Route::get('notifications', [App\Http\Controllers\DynamicNotificationController::class, 'index'])->name('notifications.index');
 
 Route::get('delivery-address', [App\Http\Controllers\DeliveryAddressController::class, 'index'])->name('delivery-address.index');
-Route::post('store-firebase-service', [App\Http\Controllers\HomeController::class,'storeFirebaseService'])->name('store-firebase-service');
+Route::post('store-firebase-service', [App\Http\Controllers\HomeController::class, 'storeFirebaseService'])->name('store-firebase-service');

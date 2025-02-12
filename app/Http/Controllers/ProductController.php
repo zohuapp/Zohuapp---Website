@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\VendorUsers;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Session;
 use Illuminate\Support\Facades\Storage;
 use Google\Client as Google_Client;

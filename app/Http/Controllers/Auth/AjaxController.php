@@ -46,12 +46,12 @@ class AjaxController extends Controller
 
     public function checkEmail(Request $request)
     {
- 
+
         $response = array();
 
-        if(User::where('email', $request->email)->exists()){
+        if (User::where('email', $request->email)->exists()) {
             $response['exist'] = 'yes';
-        }else{
+        } else {
             $response['exist'] = 'no';
         }
 
@@ -59,28 +59,28 @@ class AjaxController extends Controller
     }
 
 
-    public function setToken(Request $request){
+    public function setToken(Request $request)
+    {
 
         $userId = $request->userId;
         $uuid = $request->id;
-        $password=$request->password;
-        $exist = VendorUsers::where('email',$request->email )->get();
+        $password = $request->password;
+        $exist = VendorUsers::where('email', $request->email)->get();
         $data = $exist->isEmpty();
 
-        if($exist->isEmpty()){
-           
-            $user=User::create([
+        if ($exist->isEmpty()) {
+
+            $user = User::create([
                 'name' => $request->email,
                 'email' => $request->email,
                 'password' => Hash::make($password),
             ]);
 
-             DB::table('vendor_users')->insert([
+            DB::table('vendor_users')->insert([
                 'user_id' => $user->id,
                 'uuid' => $uuid,
                 'email' => $request->email,
             ]);
-
         } else {
 
             $user = VendorUsers::select('id')->where('email', $request->email)->first();
@@ -91,27 +91,27 @@ class AjaxController extends Controller
             $user->email = $request->email;
 
             $user->save();
-
         }
 
-        
 
-        $user = User::where('email',$request->email)->first();
 
-    
-        
-       Auth::login($user,true);
-       $data = array();
-       if(Auth::check()){
+        $user = User::where('email', $request->email)->first();
+
+
+
+        Auth::login($user, true);
+        $data = array();
+        if (Auth::check()) {
 
             $data['access'] = true;
-       }
+        }
 
-       
+
         return $data;
     }
 
-    public function setTokenOLD(Request $request){
+    public function setTokenOLD(Request $request)
+    {
 
 
 
@@ -119,13 +119,13 @@ class AjaxController extends Controller
 
         $uuid = $request->id;
 
-        $password=$request->password;
+        $password = $request->password;
 
-        $exist = VendorUsers::where('user_id',$userId )->get();
+        $exist = VendorUsers::where('user_id', $userId)->get();
 
         $data = $exist->isEmpty();
 
-        if($exist->isEmpty()){
+        if ($exist->isEmpty()) {
 
             DB::table('vendor_users')->insert([
 
@@ -135,7 +135,7 @@ class AjaxController extends Controller
 
                 'email' => $request->email,
 
-              
+
 
             ]);
 
@@ -150,62 +150,51 @@ class AjaxController extends Controller
                 'password' => Hash::make($password),
 
             ]);
-
-
-
-        }else{
-
-           
-
-
-
+        } else {
         }
 
 
 
-        
 
 
 
-        $user = User::where('email',$request->email)->first();
 
-        
-
+        $user = User::where('email', $request->email)->first();
 
 
-        
 
-        Auth::login($user,true);
 
-       $data = array();
 
-       if(Auth::check()){
+
+
+        Auth::login($user, true);
+
+        $data = array();
+
+        if (Auth::check()) {
 
 
 
             $data['access'] = true;
-
-       }
-
+        }
 
 
-       
+
+
 
         return $data;
-
-
-
     }
 
 
 
-    public function logoutOLD(Request $request){
+    public function logoutOLD(Request $request)
+    {
 
 
 
         $user_id = Auth::user()->user_id;
 
-        $user = VendorUsers::where('user_id',$user_id)->first();
+        $user = VendorUsers::where('user_id', $user_id)->first();
 
 
 
@@ -213,83 +202,74 @@ class AjaxController extends Controller
 
             Auth::logout();
             return redirect('/login');
-
         } catch (\Exception $e) {
 
-              $this->sendError($e->getMessage(), 401);
-
+            $this->sendError($e->getMessage(), 401);
         }
 
-        
+
 
         $data1 = array();
 
-        if(!Auth::check()){
+        if (!Auth::check()) {
 
-          $data1['logoutuser'] = true;
-
+            $data1['logoutuser'] = true;
         }
 
         return $data1;
-
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
 
         $user_id = Auth::user()->user_id;
-        $user = VendorUsers::where('user_id',$user_id)->first();
+        $user = VendorUsers::where('user_id', $user_id)->first();
 
         try {
             Auth::logout();
             return redirect('/login');
         } catch (\Exception $e) {
-              $this->sendError($e->getMessage(), 401);
+            $this->sendError($e->getMessage(), 401);
         }
-        
+
         $data1 = array();
-        if(!Auth::check()){
-          $data1['logoutuser'] = true;
+        if (!Auth::check()) {
+            $data1['logoutuser'] = true;
         }
         return $data1;
     }
 
-    public function newRegister(Request $request){
+    public function newRegister(Request $request)
+    {
 
         $userId = $request->userId;
 
-        $password=$request->password;
+        $password = $request->password;
 
-            $user=User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($password),
-            ]);
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($password),
+        ]);
 
-            DB::table('vendor_users')->insert([
-                'user_id' => $user->id,
-                'uuid' => $userId,
-                'email' => $request->email,
-            ]);
-            
+        DB::table('vendor_users')->insert([
+            'user_id' => $user->id,
+            'uuid' => $userId,
+            'email' => $request->email,
+        ]);
 
-        $user = User::where('email',$request->email)->first();
 
-        
+        $user = User::where('email', $request->email)->first();
 
-        Auth::login($user,true);
+
+
+        Auth::login($user, true);
 
         $signupdata = array();
 
-        if(Auth::check()){
+        if (Auth::check()) {
             $signupdata['access'] = true;
         }
         return $signupdata;
-
     }
-
-
-
-
-
 }
-

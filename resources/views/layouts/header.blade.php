@@ -160,13 +160,13 @@
 <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-database.js"></script> --}}
 
-{{-- @php
+@php
     $id = null;
     if (Auth::user()) {
         $id = Auth::user()->getvendorId();
     }
-@endphp --}}
+@endphp
 <script type="text/javascript">
 
-    var cuser_id = '{{ $authUserId }}';
+    var cuser_id = '{{ $id }}';
 </script>
