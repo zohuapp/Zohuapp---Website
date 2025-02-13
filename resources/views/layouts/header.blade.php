@@ -135,7 +135,7 @@
 <div class="d-none">
     <div class="bg-primary p-3 d-flex align-items-center">
         <a class="toggle togglew toggle-2" href="#"><span></span></a>
-        <a href="{{ url('/') }}" class="mobile-logo brand-wrap mb-0">
+        <a href="{{ route('home') }}" class="mobile-logo brand-wrap mb-0">
             <img alt="#" class="img-fluid" src="{{ asset('img/logo_web.png') }}">
         </a>
         <div class="mobile-set-location d-flex align-items-center head-search">

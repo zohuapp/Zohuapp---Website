@@ -32,17 +32,19 @@
         <div class="col-md-6">
             <div class="col-10 mx-auto card p-3">
                 <h3 class="text-dark text-center my-0 mb-3">{{ trans('lang.login') }}</h3>
-                {{-- <p class="text-50">{{ trans('lang.sign_in_to_continue') }}</p> --}}
-                <div class="error" id="error"></div>
+                {{-- <div class="error" id="error"></div> --}}
 
-                <form class="form-horizontal form-material pt-4" method="POST" id="login-form">
-                    @csrf
-                    {{-- <div class="box-title m-b-20">{{ __('Login') }}</div> --}}
+                {{-- display errors --}}
+                <div id="errors">
+
+                </div>
+
+                <form class="form-horizontal form-material pt-4">
                     <div class="form-group " id="phone-box">
-                        {{-- <div class="mb-3"> --}}
                         {{-- email input --}}
                         <label for="userEmail" class="form-label">Email Address</label>
-                        <input type="email" name="email" class="form-control" id="userEmail" required
+                        <input type="email" name="email" class="form-control"
+                            placeholder="{{ trans('lang.user_email_help') }}" id="userEmail" required
                             aria-describedby="emailHelp">
                         <span id="emailHelp" class="form-text">We'll never share your email with anyone else.</span>
                         @error('email')
@@ -50,36 +52,13 @@
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
-                        {{-- </div> --}}
-                        {{-- <div class="col-xs-12"> --}}
-
-                        {{-- <select name="country" id="country_selector">
-                                @foreach ($newcountries as $keycy => $valuecy)
-                                    @if ($valuecy->code === 'ES')
-                                        <option selected code="{{ $valuecy->code }}" value="{{ $keycy }}">
-                                            +{{ $valuecy->phoneCode . '(' . $valuecy->countryName . ')' }}</option>
-                                    @else
-                                        <option code="{{ $valuecy->code }}" value="{{ $keycy }}">
-                                            +{{ $valuecy->phoneCode . '(' . $valuecy->countryName . ')' }}</option>
-                                    @endif
-                                @endforeach
-                            </select> --}}
-                        {{-- <input class="form-control" placeholder="{{ trans('lang.user_phone') }}" id="phone"
-                                type="phone" class="form-control" name="phone" value="{{ old('phone') }}" required
-                                onkeypress="return chkAlphabets2(event,'phone_number_err')" autocomplete="phone"
-                                autofocus>
-                            <div id="phone_number_err"></div>
-                        </div> --}}
-                        {{-- @error('phone')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror --}}
                     </div>
+
                     {{-- password input --}}
                     <div class="form-group">
                         <label for="userPassword" class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control" required id="userPassword">
+                        <input type="password" name="password" placeholder="{{ trans('lang.user_password_help') }}"
+                            class="form-control" required id="userPassword">
                         @error('password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -91,11 +70,10 @@
 
                     <div class="form-group text-center m-t-20">
                         <div class="col-xs-12">
-                            {{-- <button type="button" style="display:none;" onclick="applicationVerifier()" id="verify_btn"
-                                class="btn btn-dark btn-lg btn-block text-uppercase waves-effect waves-light btn btn-primary remove_hover">{{ trans('lang.otp_verify') }}</button> --}}
-                            {{--  --}}
-                            <button type="submit" onclick="signInUser()" id="sendotp_btn"
-                                class="btn btn-dark btn-lg btn-block text-uppercase waves-effect waves-light btn btn-primary remove_hover">{{ trans('lang.sign_in') }}</button>
+                            <button type="button" onclick="signInUser()" id=""
+                                class="btn btn-dark btn-lg btn-block text-uppercase waves-effect waves-light btn btn-primary remove_hover">
+                                {{ trans('lang.sign_in') }}
+                            </button>
                             {{--  --}}
                             <div class="or-line mb-3 mt-3">
                                 <span>OR</span>
@@ -150,6 +128,14 @@
 
     // const appVerifier = window.recaptchaVerifier;
 
+    // associative array that contains error messages
+    const errorMessages = {
+        'password': "An account already exists with the provided email. Please sign in.",
+        'inactive': "Your account is not active. Please contact support.",
+        'unexpected': "An error occurred during sign in. Please try again.",
+        'invalid': "Your credentials does not match our records.",
+    };
+
     async function signInUser() {
 
         // const form = event.target; // Get the form element from the event object
@@ -158,11 +144,11 @@
         const email = $("#userEmail").val();
         const password = $("#userPassword").val();
 
-        // console.log("email (direct access):", email);
-        // console.log("Password (direct access):", password);
+        console.log("email (direct access):", email);
+        console.log("Password (direct access):", password);
 
         try {
-            const checkUser = await firebase.firestore().collection('users') // Use firebase.firestore()
+            const checkUser = await firebase.firestore().collection('users')
                 .where("email", "==", email)
                 .where("role", "==", "customer")
                 .get();
@@ -173,8 +159,8 @@
                 if (userData.active === true) {
                     try {
                         const signIn = await firebase.auth().signInWithEmailAndPassword(email, password);
-                        console.log("User signed in:", signIn.user);
-                        alert("User signed in");
+                        // console.log("User signed in:", signIn.user);
+                        // alert("User signed in");
 
                         const uid = signIn.user.uid;
                         const url = "{{ route('setToken') }}";
@@ -185,34 +171,46 @@
                             data: {
                                 id: uid,
                                 userId: uid,
-                                email: userData.phoneNumber,
-                                password: '',
-                                // firstName: firstName,
-                                // lastName: lastName,
-                                // profilePicture: imageURL
+                                email: userData.email,
+                                password: password,
                             },
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
                             success: function(data) {
                                 if (data.access) {
-                                    window.location = "{{ url('/') }}";
+                                    window.location = "{{ route('home') }}";
                                 }
                             }
                         });
                         // return; // Stop further execution
                     } catch (signInError) {
-                        console.error("Sign-in error:", signInError);
+                        // console.error("Sign-in error:", signInError);
                         // Handle sign-in errors (e.g., wrong password):
                         if (signInError.code === 'auth/wrong-password') {
-                            alert("Incorrect password.");
+                            $("#errors").html(
+                                `<p class="error" id="field_error" style="background-color: rgba(179, 24, 24, 0.625);color:white;">${signInError.message}</p>`
+                            );
+                            $("#field_error").addClass('p-2');
+                        } else if (signInError.code === 'auth/internal-error') {
+                            $("#errors").html(
+                                `<p class="error" id="field_error" style="background-color: rgba(179, 24, 24, 0.625);color:white;">${errorMessages.invalid}</p>`
+                            );
+                            $("#field_error").addClass('p-2');
                         } else {
-                            alert("An error occurred during sign in. Please try again.");
+                            $("#errors").html(
+                                `<p class="error" id="field_error" style="background-color: rgba(179, 24, 24, 0.625);color:white;">${errorMessages.unexpected}</p>`
+                            );
+                            $("#field_error").addClass('p-2');
                         }
                         return; // Stop further execution
                     }
                 } else {
-                    alert("Your account is not active. Please contact support.");
+                    $("#errors").html(
+                        `<p class="error" id="field_error" style="background-color: rgba(179, 24, 24, 0.625);color:white;">${errorMessages.inactive}</p>`
+                    );
+                    $("#field_error").addClass('p-2');
+                    // alert("Your account is not active. Please contact support.");
                     return;
                 }
             }

@@ -12,8 +12,6 @@
 
  */
 
-
-
 namespace App\Http\Controllers\Auth;
 
 
@@ -31,14 +29,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
-
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
-use Laravel\Socialite\Facades\Socialite;
-
-use Prettus\Validator\Exceptions\ValidatorException;
-
-
 
 class AjaxController extends Controller
 

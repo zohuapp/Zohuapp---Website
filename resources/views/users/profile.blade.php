@@ -41,7 +41,7 @@
                             </div>
                             <div class="form-group">
                                 <label>{{trans('lang.user_phone')}}</label>
-                                <input type="text" class="form-control user_phone" value="" disabled>
+                                <input type="text" class="form-control user_phone" value="">
                             </div>
                             <div class="form-group">
                                 <label>{{trans('lang.restaurant_image')}}</label>
@@ -71,7 +71,7 @@
 <script src="{{ asset('js/crypto-js.js') }}"></script>
 
 
-<script type="text/javascript"> 
+<script type="text/javascript">
 
     var id = user_uuid;
     var database = firebase.firestore();
@@ -123,7 +123,7 @@
         document.cookie = name + "=" + (value || "") + expires + "; path=/";
     }
 
-    
+
     var photo = "";
 
     $(document).ready(function () {
@@ -137,24 +137,24 @@
             $(".user_full_name").text(user.name);
 
             if (user.hasOwnProperty('walletAmount') && user.walletAmount != '' && user.walletAmount!=null && user.walletAmount != '0' ) {
-                wallet_amount_user = user.walletAmount;      
-            } 
+                wallet_amount_user = user.walletAmount;
+            }
 
             wallet_amount_user = parseFloat(wallet_amount_user).toFixed(decimal);
-        
+
             if (currencyAtRight) {
                 wallet_amount_user = wallet_amount_user + " " + currentCurrency;
             } else {
                 wallet_amount_user = currentCurrency + " " + wallet_amount_user;
             }
 
- 
+
             $(".user_wallet").html(wallet_amount_user);
 
             $(".user_name").val(user.name);
             $(".user_email").val(user.email);
             $(".user_phone").val(user.phoneNumber);
-            
+
             photo = user.image;
             if (photo != '') {
                 if(user.image){
@@ -179,7 +179,7 @@
             var lat = getCookie('address_lat');
             var lng = getCookie('address_lng');
             var location = {"latitude":parseFloat(lat),"longitude":parseFloat(lng)};
-            
+
             var user_name = $(".user_name").val();
             var email = $(".user_email").val();
             var userPhone = $(".user_phone").val();
@@ -220,7 +220,7 @@
     })
     var storageRef = firebase.storage().ref('images');
 
-  
+
     function handleFileSelect(evt) {
         var f = evt.target.files[0];
         var reader = new FileReader();

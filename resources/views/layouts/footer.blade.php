@@ -782,7 +782,9 @@
         if (user_ref != '') {
             user_ref.get().then(async function(profileSnapshots) {
                 var profile_user = profileSnapshots.docs[0].data();
-                var profile_name = profile_user.name;
+                var profile_name = profile_user.name === undefined ? 'Champ' : profile_user.name
+                    .split(' ')[0];
+
                 if (profile_user.image != '') {
                     if (profile_user.image) {
                         photo = profile_user.image;
@@ -792,11 +794,11 @@
                     $("#dropdownMenuButton").append('<img alt="#" src="' + photo +
                         '" onerror="this.onerror=null;this.src=\'' + placeholderImage +
                         '\'" class="img-fluid rounded-circle header-user mr-2 header-user">Hi ' +
-                        profile_user.name);
+                        profile_name);
                 } else {
                     $("#dropdownMenuButton").append('<img alt="#" src="' + placeholderImage +
                         '" class="img-fluid rounded-circle header-user mr-2 header-user">Hi ' +
-                        profile_user.name);
+                        profile_name);
                 }
                 if (profile_user.hasOwnProperty('shippingAddress')) {
                     profile_user.shippingAddress.forEach(element => {
@@ -935,7 +937,7 @@
 </script>
 
 
- <script type="text/javascript">
+<script type="text/javascript">
     var database = app1.firestore();
     var currentCurrency = "";
     var currencyAtRight = false;

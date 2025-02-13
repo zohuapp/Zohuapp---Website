@@ -1,19 +1,7 @@
 @include('auth.default')
 
-@php
-    $countries = file_get_contents(public_path('countriesdata.json'));
-    $countries = json_decode($countries);
-    $countries = (array) $countries;
-    $newcountries = [];
-    $newcountriesjs = [];
-    foreach ($countries as $keycountry => $valuecountry) {
-        $newcountries[$valuecountry->phoneCode] = $valuecountry;
-        $newcountriesjs[$valuecountry->phoneCode] = $valuecountry->code;
-    }
-@endphp
-
-<link href="{{ asset('vendor/select2/dist/css/select2.min.css') }}" rel="stylesheet">
-<link href="{{ asset('/css/font-awesome.min.css') }}" rel="stylesheet">
+{{-- <link href="{{ asset('vendor/select2/dist/css/select2.min.css') }}" rel="stylesheet"> --}}
+{{-- <link href="{{ asset('/css/font-awesome.min.css') }}" rel="stylesheet"> --}}
 <style>
     #mobileNumber {
         padding-left: 52% !important;
@@ -27,7 +15,7 @@
 <div class="siddhi-signup login-page vh-100">
 
 
-    <div class="d-flex align-items-center justify-content-center py-3">
+    <div class="d-flex align-items-center justify-content-center vh-100">
         <div id="overlay">
             <img src="{{ asset('img/spinner.gif') }}">
         </div>
@@ -37,9 +25,12 @@
 
                 <h3 class="text-dark my-0 mb-3">{{ trans('lang.sign_up_with_us') }}</h3>
 
-                <p class="text-50">{{ trans('lang.sign_up_to_continue') }}</p>
+                {{-- <p class="text-50">{{ trans('lang.sign_up_to_continue') }}</p> --}}
 
-                <div class="error" id="field_error"></div>
+                {{-- display errors --}}
+                <div id="errors">
+
+                </div>
 
                 {{-- register form --}}
                 <form class="mt-3 mb-4">
@@ -77,14 +68,10 @@
             </div>
 
             <div class="new-acc d-flex align-items-center justify-content-center mt-4 mb-3">
-
-                <a href="{{ url('login') }}">
-
+                <a href="{{ route('login') }}">
                     <p class="text-center m-0"> {{ trans('lang.already_an_account') }} {{ trans('lang.sign_in') }}
                     </p>
-
                 </a>
-
             </div>
 
         </div>
@@ -133,15 +120,15 @@
     var address_name1 = getCookie('address_name1');
     var address_name2 = getCookie('address_name2');
     var address_zip = getCookie('address_zip');
-    var newcountriesjs = '<?php echo json_encode($newcountriesjs); ?>';
+    var newcountriesjs = '<?php echo json_encode([]); ?>';
     var newcountriesjs = JSON.parse(newcountriesjs);
     var shippingAdrs = [];
     var pincode = '';
 
     function initialize() {
-        if (address_name != '') {
-            document.getElementById('business_address').value = address_name;
-        }
+        // if (address_name != '') {
+        //     document.getElementById('business_address').value = address_name;
+        // }
         var input = document.getElementById('business_address');
         autocomplete = new google.maps.places.Autocomplete(input);
         google.maps.event.addListener(autocomplete, 'place_changed', function() {
@@ -360,6 +347,13 @@
 
     });
 
+    // associative array that contains error messages
+    const errorMessages = {
+        'password': "An account already exists with the provided email. Please sign in.",
+        'unexpected': "An error occurred during sign up. Please try again."
+    };
+
+    // signUpUser function
     async function signUpUser() {
 
         const name = $("#userName").val();
@@ -409,25 +403,36 @@
 
                     success: function(data) {
                         if (data.access) {
-                            window.location = "{{ url('/') }}";
+                            window.location = "{{ route('home') }}";
                         }
                     }
                 })
             } else {
-                alert("Account already exists with the required credentials. Please sign In.");
+                $("#errors").html(
+                    `<p class="error" id="field_error" style="background-color: rgba(179, 24, 24, 0.625);color:white;">${errorMessages.password}</p>`
+                );
+                $("#field_error").addClass('p-2');
                 return;
             }
             // return;
 
         } catch (signUpError) {
-            // console.error("Sign-up error:", signUpError);
             // Handle sign-up errors (e.g., weak password, email already in use):
             if (signUpError.code === 'auth/weak-password') {
-                alert(signUpError.message);
+                $("#errors").html(
+                    `<p class="error" id="field_error" style="background-color: rgba(179, 24, 24, 0.625);color:white;">${signUpError.message}</p>`
+                );
+                $("#field_error").addClass('p-2');
             } else if (signUpError.code === 'auth/email-already-in-use') {
-                alert(signUpError.message);
+                $("#errors").html(
+                    `<p class="error" id="field_error" style="background-color: rgba(179, 24, 24, 0.625);color:white;">${signUpError.message}</p>`
+                );
+                $("#field_error").addClass('p-2');
             } else {
-                alert("An error occurred during sign up. Please try again.");
+                $("#errors").html(
+                    `<p class="error" id="field_error" style="background-color: rgba(179, 24, 24, 0.625);color:white;">${signUpError.message}</p>`
+                );
+                $("#field_error").addClass('p-2');
             }
         }
     }
