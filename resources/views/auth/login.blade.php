@@ -1,18 +1,4 @@
 @include('auth.default')
-
-{{-- @php
-    $countries = file_get_contents(public_path('countriesdata.json'));
-    $countries = json_decode($countries);
-    $countries = (array) $countries;
-    $newcountries = [];
-    $newcountriesjs = [];
-    foreach ($countries as $keycountry => $valuecountry) {
-        $newcountries[$valuecountry->phoneCode] = $valuecountry;
-        $newcountriesjs[$valuecountry->phoneCode] = $valuecountry->code;
-    }
-@endphp --}}
-{{-- <link href="{{ asset('vendor/select2/dist/css/select2.min.css') }}" rel="stylesheet"> --}}
-{{-- <link href="{{ asset('/css/font-awesome.min.css') }}" rel="stylesheet"> --}}
 <style>
     #phone {
         padding-left: 40% !important;
@@ -134,6 +120,8 @@
         'inactive': "Your account is not active. Please contact support.",
         'unexpected': "An error occurred during sign in. Please try again.",
         'invalid': "Your credentials does not match our records.",
+        'emptyFields': "One or more fields are empty",
+        'invalidEmail': "Email address is invalid",
     };
 
     async function signInUser() {
@@ -143,9 +131,24 @@
 
         const email = $("#userEmail").val();
         const password = $("#userPassword").val();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         console.log("email (direct access):", email);
         console.log("Password (direct access):", password);
+
+        if (email == '' || password == '') {
+            $("#errors").html(
+                `<p class="error" id="field_error" style="background-color: rgba(179, 24, 24, 0.625);color:white;">${errorMessages.emptyFields}</p>`
+            );
+            $("#field_error").addClass('p-2');
+            return;
+        } else if (!emailRegex.test(email)) {
+            $("#errors").html(
+                `<p class="error" id="email_error" style="background-color: rgba(179, 24, 24, 0.625);color:white;">${errorMessages.invalidEmail}</p>`
+            );
+            $("#email_error").addClass('p-2');
+            return;
+        }
 
         try {
             const checkUser = await firebase.firestore().collection('users')
@@ -159,7 +162,7 @@
                 if (userData.active === true) {
                     try {
                         const signIn = await firebase.auth().signInWithEmailAndPassword(email, password);
-                        // console.log("User signed in:", signIn.user);
+                        console.log("User signed in:", signIn.user);
                         // alert("User signed in");
 
                         const uid = signIn.user.uid;
@@ -185,7 +188,7 @@
                         });
                         // return; // Stop further execution
                     } catch (signInError) {
-                        // console.error("Sign-in error:", signInError);
+                        console.error("Sign-in error:", signInError);
                         // Handle sign-in errors (e.g., wrong password):
                         if (signInError.code === 'auth/wrong-password') {
                             $("#errors").html(
