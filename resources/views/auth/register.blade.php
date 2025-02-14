@@ -397,7 +397,7 @@
                 });
 
                 console.log("User signed up and data stored:", user);
-                alert("User signed up");
+                // alert("User signed up");
 
                 const uuid = user.uid;
                 const url = "{{ route('setToken') }}";
