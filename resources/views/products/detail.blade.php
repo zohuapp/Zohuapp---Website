@@ -579,11 +579,12 @@
             }
         });
 
-        var expiry = vendorProduct.expiry_date.toDate().toLocaleDateString('en', {
-            year: "numeric",
-            month: "short",
-            day: "numeric"
-        });
+
+        // var expiry = vendorProduct.expiry_date.toDate().toLocaleDateString('en', {
+        //     year: "numeric",
+        //     month: "short",
+        //     day: "numeric"
+        // });
 
         // reviewhtml += '<li><label>Shelf Life:</label><span class="shelf_life">' + vendorProduct.shelf_life +
         //     '</span></li><li><label>Country:</label><span class="country">' + vendorProduct.country +

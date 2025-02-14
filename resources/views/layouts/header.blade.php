@@ -5,7 +5,7 @@
             <div class="row align-items-center">
                 <div class="col-2">
                     <a href="{{ url('/') }}" class="brand-wrap mb-0">
-                        <img alt="#" class="img-fluid" src="{{ asset('img/logo_web.png') }}" id="logo_web">
+                        <img alt="#" class="" style="width: 130px;" src="{{ asset('img/logo_web.png') }}" id="logo_web">
                     </a>
                 </div>
 
