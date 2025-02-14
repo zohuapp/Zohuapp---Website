@@ -163,7 +163,7 @@
 @php
     $id = null;
     if (Auth::user()) {
-        $id = Auth::user()->getvendorId();
+        $id = Auth::user()->getVendorId();
     }
 @endphp
 <script type="text/javascript">

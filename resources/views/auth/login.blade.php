@@ -133,8 +133,8 @@
         const password = $("#userPassword").val();
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        console.log("email (direct access):", email);
-        console.log("Password (direct access):", password);
+        // console.log("email (direct access):", email);
+        // console.log("Password (direct access):", password);
 
         if (email == '' || password == '') {
             $("#errors").html(
@@ -166,6 +166,8 @@
                         // alert("User signed in");
 
                         const uid = signIn.user.uid;
+                        // const id = signIn.user.id;
+                        // alert(id);
                         const url = "{{ route('setToken') }}";
 
                         $.ajax({

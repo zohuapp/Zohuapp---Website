@@ -23,7 +23,7 @@
 
             <div class="col-10 mx-auto card p-3">
 
-                <h3 class="text-dark my-0 mb-3">{{ trans('lang.sign_up_with_us') }}</h3>
+                <h3 class="text-dark text-center my-0 mb-3">{{ trans('lang.sign_up') }}</h3>
 
                 {{-- <p class="text-50">{{ trans('lang.sign_up_to_continue') }}</p> --}}
 
@@ -350,7 +350,9 @@
     // associative array that contains error messages
     const errorMessages = {
         'password': "An account already exists with the provided email. Please sign in.",
-        'unexpected': "An error occurred during sign up. Please try again."
+        'unexpected': "An error occurred during sign up. Please try again.",
+        'emptyFields': "One or more fields are empty",
+        'invalidEmail': "Email address is invalid"
     };
 
     // signUpUser function
@@ -359,8 +361,21 @@
         const name = $("#userName").val();
         const email = $("#userEmail").val();
         const password = $("#userPassword").val();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        // alert(name);
+        if (email == '' || password == '' || name == '') {
+            $("#errors").html(
+                `<p class="error" id="field_error" style="background-color: rgba(179, 24, 24, 0.625);color:white;">${errorMessages.emptyFields}</p>`
+            );
+            $("#field_error").addClass('p-2');
+            return;
+        } else if (!emailRegex.test(email)) {
+            $("#errors").html(
+                `<p class="error" id="email_error" style="background-color: rgba(179, 24, 24, 0.625);color:white;">${errorMessages.invalidEmail}</p>`
+            );
+            $("#email_error").addClass('p-2');
+            return;
+        }
 
         // If user doesn't exist in Firestore or is not active, create the user in Firebase Auth:
         try {

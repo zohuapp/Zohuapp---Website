@@ -44,7 +44,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function getvendorId()
+    public function getVendorId()
     {
 
         $exist = VendorUsers::where('user_id', Auth::user()->id)->first();

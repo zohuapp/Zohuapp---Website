@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
+use Exception;
 
 class AjaxController extends Controller
 
@@ -36,7 +37,6 @@ class AjaxController extends Controller
 
     public function checkEmail(Request $request)
     {
-
         $response = array();
 
         if (User::where('email', $request->email)->exists()) {
@@ -52,59 +52,58 @@ class AjaxController extends Controller
     public function setToken(Request $request)
     {
 
-        $userId = $request->userId;
+        // $userId = $request->userId;
         $uuid = $request->id;
         $password = $request->password;
-        $exist = VendorUsers::where('email', $request->email)->get();
-        $data = $exist->isEmpty();
+        $email = $request->email;
+        $exist = VendorUsers::where('email', $email)->exists();
+        // $data = $exist->isEmpty();
 
-        if ($exist->isEmpty()) {
+        try {
+            //code...
+            if (!$exist) {
+                // Create new user and add to vendor_users table
+                $user = User::create([
+                    'name' => $request->email,
+                    'email' => $request->email,
+                    'password' => Hash::make($password),
+                ]);
 
-            $user = User::create([
-                'name' => $request->email,
-                'email' => $request->email,
-                'password' => Hash::make($password),
-            ]);
+                VendorUsers::create([
+                    'user_id' => $user->id,
+                    'uuid' => $uuid,
+                    'email' => $request->email,
+                ]);
+            } elseif ($exist) {
+                // Update existing user and add to vendor_users table
+                $user = VendorUsers::select('id')->where('email', $email)->first();
 
-            DB::table('vendor_users')->insert([
-                'user_id' => $user->id,
-                'uuid' => $uuid,
-                'email' => $request->email,
-            ]);
-        } else {
+                $user = VendorUsers::find($user->id);
 
-            $user = VendorUsers::select('id')->where('email', $request->email)->first();
+                $user->uuid = $uuid;
+                $user->email = $request->email;
 
-            $user = VendorUsers::find($user->id);
+                $user->save();
+            }
 
-            $user->uuid = $uuid;
-            $user->email = $request->email;
+            $user = User::where('email', $request->email)->first();
 
-            $user->save();
+            Auth::login($user, true);
+
+            $data = array();
+
+            if (Auth::check()) {
+                $data['access'] = true;
+            }
+
+            return $data;
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
-
-
-
-        $user = User::where('email', $request->email)->first();
-
-
-
-        Auth::login($user, true);
-        $data = array();
-        if (Auth::check()) {
-
-            $data['access'] = true;
-        }
-
-
-        return $data;
     }
 
     public function setTokenOLD(Request $request)
     {
-
-
-
         $userId = $request->userId;
 
         $uuid = $request->id;
