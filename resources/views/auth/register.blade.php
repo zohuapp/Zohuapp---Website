@@ -406,8 +406,8 @@
                     type: 'POST',
                     url: url,
                     data: {
-                        userId: uuid,
                         id: uuid,
+                        userId: uuid,
                         email: email,
                         password: password,
                         name: name,

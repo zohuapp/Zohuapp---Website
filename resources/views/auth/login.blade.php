@@ -169,6 +169,7 @@
                         // const id = signIn.user.id;
                         // alert(id);
                         const url = "{{ route('setToken') }}";
+                        console.log(url);
 
                         $.ajax({
                             type: 'POST',

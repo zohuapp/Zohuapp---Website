@@ -250,15 +250,13 @@ class AjaxController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-
-
         Auth::login($user, true);
 
-        $signupdata = array();
+        $signUpData = array();
 
         if (Auth::check()) {
-            $signupdata['access'] = true;
+            $signUpData['access'] = true;
         }
-        return $signupdata;
+        return $signUpData;
     }
 }

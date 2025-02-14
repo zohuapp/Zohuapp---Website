@@ -60,7 +60,7 @@ class VendorUsers extends Authenticatable
 
 {
 
-    
+
 
 
     /**
@@ -77,6 +77,12 @@ class VendorUsers extends Authenticatable
     public $timestamps = false;
     public $table = 'vendor_users';
 
+    protected $fillable = [
+        'user_id',
+        'uuid',
+        'email'
+    ];
+
     /**
 
      * The attributes that are mass assignable.
@@ -86,6 +92,4 @@ class VendorUsers extends Authenticatable
      * @var array
 
      */
-
 }
-
