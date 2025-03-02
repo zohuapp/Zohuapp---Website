@@ -5,12 +5,13 @@
             <div class="row align-items-center">
                 <div class="col-2">
                     <a href="{{ url('/') }}" class="brand-wrap mb-0">
-                        <img alt="#" class="" style="width: 130px;" src="{{ asset('img/logo_web.png') }}" id="logo_web">
+                        <img alt="#" class="" style="width: 130px;" src="{{ asset('img/logo_web.png') }}"
+                            id="logo_web">
                     </a>
                 </div>
 
                 <div class="col-3 d-flex align-items-center m-none head-search">
-                    <div class="dropdown ml-4">
+                    <div class="dropdown ml-4 d-flex align-items-center justify-content-between">
                         <a class="text-dark dropdown-toggle d-flex align-items-center p-0" href="javascript:void(0)"
                             id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             <div class="head-loc" onclick="getCurrentLocation('reload')">
@@ -20,16 +21,19 @@
                                 <input id="user_locationnew" type="text" size="50" class="pac-target-input">
                             </div>
                         </a>
+                        {{-- search icon --}}
+                        <a href="{{ url('search') }}" class="widget-header text-dark">
+                            <div class="icon d-flex align-items-center">
+                                <i class="feather-search h5 mb-0"></i>
+                                {{-- <span>{{ trans('lang.search') }}</span> --}}
+                            </div>
+                        </a>
                     </div>
                 </div>
 
                 <div class="col-7 header-right">
-                    <div class="d-flex align-items-center justify-content-end pr-5">
-                        <a href="{{ url('search') }}" class="widget-header mr-4 text-dark">
-                            <div class="icon d-flex align-items-center">
-                                <i class="feather-search h6 mr-2 mb-0"></i> <span>{{ trans('lang.search') }}</span>
-                            </div>
-                        </a>
+                    <div class="d-flex align-items-center justify-content-between">
+                        {{--  --}}
                         <a href="{{ url('offers') }}" class="widget-header mr-4 text-dark offer-link">
                             <div class="icon d-flex align-items-center">
                                 <img alt="#" class="img-fluid mr-2" src="{{ asset('img/discount.png') }}">
@@ -38,17 +42,53 @@
                         </a>
                         @auth
                         @else
-                            <a href="{{ url('login') }}" class="widget-header mr-4 text-dark m-none">
+                            <a href="{{ url('login') }}" class="widget-header text-dark m-none">
                                 <div class="icon d-flex align-items-center">
                                     <i class="feather-user h6 mr-2 mb-0"></i> <span>{{ trans('lang.signin') }}</span>
                                 </div>
                             </a>
                         @endauth
-                        <div class="dropdown mr-4 m-none">
-                            <a href="#" class="dropdown-toggle text-dark py-3 d-block" id="dropdownMenuButton"
+
+                        <div style="visibility: hidden;" class="language-list icon d-flex align-items-center text-dark"
+                            id="language_dropdown_box">
+                            <div class="language-select">
+                                <i class="feather-globe h5"></i>
+                            </div>
+                            <div class="language-options">
+                                <select class="form-control changeLang text-dark" id="language_dropdown">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="cart">
+                            <a href="{{ url('/checkout') }}" class="widget-header text-dark">
+                                <div class="icon d-flex align-items-center">
+                                    <i class="feather-shopping-cart h5 mr-2 mb-0"></i>
+                                    {{-- <span>{{ trans('lang.cart') }}</span> --}}
+                                </div>
+                            </a>
+                        </div>
+
+                        @auth
+                            <div class="dropdown m-none">
+                                <a href="" class="dropdown-toggle text-dark py-3 d-block"
+                                    id="dropdownNotificationMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    <i class="feather-bell h5"></i>
+                                    <span class="notification_count d-none"></span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right notification_data"
+                                    aria-labelledby="dropdownNotificationMenuButton"></div>
+                            </div>
+                        @endauth
+
+                        {{-- user profile icon --}}
+                        <div class="dropdown m-none">
+                            <a href="#" class="dropdown-toggle text-dark d-block border border-secondary rounded-pill p-1 d-flex align-items-center" id="dropdownMenuButton"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
                             </a>
+                            {{-- dropdown menu --}}
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                                 @auth
 
@@ -82,7 +122,8 @@
                                     <a class="dropdown-item"
                                         href="{{ route('aboutus') }}">{{ trans('lang.about_us') }}</a>
                                     <a class="dropdown-item" href="{{ url('help') }}"></i>{{ trans('lang.help') }}</a>
-                                    <a class="dropdown-item" href="{{ route('terms') }}">{{ trans('lang.terms_use') }}</a>
+                                    <a class="dropdown-item"
+                                        href="{{ route('terms') }}">{{ trans('lang.terms_use') }}</a>
                                     <a class="dropdown-item"
                                         href="{{ route('privacy') }}">{{ trans('lang.privacy_policy') }}</a>
                                     <a class="dropdown-item"
@@ -92,40 +133,12 @@
 
                             </div>
                         </div>
-                        <a href="{{ url('/checkout') }}" class="widget-header mr-4 text-dark">
-                            <div class="icon d-flex align-items-center">
-                                <i class="feather-shopping-cart h6 mr-2 mb-0"></i>
-                                <span>{{ trans('lang.cart') }}</span>
-                            </div>
-                        </a>
 
-                        <div style="visibility: hidden;"
-                            class="language-list icon d-flex align-items-center text-dark ml-2"
-                            id="language_dropdown_box">
-                            <div class="language-select">
-                                <i class="feather-globe"></i>
-                            </div>
-                            <div class="language-options">
-                                <select class="form-control changeLang text-dark" id="language_dropdown">
-                                </select>
-                            </div>
+                        <div class="toggle-burger-animation p-2">
+                            <a class="toggle" href="#">
+                                <span></span>
+                            </a>
                         </div>
-
-                        @auth
-                            <div class="dropdown mr-4 m-none">
-                                <a href="" class="dropdown-toggle text-dark py-3 d-block"
-                                    id="dropdownNotificationMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                    <i class="fa fa-bell blue"></i><span class="notification_count d-none"></span>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right notification_data"
-                                    aria-labelledby="dropdownNotificationMenuButton"></div>
-                            </div>
-                        @endauth
-
-                        <a class="toggle" href="#">
-                            <span></span>
-                        </a>
                     </div>
                 </div>
             </div>
@@ -167,6 +180,5 @@
     }
 @endphp
 <script type="text/javascript">
-
     var cuser_id = '{{ $id }}';
 </script>
