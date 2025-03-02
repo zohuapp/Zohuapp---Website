@@ -85,7 +85,7 @@
                                         class="custom-control-input" checked>
 
                                     <label class="custom-control-label" for="home"><span
-                                            class="currency-symbol-left"></span> <?php echo 'Home'; ?><span
+                                            class="currency-symbol-left"></span><?php echo 'Home'; ?><span
                                             class="currency-symbol-right"></span></label>
 
                                 </div>
@@ -95,7 +95,7 @@
                                         class="custom-control-input">
 
                                     <label class="custom-control-label" for="work"><span
-                                            class="currency-symbol-left"></span> <?php echo 'Work'; ?><span
+                                            class="currency-symbol-left"></span><?php echo 'Work'; ?><span
                                             class="currency-symbol-right"></span></label>
 
                                 </div>
@@ -106,7 +106,7 @@
 
                                     <label class="custom-control-label" for="hotel"><span
                                             class="currency-symbol-left"></span>
-                                        <?php echo 'Hotel'; ?><span class="currency-symbol-right"></span>
+                                       <?php echo 'Hotel'; ?><span class="currency-symbol-right"></span>
                                     </label>
 
                                 </div>
@@ -116,7 +116,7 @@
                                         class="custom-control-input">
 
                                     <label class="custom-control-label" for="other"><span
-                                            class="currency-symbol-left"></span> <?php echo 'Other'; ?><span
+                                            class="currency-symbol-left"></span><?php echo 'Other'; ?><span
                                             class="currency-symbol-right"></span></label>
 
                                 </div>
@@ -394,7 +394,7 @@
                     var lat= shippingAddress[index].location.latitude;
                     var lng = shippingAddress[index].location.longitude;
                     database.collection('users').doc(user_uuid).update({ 'shippingAddress': shippingAddress }).then(function (result) {
-                       
+
 
                     })
 

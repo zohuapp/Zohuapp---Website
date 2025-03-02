@@ -35,7 +35,7 @@
                                             {{trans('lang.payfast_payment')}}
                                         </td>
                                         <td class="text-right payment-button">
-                                            <?php
+                                           <?php
                                             if ($payfast_isSandbox) {
                                                 $form_url = "https://sandbox.payfast.co.za/eng/process";
                                             } else {

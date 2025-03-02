@@ -30,7 +30,7 @@ foreach ($cityToCountry as $key => $value) {
                             <div class="card card-default">
 
 
-                                <?php $authorName = @$cart['cart_order']['authorName']; ?>
+                               <?php $authorName = @$cart['cart_order']['authorName']; ?>
 
                                 @if($message = Session::get('success'))
 
@@ -42,7 +42,7 @@ foreach ($cityToCountry as $key => $value) {
 
                                                                             <h1 class="font-weight-bold"><?php    if (@$authorName) {
         echo @$authorName . ",";
-    } ?> {{trans('lang.your_order_has_been_successful')}}</h1>
+    } ?>{{trans('lang.your_order_has_been_successful')}}</h1>
 
                                                                             <p>Check your order status in <a href="{{route('my_order')}}"
                                                                                     class="font-weight-bold text-decoration-none text-primary">My
@@ -156,7 +156,7 @@ foreach ($cityToCountry as $key => $value) {
             }
         });
 
-        <?php    if (@$cart['payment_status'] == true && !empty(@$cart['cart_order']['order_json'])) { ?>
+       <?php    if (@$cart['payment_status'] == true && !empty(@$cart['cart_order']['order_json'])) { ?>
 
         $("#data-table_processing_order").show();
 
@@ -345,7 +345,7 @@ foreach ($cityToCountry as $key => $value) {
                 })
             }
 
-        <?php    } ?>
+       <?php    } ?>
 
     </script>
 

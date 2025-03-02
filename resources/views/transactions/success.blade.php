@@ -30,7 +30,7 @@ foreach ($cityToCountry as $key => $value) {
                             <div class="card card-default">
 
 
-                                <?php $authorName = @$user_wallet['user']['name']; ?>
+                               <?php $authorName = @$user_wallet['user']['name']; ?>
 
                                 @if($message = Session::get('success'))
 
@@ -42,7 +42,7 @@ foreach ($cityToCountry as $key => $value) {
 
                                                                             <h1 class="font-weight-bold"><?php    if (@$authorName) {
         echo @$authorName . ",";
-    } ?> {{trans('lang.your_transaction_has_been_successful')}}</h1>
+    } ?>{{trans('lang.your_transaction_has_been_successful')}}</h1>
 
                                                                             <p>Check your transaction status in <a href="{{route('transactions')}}"
                                                                                     class="font-weight-bold text-decoration-none text-primary">My
@@ -113,7 +113,7 @@ foreach ($cityToCountry as $key => $value) {
 
         var razorpaySettings = database.collection('settings').doc('razorpaySettings');
 
-        <?php    if (@$user_wallet['payment_status'] == 1) { ?>
+       <?php    if (@$user_wallet['payment_status'] == 1) { ?>
             $("#data_table_processing_order").show();
             var final_wallet_balance = 0.0;
             var amount = {{$user_wallet['data']['amount']}};
@@ -138,7 +138,7 @@ foreach ($cityToCountry as $key => $value) {
             }).then(function (result) {
                 $("#data_table_processing_order").hide();
             });
-        <?php    } ?>
+       <?php    } ?>
 
     </script>
 

@@ -15,7 +15,7 @@ $total_item_price = 0;
 
 if (@$cart['item']) {
 
-    
+
   ?>
 
 <div class="sidebar-header p-3">
@@ -28,7 +28,7 @@ if (@$cart['item']) {
 
     <input type="hidden" name="main_vendor_id" value="" id="main_vendor_id">
 
-    <?php    foreach ($cart['item'] as $key1 => $value_item) {
+   <?php    foreach ($cart['item'] as $key1 => $value_item) {
         $item_count++;?>
 
 
@@ -40,7 +40,7 @@ if (@$cart['item']) {
 
         <input type="hidden" id="dis_price_<?php        echo @$key1; ?>"
                value="<?php        echo floatval($value_item['dis_price']); ?>">
-        
+
         <input type="hidden" id="product_discount_<?php        echo @$key1; ?>"
                value="<?php        echo floatval($value_item['discount']); ?>">
 
@@ -72,7 +72,7 @@ if (@$cart['item']) {
 
                 <div class="m-0 product-name">
 
-                    <?php
+                   <?php
         if (isset($value_item['variant_info']) && !empty($value_item['variant_info'])) {
             if (!empty($value_item['variant_info']['variant_image'])) {
 
@@ -87,12 +87,12 @@ if (@$cart['item']) {
 
                     ?>
 
-                    <?php        echo $value_item['name']; ?>
+                   <?php        echo $value_item['name']; ?>
 
                 </div>
 
 
-                <?php
+               <?php
         if (isset($value_item['variant_info']) && !empty($value_item['variant_info'])) {
             echo '<div class="variant-info">';
             echo '<ul>';
@@ -113,16 +113,16 @@ if (@$cart['item']) {
 
 												<button type="button" data-vendor=""
                                                         data-id="<?php        echo $key1; ?>"
-                                                        
-                                                        <?php        if (isset($value_item['variant_info']) && !empty($value_item['variant_info'])) {
+
+                                                       <?php        if (isset($value_item['variant_info']) && !empty($value_item['variant_info'])) {
             $varient_qty = $value_item['variant_info']['variant_qty'];
                                                         ?>
                                                         data-vqty="<?php            echo $varient_qty; ?>"
                                                         data-vqtymsg="{{trans('lang.invalid_stock_qty')}}"
-                                                        <?php        } else { ?>
+                                                       <?php        } else { ?>
                                                         data-vqty="<?php            echo $value_item['stock_quantity']; ?>"
                                                         data-vqtymsg="{{trans('lang.invalid_stock_qty')}}"
-                                                        <?php        } ?>
+                                                       <?php        } ?>
 
                                                         class="count-number-input-cart btn-sm left dec btn btn-outline-secondary">
 
@@ -137,15 +137,15 @@ if (@$cart['item']) {
 												<button type="button" data-vendor=""
                                                         data-id="<?php        echo $key1; ?>"
 
-                                                        <?php        if (isset($value_item['variant_info']) && !empty($value_item['variant_info'])) {
+                                                       <?php        if (isset($value_item['variant_info']) && !empty($value_item['variant_info'])) {
             $varient_qty = $value_item['variant_info']['variant_qty'];
                                                         ?>
                                                         data-vqty="<?php            echo $varient_qty; ?>"
                                                         data-vqtymsg="{{trans('lang.invalid_stock_qty')}}"
-                                                        <?php        } else { ?>
+                                                       <?php        } else { ?>
                                                         data-vqty="<?php            echo $value_item['stock_quantity']; ?>"
                                                         data-vqtymsg="{{trans('lang.invalid_stock_qty')}}"
-                                                        <?php        } ?>
+                                                       <?php        } ?>
 
                                                         class="count-number-input-cart btn-sm right inc btn btn-outline-secondary count_number_right"
                                                         data-vendor-id="">
@@ -158,7 +158,7 @@ if (@$cart['item']) {
                 <span class="currency-symbol-left"></span>
                 <span class="cart_iteam_total_<?php        echo $key1; ?>">
 
-                    <?php        $totalItemPrice = @floatval($value_item['price']);
+                   <?php        $totalItemPrice = @floatval($value_item['price']);
         $digit_decimal = 0;
 
         if (@$cart['decimal_degits']) {
@@ -172,21 +172,21 @@ if (@$cart['item']) {
 
         </div>
 
-        <div class="close remove_item col-md-1" 
+        <div class="close remove_item col-md-1"
              data-vendor-id="" data-id="<?php        echo $key1; ?>"><i
                 class="fa fa-times"></i></div>
 
     </div>
 
-    <?php        $total_price = $total_price + (floatval($value_item['price']));
+   <?php        $total_price = $total_price + (floatval($value_item['price']));
     } ?>
 
 
 
 
-    <?php        
+   <?php
     } ?>
-    <?php $total_item_price = $total_price; ?>
+   <?php $total_item_price = $total_price; ?>
 </div>
 
 
@@ -219,7 +219,7 @@ if (@$cart['item']) {
 
     <div class="border-bottom pb-3">
         <i class="feather-clock mr-2"></i>{{trans('lang.delivery_in')}}
-        <?php
+       <?php
 echo @$cart['estimatedTime'];
                 ?>
 
@@ -255,7 +255,7 @@ echo number_format($total_price, $digit_decimal);
         </span>
     </p>
 
-    <?php  $discount_amount = 0;
+   <?php  $discount_amount = 0;
 $coupon_id = '';
 $coupon_code = '';
 $discount = '';
@@ -267,7 +267,7 @@ if (@$cart['coupon'] && $cart['coupon']['discountType']) { ?>
     <hr>
 
     <p class="mb-1">
-        <?php    $discountType = $cart['coupon']['discountType'];
+       <?php    $discountType = $cart['coupon']['discountType'];
 
     $coupon_code = $cart['coupon']['coupon_code'];
 
@@ -305,11 +305,11 @@ if (@$cart['coupon'] && $cart['coupon']['discountType']) { ?>
             $discount_amount = $total;
         }
 
-       
+
     }
         ?>
         <!-- this is begin of code -->
-        <?php
+       <?php
     $total_discount_val = $cart['coupon']['discount'];
     $offerType = $cart['coupon']['discountType'];
     $total_discount_html = "";
@@ -322,7 +322,7 @@ if (@$cart['coupon'] && $cart['coupon']['discountType']) { ?>
         <span class="float-right" style="color:red">( -
             <span
                 class="currency-symbol-left"></span>
-                <?php
+               <?php
     $digit_decimal = 0;
     if (@$cart['decimal_degits']) {
         $digit_decimal = $cart['decimal_degits'];
@@ -334,7 +334,7 @@ if (@$cart['coupon'] && $cart['coupon']['discountType']) { ?>
 
     </p>
 
-    <?php } else { ?>
+   <?php } else { ?>
 
 			<?php    $total = $total_price; ?>
 
@@ -356,20 +356,20 @@ if (@$cart['coupon'] && $cart['coupon']['discountType']) { ?>
     <input type="hidden" id="desc" value="">
 
 
-    <?php
+   <?php
 
 $total_item_price = $total_item_price - $discount_amount;
 
 if ($item_count && $total_price && $cart['tax'] && @$cart['taxValue']) { ?>
     <hr>
 
-    <?php
+   <?php
 
     foreach ($cart['taxValue'] as $val) {?>
     <p class="mb-2"><?php        echo $val['title'];?>
-        <?php        if ($val['type'] == 'fix') { ?>
+       <?php        if ($val['type'] == 'fix') { ?>
         ( <span class="currency-symbol-left"></span>
-        <?php
+       <?php
             $digit_decimal = 0;
             if (@$cart['decimal_degits']) {
                 $digit_decimal = $cart['decimal_degits'];
@@ -378,13 +378,13 @@ if ($item_count && $total_price && $cart['tax'] && @$cart['taxValue']) { ?>
             $tax = $val['tax'];
         ?>
         <span class="currency-symbol-right"></span> )
-        <?php        } else {
+       <?php        } else {
             $tax = ($val['tax'] * $total_item_price) / 100;?>
 
         (<?php            echo $val['tax']; ?>%)
-        <?php        } ?>
+       <?php        } ?>
 
-        <?php ?>
+       <?php ?>
 
         <span class="float-right text-dark">
          	<span class="currency-symbol-left"></span>
@@ -398,7 +398,7 @@ if ($item_count && $total_price && $cart['tax'] && @$cart['taxValue']) { ?>
             <span class="currency-symbol-right"></span>
         </span>
 
-    </p> <?php
+    </p><?php
         $total = $total + $tax;
     }
 
@@ -414,8 +414,8 @@ if ($item_count && $total_price && $cart['tax'] && @$cart['taxValue']) { ?>
         {{trans('lang.deliveryCharge')}} <span class="float-right text-dark"><span
                 class="currency-symbol-left"></span>
 
-       
-            <?php
+
+           <?php
 
 $digit_decimal = 0;
 
@@ -433,15 +433,15 @@ if ($item_count && $total_price && @$cart['deliverycharge']) {
 }
 
             ?>
-            <?php  if ($item_count && $total_price && @$cart['deliverycharge']) { ?>
+           <?php  if ($item_count && $total_price && @$cart['deliverycharge']) { ?>
 
         <span
-            class="currency-symbol-right"></span> <?php    if (@$cart['deliverykm']) { ?> (<?php        echo round($cart['deliverykm'], 2); ?>Km) <?php    } ?> </span>
+            class="currency-symbol-right"></span><?php    if (@$cart['deliverykm']) { ?>(<?php        echo round($cart['deliverykm'], 2); ?>Km)<?php    } ?></span>
 
-        <?php }?>
+       <?php }?>
     </p>
-  
-        
+
+
     <input type="hidden" value="<?php echo @$cart['deliverycharge']; ?>" id="deliveryCharge">
 
     <input type="hidden" value="<?php echo @$cart['estimatedTime']; ?>" id="estimatedTime">
@@ -471,7 +471,7 @@ echo number_format($total, $digit_decimal);
 
 <div class="p-3">
 
-    <?php
+   <?php
 if (@$cart['decimal_degits']) {
     $digit_decimal = $cart['decimal_degits'];
 }
@@ -482,20 +482,20 @@ if ($item_count == 0) {    ?>
             class="currency-symbol-right"></span><i
             class="feather-arrow-right"></i></a>
 
-    <?php } else if (@$is_checkout) { ?>
+   <?php } else if (@$is_checkout) { ?>
 
     <a class="btn btn-primary btn-block btn-lg remove_hover" href="javascript:void(0)"
        onclick="finalCheckout()">{{trans('lang.pay')}} <span
             class="currency-symbol-left"></span><?php        echo number_format($total, $digit_decimal); ?>
         <span class="currency-symbol-right"></span><i class="feather-arrow-right"></i></a>
 
-    <?php    } else { ?>
+   <?php    } else { ?>
 
     <a class="btn btn-primary btn-block btn-lg remove_hover" href="{{route('checkout')}}">{{trans('lang.pay')}} <span
             class="currency-symbol-left"></span><?php        echo number_format($total, $digit_decimal); ?><span
             class="currency-symbol-right"></span><i
             class="feather-arrow-right"></i></a>
 
-    <?php    } ?>
+   <?php    } ?>
 
 </div>

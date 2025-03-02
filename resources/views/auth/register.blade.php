@@ -1,19 +1,5 @@
 @include('auth.default')
-
-{{-- <link href="{{ asset('vendor/select2/dist/css/select2.min.css') }}" rel="stylesheet"> --}}
-{{-- <link href="{{ asset('/css/font-awesome.min.css') }}" rel="stylesheet"> --}}
-<style>
-    #mobileNumber {
-        padding-left: 52% !important;
-    }
-
-    #select2-country_selector-container {
-        max-width: fit-content;
-    }
-</style>
-
 <div class="siddhi-signup login-page vh-100">
-
 
     <div class="d-flex align-items-center justify-content-center vh-100">
         <div id="overlay">
@@ -120,7 +106,7 @@
     var address_name1 = getCookie('address_name1');
     var address_name2 = getCookie('address_name2');
     var address_zip = getCookie('address_zip');
-    var newcountriesjs = '<?php echo json_encode([]); ?>';
+    var newcountriesjs = '{{ json_encode([]) }}';
     var newcountriesjs = JSON.parse(newcountriesjs);
     var shippingAdrs = [];
     var pincode = '';
@@ -310,7 +296,7 @@
         if (!state.id) {
             return state.text;
         }
-        var baseUrl = "<?php echo URL::to('/'); ?>/flags/120/";
+        var baseUrl = "{{ URL::to('/') }}/flags/120/";
         var $state = $(
             '<span><img src="' + baseUrl + '/' + newcountriesjs[state.element.value].toLowerCase() +
             '.png" class="img-flag" /> ' + state.text + '</span>'
@@ -323,7 +309,7 @@
             return state.text;
         }
 
-        var baseUrl = "<?php echo URL::to('/'); ?>/flags/120/"
+        var baseUrl = "{{ URL::to('/') }}/flags/120/"
         var $state = $(
             '<span><img class="img-flag" /> <span></span></span>'
         );

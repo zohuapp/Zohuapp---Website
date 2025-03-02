@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" <?php if(str_replace('_', '-', app()->getLocale()) == 'ar' || @$_COOKIE['is_rtl'] == 'true'){ ?> dir="rtl" <?php } ?>>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}"<?php if(str_replace('_', '-', app()->getLocale()) == 'ar' || @$_COOKIE['is_rtl'] == 'true'){ ?>dir="rtl"<?php } ?>>
 
 <head>
     <meta charset="utf-8">
@@ -16,13 +16,13 @@
     <link href="{{ asset('vendor/icons/feather.css') }}" rel="stylesheet" type="text/css">
 
     <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <?php if(str_replace('_', '-', app()->getLocale()) == 'ar' || @$_COOKIE['is_rtl'] == 'true'){ ?>
+   <?php if(str_replace('_', '-', app()->getLocale()) == 'ar' || @$_COOKIE['is_rtl'] == 'true'){ ?>
     <link href="{{ asset('vendor/bootstrap/css/bootstrap-rtl.min.css') }}" rel="stylesheet">
-    <?php } ?>
+   <?php } ?>
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-    <?php if(str_replace('_', '-', app()->getLocale()) == 'ar' || @$_COOKIE['is_rtl'] == 'true'){ ?>
+   <?php if(str_replace('_', '-', app()->getLocale()) == 'ar' || @$_COOKIE['is_rtl'] == 'true'){ ?>
     <link href="{{ asset('css/style_rtl.css') }}" rel="stylesheet">
-    <?php } ?>
+   <?php } ?>
 
     {{-- fontawesome icons --}}
     <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">

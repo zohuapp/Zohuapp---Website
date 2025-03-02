@@ -677,11 +677,11 @@
         if (vendorProduct != undefined) {
             var productID = vendorProduct.id;
 
-            <?php if (Auth::check()) { ?>
+           <?php if (Auth::check()) { ?>
             setTimeout(() => {
                 checkFavoriteProduct(productID);
             }, 3000);
-            <?php } ?>
+           <?php } ?>
             getOverview(vendorProduct, true);
 
             getRelatedProducts(vendorProduct);

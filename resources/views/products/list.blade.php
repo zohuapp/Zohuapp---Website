@@ -2,7 +2,7 @@
 
 @include('layouts.header')
 
-<div class="st-brands-page pt-5 category-listing-page <?php echo $type; ?>">
+<div class="st-brands-page pt-5 category-listing-page<?php echo $type; ?>">
 
     <div class="container">
 
