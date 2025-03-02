@@ -81,9 +81,21 @@
 
 <script src="{{ asset('js/crypto-js.js') }}"></script>
 <script src="{{ asset('js/jquery.cookie.js') }}"></script>
-<script src="{{ asset('js/jquery.validate.js') }}"></script>
+{{-- <script src="{{ asset('js/jquery.validate.js') }}"></script> --}}
 
 <script type="text/javascript">
+    var firebaseConfig = {
+        apiKey: "{{ config('firebase.apiKey') }}",
+        authDomain: "{{ config('firebase.authDomain') }}",
+        databaseURL: "{{ config('firebase.databaseURL') }}",
+        projectId: "{{ config('firebase.projectId') }}",
+        storageBucket: "{{ config('firebase.storageBucket') }}",
+        messagingSenderId: "{{ config('firebase.messagingSenderId') }}",
+        appId: "{{ config('firebase.appId') }}",
+        measurementId: "{{ config('firebase.measurementId') }}"
+    }
+
+    firebase.initializeApp(firebaseConfig);
     var database = firebase.firestore();
 
     // associative array that contains error messages

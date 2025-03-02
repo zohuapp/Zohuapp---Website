@@ -1,5 +1,7 @@
 <?php
 
+use App\Mail\SendMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,6 +14,25 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/test-email', function () {
+    $data = [
+        'name' => 'John Doe',
+        'email' => 'john@example.com',
+        'phone' => '1234567890',
+        'address' => '123 Main St, Anytown, USA',
+        'order_id' => '1234567890',
+        'message' => 'This is an example order email.',
+        'total_amount' => 100.00,
+        'items' => [
+            ['name' => 'Product 1', 'quantity' => 2, 'price' => 50.00],
+            ['name' => 'Product 2', 'quantity' => 1, 'price' => 100.00],
+        ],
+    ];
+
+    Mail::to('behramkttk9@gmail.com')->send(new SendMail($data));
+    return 'Email sent successfully';
+});
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

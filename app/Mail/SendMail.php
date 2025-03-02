@@ -29,7 +29,7 @@ class SendMail extends Mailable
     public function build()
     {
 
-         return $this->from(env('MAIL_TO_ADDRESS'))->subject('New Customer Equiry')->view('contact_us.send_email')->with('data', $this->data);
+         return $this->from(env('MAIL_FROM_ADDRESS'))->subject('New Customer Equiry')->view('contact_us.send_email')->with('data', $this->data);
 
     }
 }

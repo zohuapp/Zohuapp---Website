@@ -11,7 +11,7 @@
                 </div>
 
                 <div class="col-3 d-flex align-items-center m-none head-search">
-                    <div class="dropdown ml-4 d-flex align-items-center justify-content-between">
+                    <div class="dropdown ml-4 d-flex align-items-center justify-content-around">
                         <a class="text-dark dropdown-toggle d-flex align-items-center p-0" href="javascript:void(0)"
                             id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             <div class="head-loc" onclick="getCurrentLocation('reload')">
@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="col-7 header-right">
-                    <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center justify-content-around">
                         {{--  --}}
                         <a href="{{ url('offers') }}" class="widget-header mr-4 text-dark offer-link">
                             <div class="icon d-flex align-items-center">
@@ -80,12 +80,13 @@
                                 <div class="dropdown-menu dropdown-menu-right notification_data"
                                     aria-labelledby="dropdownNotificationMenuButton"></div>
                             </div>
-                        @endauth
 
                         {{-- user profile icon --}}
                         <div class="dropdown m-none">
-                            <a href="#" class="dropdown-toggle text-dark d-block border border-secondary rounded-pill p-1 d-flex align-items-center" id="dropdownMenuButton"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a href="#"
+                                class="dropdown-toggle text-dark d-block border border-secondary rounded-pill p-1 d-flex align-items-center"
+                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
 
                             </a>
                             {{-- dropdown menu --}}
@@ -134,6 +135,9 @@
                             </div>
                         </div>
 
+                        @endauth
+
+
                         <div class="toggle-burger-animation p-2">
                             <a class="toggle" href="#">
                                 <span></span>
@@ -145,14 +149,18 @@
         </div>
     </section>
 </header>
+
+{{-- mobile resolution menu --}}
 <div class="d-none">
-    <div class="bg-primary p-3 d-flex align-items-center">
-        <a class="toggle togglew toggle-2" href="#"><span></span></a>
-        <a href="{{ route('home') }}" class="mobile-logo brand-wrap mb-0">
-            <img alt="#" class="img-fluid" src="{{ asset('img/logo_web.png') }}">
-        </a>
-        <div class="mobile-set-location d-flex align-items-center head-search">
-            <div class="dropdown ml-4">
+    <div class="bg-primary p-3 row align-items-center">
+        <div class="col-4 logo-mobile p-0 m-0">
+            <a href="{{ route('home') }}" class="mobile-logo brand-wrap mb-0">
+                <img alt="#" class="img-fluid" src="{{ asset('img/logo_web.png') }}">
+            </a>
+        </div>
+
+        <div class="col-6 mobile-set-location d-flex align-items-center head-search">
+            <div class="dropdown">
                 <a class="text-dark dropdown-toggle d-flex align-items-center p-0" href="javascript:void(0)"
                     id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     <div class="head-loc" onclick="getCurrentLocation('reload')">
@@ -163,6 +171,12 @@
                     </div>
                 </a>
             </div>
+        </div>
+
+        <div class="col-2 burger-menu-mobile ms-auto">
+            <a class="toggle" href="#">
+                <span></span>
+            </a>
         </div>
     </div>
 </div>
