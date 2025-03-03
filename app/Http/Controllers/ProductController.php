@@ -24,6 +24,7 @@ class ProductController extends Controller
     public function productDetail($id)
     {
         $cart = session()->get('cart', []);
+
         return view('products.detail', compact('id', 'cart'));
     }
 

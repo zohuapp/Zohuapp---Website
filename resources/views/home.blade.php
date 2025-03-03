@@ -235,8 +235,8 @@
                     photo = banner.photo;
                 }
 
-                html += '<a href="' + redirect_id + '"><img src="' + photo +
-                    '" onerror="this.onerror=null;this.src=\'' + placeholderImage + '\'"></a>';
+                html += '<div><img src="' + photo +
+                    '" onerror="this.onerror=null;this.src=\'' + placeholderImage + '\'"></div>';
                 html += '</div>';
                 html += '</div>';
             }
@@ -269,8 +269,8 @@
                     photo = banner.photo;
                 }
 
-                html += '<a href="' + redirect_id + '"><img src="' + photo +
-                    '" onerror="this.onerror=null;this.src=\'' + placeholderImage + '\'"></a>';
+                html += '<div><img src="' + photo +
+                    '" onerror="this.onerror=null;this.src=\'' + placeholderImage + '\'"></div>';
                 html += '</div>';
                 html += '</div>';
             }
@@ -571,6 +571,8 @@
 
         var itemCount = await getTotalItem();
 
+        // console.log(itemCount);
+
         var photo = placeholderImage;
 
         var view_product = "{{ route('productlist.all') }}";
@@ -578,7 +580,8 @@
         html = html + '<div class="col-md-3 top-cat-list"><a href="' + view_product +
             '" class="d-block text-center cat-link"><span class="cat-img"><img alt="#" src="' + photo +
             '"  onerror="this.onerror=null;this.src=\'' + placeholderImage +
-            '\'" class="img-fluid mb-2"></span><h4 class="m-0">Browse All</h4><h6>' + itemCount + '</h6></a></div>';
+            '\'" class="img-fluid mb-2"></span><h4 class="m-0">Browse All</h4><h6>' + itemCount +
+            '</h6></a></div>';
 
         var category_html = '';
 

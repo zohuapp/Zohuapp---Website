@@ -148,6 +148,7 @@
     var id = '<?php echo $id; ?>';
 
     var productsRef = database.collection('vendor_products').doc(id);
+    // console.log(productsRef);
 
     var firestore = app1.firestore();
     var geoFirestore = new GeoFirestore(firestore);
@@ -520,6 +521,7 @@
     function getProductDetail() {
         $("#overlay").show();
         productsRef.get().then(async function(snapshots) {
+            // console.log(snapshots.data());
             if (snapshots != undefined) {
                 var html = '';
                 html = await buildHTML(snapshots);
@@ -647,6 +649,7 @@
 
         database.collection('favorite_item').where('product_id', '==', product_id).where('user_id', '==',
             user_id).get().then(async function(favoriteItemsnapshots) {
+                //
             if (favoriteItemsnapshots.docs.length > 0) {
                 var id = favoriteItemsnapshots.docs[0].id;
                 database.collection('favorite_item').doc(id).delete().then(function() {

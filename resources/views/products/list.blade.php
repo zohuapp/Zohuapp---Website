@@ -53,10 +53,12 @@
     jQuery("#overlay").show();
     $(document).ready(function () {
 
+        // get categories method
         getCategories();
+        // get brands method
         getBrands();
 
-
+        // Click function for selecting different categories
         $(document).on("click", ".category-item, .brand-item, .attr-item ", function () {
             var checkboxes = document.querySelectorAll('.category-item');
             var brandcheckboxes = document.querySelectorAll('.brand-item');
@@ -245,6 +247,8 @@
     }
 
     async function getProducts(type, catId, checkedBrandIds, checkedAttrIds) {
+
+        // console.log(type, catId, checkedBrandIds, checkedAttrIds);
 
         jQuery("#overlay").show();
         var product_list = document.getElementById('product-list');
