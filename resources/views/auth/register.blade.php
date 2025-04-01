@@ -19,7 +19,8 @@
                 </div>
 
                 {{-- register form --}}
-                <form class="mt-3 mb-4">
+                <form class="mt-3 mb-4" action="{{ route('setToken') }}" method="POST">
+                    @csrf
                     <div id="password_required_new"></div>
                     {{-- full name --}}
                     <div class="form-group" id="fullName_div">
@@ -46,7 +47,8 @@
                     </div>
 
                     {{-- submit button --}}
-                    <button type="button" onclick="signUpUser()"
+                    <button type="submit"
+                    {{-- onclick="signUpUser()" --}}
                         class="btn btn-primary btn-lg btn-block send-code remove_hover">
                         {{ trans('lang.sign_up') }}
                     </button>
@@ -382,10 +384,11 @@
                     active: true, // or whatever default value you want
                 });
 
-                console.log("User signed up and data stored:", user);
+                // console.log("User signed up and data stored:", user);
                 // alert("User signed up");
 
                 const uuid = user.uid;
+                // const uuid = user.uid;
                 const url = "{{ route('setToken') }}";
 
                 $.ajax({

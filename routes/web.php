@@ -1,7 +1,7 @@
 <?php
 
-use App\Mail\SendMail;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\NewUserSignUp;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,23 +15,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/test-email', function () {
-    $data = [
-        'name' => 'John Doe',
-        'email' => 'john@example.com',
-        'phone' => '1234567890',
-        'address' => '123 Main St, Anytown, USA',
-        'order_id' => '1234567890',
-        'message' => 'This is an example order email.',
-        'total_amount' => 100.00,
-        'items' => [
-            ['name' => 'Product 1', 'quantity' => 2, 'price' => 50.00],
-            ['name' => 'Product 2', 'quantity' => 1, 'price' => 100.00],
-        ],
-    ];
+// Route::get('/test-email', function () {
+//     // return view('mail.newUserSignUp');
+//     $user = [
+//         'name' => 'John Doe',
+//         'email' => 'john@example.com',
+//         'password' => '1234567890'
+//     ];
 
-    Mail::to('behramkttk9@gmail.com')->send(new SendMail($data));
-    return 'Email sent successfully';
+//     $route = route('proceed-to-signup', $user);
+//     $username = $user['name'];
+
+//     Mail::to('behramkttk9@gmail.com')->send(new NewUserSignUp($route, $username));
+//     return 'Email sent successfully';
+// });
+
+Route::get('verify-view', function () {
+    return view('auth.verify');
 });
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -154,7 +154,11 @@ Route::post('logout', [App\Http\Controllers\Auth\AjaxController::class, 'logout'
 
 Route::post('newRegister', [App\Http\Controllers\Auth\AjaxController::class, 'newRegister'])->name('newRegister');
 
-Route::post('checkEmail', [App\Http\Controllers\Auth\AjaxController::class, 'checkEmail'])->name('checkEmail');
+// Route::post('checkEmail', [App\Http\Controllers\Auth\AjaxController::class, 'checkEmail'])->name('checkEmail');
+
+// proceed to signup after verifying user's email address.
+Route::get('proceed-to-signup/{uuid}', [App\Http\Controllers\Auth\AjaxController::class, 'proceedToSignupView'])->name('proceed-to-signup');
+Route::post('proceed-to-verify-email', [App\Http\Controllers\Auth\AjaxController::class, 'proceedToVerifyEmail'])->name('proceed-to-verify-email');
 
 Route::post('sendemail/send', [App\Http\Controllers\SendEmailController::class, 'sendMail'])->name('sendContactUsMail');
 

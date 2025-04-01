@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\VendorUsers;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
@@ -58,5 +59,14 @@ class User extends Authenticatable
                 return null;
             }
         }
+    }
+
+    /**
+     * Summary of vendorUser
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function vendorUser(): HasOne
+    {
+        return $this->hasOne(VendorUsers::class, 'user_id');
     }
 }
