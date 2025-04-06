@@ -85,6 +85,7 @@ class VendorUsers extends Authenticatable
     ];
 
     /**
+     * A VendorUser belongs to only one User
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user(): BelongsTo

@@ -45,24 +45,30 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function getVendorId()
+    /**
+     * Get the Vendor uuid of the authenticated user
+     * @return mixed
+     */
+    public function getVendorId(): mixed
     {
+        $authUserVendorId = Auth::user()->vendorUser->uuid;
+        return $authUserVendorId ?? null;
+        // $exist = VendorUsers::where('user_id', Auth::user()->id)->exists();
 
-        $exist = VendorUsers::where('user_id', Auth::user()->id)->first();
-        if ($exist) {
-            return $exist->uuid;
-        } else {
-            $exist = VendorUsers::where('email', Auth::user()->email)->first();
-            if ($exist) {
-                return $exist->uuid;
-            } else {
-                return null;
-            }
-        }
+        // if ($exist) {
+        //     return $exist->uuid;
+        // } else {
+        //     $exist = VendorUsers::where('email', Auth::user()->email)->first();
+        //     if ($exist) {
+        //         return $exist->uuid;
+        //     } else {
+        //         return null;
+        //     }
+        // }
     }
 
     /**
-     * Summary of vendorUser
+     * A User has only one VendorUser
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function vendorUser(): HasOne
