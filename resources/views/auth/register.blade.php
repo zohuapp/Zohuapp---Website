@@ -391,7 +391,7 @@
 
                 const uuid = user.uid;
                 // const uuid = "234qwsdafans45re";
-                console.log("User ID:", uuid);
+                // console.log("User ID:", uuid);
                 // const uuid = user.uid;
                 // const url = "{{ route('setToken') }}";
                 $("#firebase_uuid").val(uuid);

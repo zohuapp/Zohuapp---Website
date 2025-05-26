@@ -38,8 +38,6 @@
                 // handle the response if the login is successful
                 // typically, you would redirect the user to the intended page
                 // check if the response status is 200
-                alert("You have been signed in successfully!");
-                console.log(response);
                 if (response.status === 200) {
                     // redirect to the home page
                     window.location = "{{ route('home') }}";

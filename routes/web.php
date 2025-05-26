@@ -34,6 +34,10 @@ Route::get('verify-view', function () {
     return view('auth.verify');
 });
 
+// Route::get('check-locale', function () {
+//     return App::getLocale();
+// })->name('check-locale');
+
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('set-location', [App\Http\Controllers\HomeController::class, 'setLocation'])->name('set-location');
