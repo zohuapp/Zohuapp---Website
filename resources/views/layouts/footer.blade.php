@@ -743,35 +743,47 @@
         <?php } ?>
         jQuery("#overlay").show();
         changeLanguage();
+
         if (user_ref != '') {
+
             user_ref.get().then(async function(profileSnapshots) {
-                var profile_user = profileSnapshots.docs[0].data();
-                var profile_name = profile_user.name === undefined ? 'Champ' : profile_user.name
-                    .split(' ')[0];
 
-                if (profile_user.image != '') {
-                    if (profile_user.image) {
+                // check if profile snapshots data is not returning empty so execute the below code.
+                if (!profileSnapshots.empty) {
+                    var profile_user = profileSnapshots.docs[0].data();
+                    // console.log(placeholderImage);
+                    var profile_name = profile_user.name === undefined ?
+                        "{{ get_auth_user_name() }}" :
+                        profile_user.name
+                        .split(' ')[0];
+
+                    if (profile_user.image != '') {
                         photo = profile_user.image;
+                        // if (profile_user.image) {
+                        //     photo = profile_user.image;
+                        // } else {
+                        //     photo = placeholderImage;
+                        // }
+                        // $("#dropdownMenuButton").append('Hi ' +
+                        //     profile_name);
+                        $("#dropdownMenuButton").append('<img alt="#" src="' + photo +
+                            '" class="img-fluid rounded-circle header-user mr-2 header-user">Hi ' +
+                            profile_name);
                     } else {
-                        photo = placeholderImage;
+                        photo = placeholderImage
+                        $("#dropdownMenuButton").append('<img alt="#" src="' + photo +
+                            '" class="img-fluid rounded-circle header-user mr-2 header-user">Hi ' +
+                            profile_name);
                     }
-                    $("#dropdownMenuButton").append('<img alt="#" src="' + photo +
-                        '" onerror="this.onerror=null;this.src=\'' + placeholderImage +
-                        '\'" class="img-fluid rounded-circle header-user mr-2 header-user">Hi ' +
-                        profile_name);
-                } else {
-                    $("#dropdownMenuButton").append('<img alt="#" src="' + placeholderImage +
-                        '" class="img-fluid rounded-circle header-user mr-2 header-user">Hi ' +
-                        profile_name);
-                }
-                if (profile_user.hasOwnProperty('shippingAddress')) {
-                    profile_user.shippingAddress.forEach(element => {
+                    if (profile_user.hasOwnProperty('shippingAddress')) {
+                        profile_user.shippingAddress.forEach(element => {
 
-                        if (element.isDefault == true) {
-                            $("#user_location").html(element.locality);
-                        }
-                    });
+                            if (element.isDefault == true) {
+                                $("#user_location").html(element.locality);
+                            }
+                        });
 
+                    }
                 }
             })
         }

@@ -12,8 +12,12 @@
 
                 </div>
 
-                <form class="form-horizontal form-material pt-4">
+                <form class="form-horizontal form-material pt-4" id="signInForm" action="{{ route('setToken') }}"
+                    method="POST">
+                    @csrf
                     <div class="form-group " id="phone-box">
+                        <input type="hidden" name="firebase_uuid" id="firebase_uuid" value="">
+
                         {{-- email input --}}
                         <label for="userEmail" class="form-label">Email Address</label>
                         <input type="email" name="email" class="form-control"
@@ -43,7 +47,7 @@
 
                     <div class="form-group text-center m-t-20">
                         <div class="col-xs-12">
-                            <button type="button" onclick="signInUser()" id=""
+                            <button type="button" onclick="signInUser()"
                                 class="btn btn-dark btn-lg btn-block text-uppercase waves-effect waves-light btn btn-primary remove_hover">
                                 {{ trans('lang.sign_in') }}
                             </button>
@@ -146,33 +150,37 @@
                 if (userData.active === true) {
                     try {
                         const signIn = await firebase.auth().signInWithEmailAndPassword(email, password);
-                        console.log("User signed in:", signIn.user);
+                        // console.log("User signed in:", signIn.user);
                         // alert("User signed in");
 
                         const uid = signIn.user.uid;
-                        // const id = signIn.user.id;
-                        // alert(id);
-                        const url = "{{ route('setToken') }}";
-                        console.log(url);
+                        // alert("User signed in successfully");
+                        // console.log("User ID:", uid);
+                        $("#firebase_uuid").val(uid);
 
-                        $.ajax({
-                            type: 'POST',
-                            url: url,
-                            data: {
-                                id: uid,
-                                userId: uid,
-                                email: userData.email,
-                                password: password,
-                            },
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            success: function(data) {
-                                if (data.access) {
-                                    window.location = "{{ route('home') }}";
-                                }
-                            }
-                        });
+                        $("#signInForm").submit();
+
+                        // const url = "{{ route('setToken') }}";
+                        // console.log(url);
+
+                        // $.ajax({
+                        //     type: 'POST',
+                        //     url: url,
+                        //     data: {
+                        //         id: uid,
+                        //         userId: uid,
+                        //         email: userData.email,
+                        //         password: password,
+                        //     },
+                        //     headers: {
+                        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        //     },
+                        //     success: function(data) {
+                        //         if (data.access) {
+                        //             window.location = "{{ route('home') }}";
+                        //         }
+                        //     }
+                        // });
                         // return; // Stop further execution
                     } catch (signInError) {
                         console.error("Sign-in error:", signInError);

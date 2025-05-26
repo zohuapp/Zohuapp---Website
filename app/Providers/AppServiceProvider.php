@@ -24,6 +24,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        App::setLocale(session('locale', 'en')); // Default to English if locale is not set
+        App::setLocale(session('locale', 'es')); // Default to Spanish if locale is not set
     }
 }

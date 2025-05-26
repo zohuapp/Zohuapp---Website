@@ -30,11 +30,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $authUserId = Auth::user() !== null ? Auth::user()->id : null;
-        // dd(Auth::user()->vendorUser->uuid);
-        // exit;
+        // $authUserName = Auth::user() !== null ? Auth::user()->name : null;
+        // // dd(Auth::user()->vendorUser->uuid);
+        // // exit;
 
-        return view('home', compact('authUserId'));
+        return view('home');
     }
     public function setLocation()
     {

@@ -7,8 +7,6 @@ Dear {{ $username }},
 Thank you for registering with {{ config('app.name') }}.<br> To complete your registration and access all features, please confirm
 your email address by clicking the button below
 
-{{ $route }}
-
 <x-mail::button :url="$route">
     Proceed to Sign Up
 </x-mail::button>
