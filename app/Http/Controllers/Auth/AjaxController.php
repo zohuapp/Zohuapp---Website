@@ -24,6 +24,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\NewUserSignUp;
 use Exception;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\View;
 
 class AjaxController extends Controller
 {
@@ -47,25 +48,28 @@ class AjaxController extends Controller
      */
     protected function setToken(Request $request)
     {
-        // $userId = $request->userId;
-        $uuid = $request->id ?? 'sadfads98790sadfa8';
-        $password = $request->password;
+        // Validate the request data
+        $uuid = $request->firebase_uuid;
         $email = $request->email;
+        $password = $request->password;
+        $name = $request->name;
+
         $exist = VendorUsers::where('email', $email)->exists();
 
+        // Check if the user already exists in the vendor_users table
         try {
             if (!$exist) {
                 // Create new user and add to vendor_users table
                 $user = User::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
+                    'name' => $name,
+                    'email' => $email,
                     'password' => Hash::make($password),
                 ]);
 
                 VendorUsers::create([
                     'user_id' => $user->id,
                     'uuid' => $uuid,
-                    'email' => $request->email,
+                    'email' => $email,
                 ]);
 
                 // Send email verification
@@ -89,13 +93,8 @@ class AjaxController extends Controller
 
             Auth::login($user, true);
 
-            $data = array();
+            return to_route('home');
 
-            if (Auth::check()) {
-                $data['access'] = true;
-            }
-
-            return $data;
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -103,7 +102,7 @@ class AjaxController extends Controller
 
     /**
      * Create a new user after verifying user's email address.
-     * @return \Illuminate\Support\Facades\View
+     * @return mixed
      */
     protected function proceedToSignupView($uuid)
     {
@@ -112,26 +111,27 @@ class AjaxController extends Controller
 
     /**
      * Create a new user after verifying user's email address.
-     * @return \Illuminate\Http\JsonResponse
+     * @return mixed
      */
     protected function proceedToVerifyEmail(VendorUsers $vendor_users, Request $request)
     {
         $vendor_user = $vendor_users->where('uuid', $request->uuid)->first();
-
-        // dd($vendor_user);
-        // exit;
 
         try {
             // Verify the email and update the email_verified_at field in the users table
             $vendor_user->user->email_verified_at = now();
             $vendor_user->user->save();
 
+            Auth::login($vendor_user->user, true);
             // send a successful response
-            return true;
-            // return response()->json(['message' => 'Email verified successfully.'], 200);
+            // return true;
+            // return to_route('home');
+            return response()->json(
+                ['message' => 'Email verified successfully.', 'status' => 200],
+            );
         } catch (Exception $e) {
-            // return response()->json(['error' => $e->getMessage()], 500);
-            return $e->getMessage();
+            return response()->json(['error' => $e->getMessage()])->statusCode(500);
+            // return $e->getMessage();
         }
         // return view('auth.proceed-to-signup');
     }

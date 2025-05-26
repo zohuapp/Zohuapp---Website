@@ -260,7 +260,10 @@
     } ?>
 
     var cuser_id = '<?php echo $id; ?>';
-    console.log(cuser_id);
+    var user_uuid = cuser_id;
+    var user_ref = database.collection('users').where('id', '==', user_uuid);
+
+    // console.log(cuser_id);
 
     var place = [];
 
@@ -550,20 +553,6 @@
 
 
 <script type="text/javascript">
-    <?php
-    use App\Models\user;
-    use App\Models\VendorUsers;
-
-    $user_email = '';
-    $user_uuid = '';
-    $auth_id = Auth::id();
-    if ($auth_id) {
-        $user = user::select('email')->where('id', $auth_id)->first();
-        $user_email = $user->email;
-        $user_uuid = VendorUsers::select('uuid')->where('email', $user_email)->orderby('id', 'DESC')->first();
-        $user_uuid = $user_uuid->uuid;
-    }
-    ?>
     var database = app1.firestore();
 
     var googleMapKey = '';
@@ -581,32 +570,6 @@
     placeholder.get().then(async function(snapshotsimage) {
         var placeholderImageData = snapshotsimage.data();
         placeholderImage = placeholderImageData.image;
-    });
-
-    var user_email = "<?php echo $user_email; ?>";
-    var user_ref = '';
-    if (user_email != '') {
-        var user_uuid = "<?php echo $user_uuid; ?>";
-        user_ref = database.collection('users').where("id", "==", user_uuid);
-    }
-    database.collection('settings').doc("notification_setting").get().then(async function(snapshots) {
-        var data = snapshots.data();
-        if (data != undefined) {
-            serviceJson = data.serviceJson;
-            if (serviceJson != '' && serviceJson != null) {
-                $.ajax({
-                    type: 'POST',
-                    data: {
-                        serviceJson: btoa(serviceJson),
-                    },
-                    url: "{{ route('store-firebase-service') }}",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(data) {}
-                });
-            }
-        }
     });
 
     function buildNotificationHtml() {
