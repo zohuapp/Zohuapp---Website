@@ -31,6 +31,8 @@ class HomeController extends Controller
     public function index()
     {
         $authUserId = Auth::user() !== null ? Auth::user()->id : null;
+        // dd(Auth::user()->vendorUser->uuid);
+        // exit;
 
         return view('home', compact('authUserId'));
     }

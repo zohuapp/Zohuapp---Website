@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\VendorUsers;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
@@ -44,19 +45,34 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function getVendorId()
+    /**
+     * Get the Vendor uuid of the authenticated user
+     * @return mixed
+     */
+    public function getVendorId(): mixed
     {
+        $authUserVendorId = Auth::user()->vendorUser->uuid;
+        return $authUserVendorId ?? null;
+        // $exist = VendorUsers::where('user_id', Auth::user()->id)->exists();
 
-        $exist = VendorUsers::where('user_id', Auth::user()->id)->first();
-        if ($exist) {
-            return $exist->uuid;
-        } else {
-            $exist = VendorUsers::where('email', Auth::user()->email)->first();
-            if ($exist) {
-                return $exist->uuid;
-            } else {
-                return null;
-            }
-        }
+        // if ($exist) {
+        //     return $exist->uuid;
+        // } else {
+        //     $exist = VendorUsers::where('email', Auth::user()->email)->first();
+        //     if ($exist) {
+        //         return $exist->uuid;
+        //     } else {
+        //         return null;
+        //     }
+        // }
+    }
+
+    /**
+     * A User has only one VendorUser
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function vendorUser(): HasOne
+    {
+        return $this->hasOne(VendorUsers::class, 'user_id');
     }
 }
