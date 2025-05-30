@@ -132,6 +132,7 @@
 
             var user = snapshots.docs[0].data();
             var wallet_amount_user = 0;
+            const placeholderImage = await getPlaceholderImage();
 
             $(".user_email_show").html(user.email);
             $(".user_full_name").text(user.name);
@@ -245,7 +246,8 @@
                     jQuery("#uploding_image").text("Image is uploading...");
                 }, function (error) {
                 }, function () {
-                    uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+                    uploadTask.snapshot.ref.getDownloadURL().then(async function (downloadURL) {
+                        const placeholderImage = await getPlaceholderImage();
                         jQuery("#uploding_image").text("Upload is completed");
                         photo = downloadURL;
                         $(".user_image").empty();
