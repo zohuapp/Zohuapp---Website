@@ -16,6 +16,7 @@ namespace App\Models;
 
 
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use Illuminate\Notifications\Notifiable;
@@ -82,6 +83,15 @@ class VendorUsers extends Authenticatable
         'uuid',
         'email'
     ];
+
+    /**
+     * A VendorUser belongs to only one User
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'id');
+    }
 
     /**
 

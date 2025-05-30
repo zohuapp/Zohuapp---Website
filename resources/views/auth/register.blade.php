@@ -19,12 +19,16 @@
                 </div>
 
                 {{-- register form --}}
-                <form class="mt-3 mb-4">
+                <form class="mt-3 mb-4" id="signUpForm" action="{{ route('setToken') }}" method="POST">
+                    @csrf
                     <div id="password_required_new"></div>
+
+                    {{-- hidden input --}}
+                    <input type="hidden" name="firebase_uuid" id="firebase_uuid" value="">
                     {{-- full name --}}
                     <div class="form-group" id="fullName_div">
                         <label for="firstName" class="text-dark">{{ trans('lang.full_name') }}</label>
-                        <input type="text" name="fullName" placeholder="{{ trans('lang.full_name_help') }}"
+                        <input type="text" name="name" placeholder="{{ trans('lang.full_name_help') }}"
                             class="form-control" id="userName" required>
                         <div id="error2" class="err"></div>
                     </div>
@@ -382,32 +386,37 @@
                     active: true, // or whatever default value you want
                 });
 
-                console.log("User signed up and data stored:", user);
+                // console.log("User signed up and data stored:", user);
                 // alert("User signed up");
 
                 const uuid = user.uid;
-                const url = "{{ route('setToken') }}";
+                // const uuid = "234qwsdafans45re";
+                // console.log("User ID:", uuid);
+                // const uuid = user.uid;
+                // const url = "{{ route('setToken') }}";
+                $("#firebase_uuid").val(uuid);
 
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        id: uuid,
-                        userId: uuid,
-                        email: email,
-                        password: password,
-                        name: name,
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
+                $("#signUpForm").submit();
+                // $.ajax({
+                //     type: 'POST',
+                //     url: url,
+                //     data: {
+                //         firebase_uuid: uuid,
+                //         // userId: uuid,
+                //         email: email,
+                //         password: password,
+                //         name: name,
+                //     },
+                //     headers: {
+                //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                //     },
 
-                    success: function(data) {
-                        if (data.access) {
-                            window.location = "{{ route('home') }}";
-                        }
-                    }
-                })
+                //     success: function(data) {
+                //         if (data.access) {
+                //             window.location = "{{ route('home') }}";
+                //         }
+                //     }
+                // })
             } else {
                 $("#errors").html(
                     `<p class="error" id="field_error" style="background-color: rgba(179, 24, 24, 0.625);color:white;">${errorMessages.password}</p>`
@@ -415,7 +424,7 @@
                 $("#field_error").addClass('p-2');
                 return;
             }
-            // return;
+            return;
 
         } catch (signUpError) {
             // Handle sign-up errors (e.g., weak password, email already in use):
