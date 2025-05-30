@@ -232,6 +232,10 @@
     globalSettingsRef.get().then(async function(globalSettingsSnapshots) {
         var globalSettingsData = globalSettingsSnapshots.data();
         var src_new = globalSettingsData.appLogo;
+
+        // get the placeholder image URL
+        const placeholderImage = await getPlaceholderImage();
+
         if (src_new) {
             photo = src_new;
 
@@ -564,14 +568,23 @@
 
     });
 
+    // Function to get the placeholder image URL
+    async function getPlaceholderImage() {
+        var placeholderImage = '';
+        var placeholder = database.collection('settings').doc('placeHolderImage');
+        try {
+            const snapshotsimage = await placeholder.get();
+            const placeholderImageData = snapshotsimage.data();
+            placeholderImage = placeholderImageData.image;
+            // console.log("Inside async function:", placeholderImage); // This will log the image URL
+            return placeholderImage;
+        } catch (error) {
+            console.error("Error fetching placeholder image:", error);
+            return null; // Or handle the error as needed
+        }
+    }
 
-    var placeholderImage = '';
-    var placeholder = database.collection('settings').doc('placeHolderImage');
-    placeholder.get().then(async function(snapshotsimage) {
-        var placeholderImageData = snapshotsimage.data();
-        placeholderImage = placeholderImageData.image;
-    });
-
+    // Call the function to build html notification structure
     function buildNotificationHtml() {
 
 
@@ -748,6 +761,8 @@
 
             user_ref.get().then(async function(profileSnapshots) {
 
+                const placeholderImage = await getPlaceholderImage();
+                // console.log("Placeholder Image:", placeholderImage); // This will log the image URL
                 // check if profile snapshots data is not returning empty so execute the below code.
                 if (!profileSnapshots.empty) {
                     var profile_user = profileSnapshots.docs[0].data();
@@ -757,7 +772,7 @@
                         profile_user.name
                         .split(' ')[0];
 
-                    if (profile_user.image != '') {
+                    if (!profile_user.image == '') {
                         photo = profile_user.image;
                         // if (profile_user.image) {
                         //     photo = profile_user.image;
@@ -771,6 +786,7 @@
                             profile_name);
                     } else {
                         photo = placeholderImage
+                        // console.log("Photo URL:", photo); // This will log the image URL
                         $("#dropdownMenuButton").append('<img alt="#" src="' + photo +
                             '" class="img-fluid rounded-circle header-user mr-2 header-user">Hi ' +
                             profile_name);
@@ -879,7 +895,7 @@
                         }).then(() => {
 
 
-                            console.log('Provided document has been updated in Firestore');
+                            // console.log('Provided document has been updated in Firestore');
 
 
                         }, (error) => {

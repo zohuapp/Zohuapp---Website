@@ -571,6 +571,8 @@
 
         var itemCount = await getTotalItem();
 
+        const placeholderImage = await getPlaceholderImage();
+
         // console.log(itemCount);
 
         var photo = placeholderImage;
@@ -738,9 +740,11 @@
 
     });
 
-    function buildHTMLPopularItem(popularItemsnapshot, category_id) {
+    async function buildHTMLPopularItem(popularItemsnapshot, category_id) {
         var html = '';
         var alldata = [];
+
+        const placeholderImage = await getPlaceholderImage();
 
         popularItemsnapshot.docs.forEach((listval) => {
             var datas = listval.data();
@@ -1074,6 +1078,8 @@
         var vendorCatRef = database.collection('vendor_products').where('categoryID', "==", category_id).limit(4);
 
         var storeHtmlRes = vendorCatRef.get().then(async function(productSnapshots) {
+
+            const placeholderImage = await getPlaceholderImage();
 
             var alldata = [];
             productSnapshots.docs.forEach((listval) => {
