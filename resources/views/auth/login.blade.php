@@ -110,6 +110,7 @@
         'invalid': "Your credentials does not match our records.",
         'emptyFields': "One or more fields are empty",
         'invalidEmail': "Email address is invalid",
+        'userNotFound': "No user found with the provided email address! Please Sign Up.",
     };
 
     async function signInUser() {
@@ -211,6 +212,11 @@
                     // alert("Your account is not active. Please contact support.");
                     return;
                 }
+            } else {
+                $("#errors").html(
+                    `<p class="error" id="field_error" style="background-color: rgba(179, 24, 24, 0.625);color:white;">${errorMessages.userNotFound}</p>`
+                );
+                $("#field_error").addClass('p-2');
             }
 
         } catch (error) {

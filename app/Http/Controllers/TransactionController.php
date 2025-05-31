@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\VendorUsers;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Razorpay\Api\Api;
-use Session;
+use Illuminate\Support\Facades\Session;
 use Xendit\Configuration;
 use Xendit\Invoice\InvoiceApi;
 use Xendit\Invoice\CreateInvoiceRequest;
@@ -19,7 +20,7 @@ class TransactionController extends Controller
 
     public function __construct()
     {
-       $this->middleware('auth');
+        $this->middleware('auth');
     }
 
 
@@ -61,12 +62,11 @@ class TransactionController extends Controller
                 $payfast_return_url = $payfast_return_url . '?token=' . $token;
 
                 return view('transactions.payfast', ['is_checkout' => 1, 'user_wallet' => $user_wallet, 'id' => $user->uuid, 'email' => $email, 'authorName' => $authorName, 'amount' => $total_pay, 'payfast_merchant_key' => $payfast_merchant_key, 'payfast_merchant_id' => $payfast_merchant_id, 'payfast_isSandbox' => $payfast_isSandbox, 'payfast_return_url' => $payfast_return_url, 'payfast_notify_url' => $payfast_notify_url, 'payfast_cancel_url' => $payfast_cancel_url]);
-
             } else if ($user_wallet['data']['payment_method'] == 'paystack') {
                 $paystack_public_key = $user_wallet['data']['paystack_public_key'];
                 $paystack_secret_key = $user_wallet['data']['paystack_secret_key'];
                 $paystack_isSandbox = $user_wallet['data']['paystack_isSandbox'];
-                $userEmail= $user_wallet['user']['email'];
+                $userEmail = $user_wallet['user']['email'];
                 $authorName = $user_wallet['user']['name'];
                 $total_pay = $user_wallet['data']['amount'];
                 $amount = 0;
@@ -86,14 +86,11 @@ class TransactionController extends Controller
                     $script = "<script>window.location = '" . $payment->authorization_url . "';</script>";
                     echo $script;
                     exit;
-                }
-                else {
+                } else {
                     $script = "<script>window.location = '" . url('') . "';</script>";
                     echo $script;
                     exit;
                 }
-
-
             } else if ($user_wallet['data']['payment_method'] == 'flutterwave') {
 
                 $currency = "USD";
@@ -118,8 +115,6 @@ class TransactionController extends Controller
                 Session::save();
 
                 return view('transactions.flutterwave', ['is_checkout' => 1, 'user_wallet' => $user_wallet, 'id' => $user->uuid, 'email' => $userEmail, 'authorName' => $authorName, 'amount' => $total_pay, 'flutterWave_secret_key' => $flutterWave_secret_key, 'flutterWave_public_key' => $flutterWave_public_key, 'flutterWave_isSandbox' => $flutterWave_isSandbox, 'flutterWave_encryption_key' => $flutterWave_encryption_key, 'token' => $token, 'data' => $user_wallet['data'], 'currency' => $currency]);
-
-
             } else if ($user_wallet['data']['payment_method'] == 'mercadopago') {
 
                 $currency = "USD";
@@ -169,9 +164,6 @@ class TransactionController extends Controller
                 }
                 echo "<script>location.href = '" . $payment_url . "';</script>";
                 exit;
-
-
-
             } else if ($user_wallet['data']['payment_method'] == 'stripe') {
 
 
@@ -182,7 +174,6 @@ class TransactionController extends Controller
                 $isStripeSandboxEnabled = $user_wallet['data']['isStripeSandboxEnabled'];
                 $amount = 0;
                 return view('transactions.stripe', ['is_checkout' => 1, 'cart' => $user_wallet, 'id' => $user->uuid, 'email' => $email, 'authorName' => $authorName, 'amount' => $total_pay, 'stripeSecret' => $stripeSecret, 'stripeKey' => $stripeKey, 'data' => $user_wallet['data']]);
-
             } else if ($user_wallet['data']['payment_method'] == 'paypal') {
 
                 $paypalSecret = $user_wallet['data']['paypalSecret'];
@@ -191,9 +182,9 @@ class TransactionController extends Controller
                 $authorName = $user_wallet['user']['name'];
                 $total_pay = $user_wallet['data']['amount'];
                 return view('transactions.paypal', ['is_checkout' => 1, 'user_wallet' => $user_wallet, 'id' => $user->uuid, 'email' => $email, 'authorName' => $authorName, 'amount' => $total_pay, 'paypalSecret' => $paypalSecret, 'paypalKey' => $paypalKey, 'data' => $user_wallet['data']]);
-            }else if($user_wallet['data']['payment_method']=='xendit'){
-                $xendit_enable=$user_wallet['data']['xendit_enable'];
-                $xendit_apiKey=$user_wallet['data']['xendit_apiKey'];
+            } else if ($user_wallet['data']['payment_method'] == 'xendit') {
+                $xendit_enable = $user_wallet['data']['xendit_enable'];
+                $xendit_apiKey = $user_wallet['data']['xendit_apiKey'];
                 if (isset($xendit_enable) && $xendit_enable == true) {
                     $total_pay = $user_wallet['data']['amount'];
                     $currency = "USD";
@@ -207,8 +198,8 @@ class TransactionController extends Controller
                     $apiInstance = new InvoiceApi();
                     $create_invoice_request = new CreateInvoiceRequest([
                         'external_id' => $token,
-                        'description' => '#'.$token.' Order place',
-                        'amount' => (int)($total_pay)*1000,
+                        'description' => '#' . $token . ' Order place',
+                        'amount' => (int)($total_pay) * 1000,
                         'invoice_duration' => 300,
                         'currency' => "IDR",
                         'success_redirect_url' => $success_url,
@@ -224,8 +215,7 @@ class TransactionController extends Controller
                         ], 500);
                     }
                 }
-
-            } else if($user_wallet['data']['payment_method']=='midtrans'){
+            } else if ($user_wallet['data']['payment_method'] == 'midtrans') {
 
                 $midtrans_enable = $user_wallet['data']['midtrans_enable'];
                 $midtrans_serverKey = $user_wallet['data']['midtrans_serverKey'];
@@ -250,15 +240,15 @@ class TransactionController extends Controller
                     $payload = [
                         'transaction_details' => [
                             'order_id' => $token,
-                            'gross_amount' => (int)($total_pay)*1000,
+                            'gross_amount' => (int)($total_pay) * 1000,
                         ],
                         'usage_limit' => 1,
-                        'callbacks'=> [
-                                        'error'=> $fail_url,
-                                        'unfinish'=> $fail_url,
-                                        'close'=> $fail_url,
-                                        'finish' => $success_url,
-                                        ]
+                        'callbacks' => [
+                            'error' => $fail_url,
+                            'unfinish' => $fail_url,
+                            'close' => $fail_url,
+                            'finish' => $success_url,
+                        ]
                     ];
                     try {
                         $client = new Client();
@@ -279,10 +269,8 @@ class TransactionController extends Controller
                     } catch (\Exception $e) {
                         return response()->json(['error' => $e->getMessage()], 500);
                     }
-
                 }
-
-            } else if($user_wallet['data']['payment_method']=='orangepay'){
+            } else if ($user_wallet['data']['payment_method'] == 'orangepay') {
 
                 $orangepay_enable = $user_wallet['data']['orangepay_enable'];
                 $orangepay_isSandbox = $user_wallet['data']['orangepay_isSandbox'];
@@ -291,7 +279,7 @@ class TransactionController extends Controller
                 $orangepay_clientId = $user_wallet['data']['orangepay_clientId'];
                 $orangepay_clientSecret = $user_wallet['data']['orangepay_clientSecret'];
                 $orangepay_merchantKey = $user_wallet['data']['orangepay_merchantKey'];
-                $token = $this->getAccessToken($orangepay_clientId,$orangepay_clientSecret);
+                $token = $this->getAccessToken($orangepay_clientId, $orangepay_clientSecret);
                 Session::put('orangepay_access_token', $token);
                 Session::save();
 
@@ -347,13 +335,10 @@ class TransactionController extends Controller
                         return response()->json(['error' => $e->getMessage()]);
                     }
                 }
-
             }
-
         } else {
-            return redirect()->route('transactions');
+            return to_route('transactions');
         }
-
     }
 
     public function notify()
@@ -367,7 +352,7 @@ class TransactionController extends Controller
         }
     }
 
-    private function getAccessToken($clientId,$clientSecret)
+    private function getAccessToken($clientId, $clientSecret)
     {
         $authUrl = 'https://api.orange.com/oauth/v3/token';
         $client = new Client();
@@ -422,7 +407,6 @@ class TransactionController extends Controller
                     $res = array('status' => true, 'data' => $charge, 'message' => 'success');
                     echo json_encode($res);
                     exit;
-
                 } catch (Exception $e) {
                     $user_wallet['payment_status'] = false;
                     Session::put('user_wallet', $user_wallet);
@@ -432,11 +416,8 @@ class TransactionController extends Controller
                     echo json_encode($res);
                     exit;
                 }
-
             }
         }
-
-
     }
 
     public function processMercadoPagoPayment(Request $request)
@@ -457,11 +438,8 @@ class TransactionController extends Controller
 
                 $urladdress = "https://api.mercadopago.com/checkout/preferences";
                 $data = "PublicKey=" . $request->input('PublicKey') . "&AccessToken=" . $request->input('AccessToken') . "&amount=" . $request->input('amount');
-
             }
         }
-
-
     }
 
     public function processPaypalPayment(Request $request)
@@ -480,7 +458,6 @@ class TransactionController extends Controller
                 $res = array('status' => true, 'data' => array(), 'message' => 'success');
                 echo json_encode($res);
                 exit;
-
             }
         }
 
@@ -512,17 +489,14 @@ class TransactionController extends Controller
                 $user_wallet['payment_status'] = true;
                 Session::put('user_wallet', $user_wallet);
                 Session::save();
-
             } catch (Exception $e) {
-                return $e->getMessage();
                 Session::put('error', $e->getMessage());
-                return redirect()->back();
+                return [$e->getMessage(), back()];
             }
         }
 
         Session::put('success', 'Payment successful');
-        return redirect()->route('wallet-success');
-
+        return to_route('wallet-success');
     }
 
     public function success()
@@ -532,9 +506,9 @@ class TransactionController extends Controller
         $email = Auth::user()->email;
         $user = VendorUsers::where('email', $email)->first();
 
-        if(isset($_GET['xendit_token'])){
-            $xendit_payment=Session::get('xendit_payment_token');
-            if($xendit_payment == $_GET['xendit_token']){
+        if (isset($_GET['xendit_token'])) {
+            $xendit_payment = Session::get('xendit_payment_token');
+            if ($xendit_payment == $_GET['xendit_token']) {
                 $user_wallet['transaction_id'] = $xendit_payment;
                 $user_wallet['payment_status'] = true;
                 Session::put('user_wallet', $user_wallet);
@@ -624,7 +598,7 @@ class TransactionController extends Controller
                 Session::put('success', 'Payment successful');
                 Session::save();
             } else {
-                return redirect()->route('transactions');
+                return to_route('transactions');
             }
         }
 
@@ -637,7 +611,7 @@ class TransactionController extends Controller
                 Session::put('success', 'Payment successful');
                 Session::save();
             } else {
-                return redirect()->route('transactions');
+                return to_route('transactions');
             }
         }
         $payment_method = $user_wallet['data']['payment_method'];

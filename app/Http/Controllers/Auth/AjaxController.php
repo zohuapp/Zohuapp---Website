@@ -94,7 +94,6 @@ class AjaxController extends Controller
             Auth::login($user, true);
 
             return to_route('home');
-
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

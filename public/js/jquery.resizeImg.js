@@ -97,7 +97,7 @@ $.fn.resizeImg = function(options) {
                         ctx.translate(-w, 0);
                         break;
                     default:
-                        console.log(orientation);
+                        // console.log(orientation);
                 }
                 ctx.drawImage(this, 0, 0, w, h);
                 this.onload = null;

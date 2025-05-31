@@ -2,12 +2,12 @@
 
 @include('layouts.header')
 @php
-$cityToCountry = file_get_contents(asset('tz-cities-to-countries.json'));
-$cityToCountry = json_decode($cityToCountry, true);
-$countriesJs = array();
-foreach ($cityToCountry as $key => $value) {
-$countriesJs[$key] = $value;
-}
+    $cityToCountry = file_get_contents(asset('tz-cities-to-countries.json'));
+    $cityToCountry = json_decode($cityToCountry, true);
+    $countriesJs = [];
+    foreach ($cityToCountry as $key => $value) {
+        $countriesJs[$key] = $value;
+    }
 @endphp
 <div class="siddhi-popular">
 
@@ -24,7 +24,7 @@ $countriesJs[$key] = $value;
                         <a data-toggle="modal" data-target="#add_wallet_money"
                             class="d-flex w-100 align-items-center border-bottom p-3">
                             <div class="left mr-3 text-green">
-                                <h6 class="font-weight-bold mb-1 text-dark">{{trans('lang.add_wallet_money')}}</h6>
+                                <h6 class="font-weight-bold mb-1 text-dark">{{ trans('lang.add_wallet_money') }}</h6>
                             </div>
                             <div class="right ml-auto">
                                 <h6 class="font-weight-bold m-0"><i class="feather-chevron-right"></i></h6>
@@ -36,7 +36,7 @@ $countriesJs[$key] = $value;
             </div>
         </div>
 
-        <div class="text-center py-5 not_found_div" style="display:none"><img src="{{asset('img/no-result.png')}}">
+        <div class="text-center py-5 not_found_div" style="display:none"><img src="{{ asset('img/no-result.png') }}">
         </div>
 
 
@@ -51,11 +51,11 @@ $countriesJs[$key] = $value;
                             <ul class="pagination justify-content-center">
                                 <li class="page-item ">
                                     <a class="page-link" href="javascript:void(0);" id="users_table_previous_btn"
-                                        onclick="prev()" data-dt-idx="0" tabindex="0">{{trans('lang.previous')}}</a>
+                                        onclick="prev()" data-dt-idx="0" tabindex="0">{{ trans('lang.previous') }}</a>
                                 </li>
                                 <li class="page-item">
                                     <a class="page-link" href="javascript:void(0);" id="users_table_next_btn"
-                                        onclick="next()" data-dt-idx="2" tabindex="0">{{trans('lang.next')}}</a>
+                                        onclick="next()" data-dt-idx="2" tabindex="0">{{ trans('lang.next') }}</a>
                                 </li>
                             </ul>
                         </nav>
@@ -71,16 +71,20 @@ $countriesJs[$key] = $value;
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{trans('lang.add_wallet_money')}}</h5>
+                <h5 class="modal-title">{{ trans('lang.add_wallet_money') }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
+                {{-- display errors --}}
+                <div id="errors">
+
+                </div>
                 <div class="form-row">
                     <div class="col-md-12 error_top_pass"></div>
                     <div class="col-md-12 form-group">
-                        <label class="form-label">{{trans('lang.amount')}}</label>
+                        <label class="form-label">{{ trans('lang.amount') }}</label>
                         <div class="control-inner">
                             <div class="currentCurrency"></div>
                             <input type="number" class="form-control wallet_amount">
@@ -96,7 +100,7 @@ $countriesJs[$key] = $value;
                                 <input type="radio" name="payment_method" id="razorpay" value="razorpay"
                                     class="custom-control-input" checked>
 
-                                <label class="custom-control-label" for="razorpay">{{trans('lang.razorpay')}}</label>
+                                <label class="custom-control-label" for="razorpay">{{ trans('lang.razorpay') }}</label>
 
                                 <input type="hidden" id="isEnabled">
 
@@ -114,7 +118,7 @@ $countriesJs[$key] = $value;
                                 <input type="radio" name="payment_method" id="stripe" value="stripe"
                                     class="custom-control-input">
 
-                                <label class="custom-control-label" for="stripe">{{trans('lang.stripe')}}</label>
+                                <label class="custom-control-label" for="stripe">{{ trans('lang.stripe') }}</label>
 
 
                                 <input type="hidden" id="isStripeSandboxEnabled">
@@ -131,7 +135,7 @@ $countriesJs[$key] = $value;
                                 <input type="radio" name="payment_method" id="paypal" value="paypal"
                                     class="custom-control-input">
 
-                                <label class="custom-control-label" for="paypal">{{trans('lang.pay_pal')}}</label>
+                                <label class="custom-control-label" for="paypal">{{ trans('lang.pay_pal') }}</label>
 
 
                                 <input type="hidden" id="ispaypalSandboxEnabled">
@@ -148,7 +152,8 @@ $countriesJs[$key] = $value;
                                 <input type="radio" name="payment_method" id="payfast" value="payfast"
                                     class="custom-control-input">
 
-                                <label class="custom-control-label" for="payfast">{{trans('lang.pay_fast')}}</label>
+                                <label class="custom-control-label"
+                                    for="payfast">{{ trans('lang.pay_fast') }}</label>
 
                                 <input type="hidden" id="payfast_isEnabled">
 
@@ -173,7 +178,8 @@ $countriesJs[$key] = $value;
                                 <input type="radio" name="payment_method" id="paystack" value="paystack"
                                     class="custom-control-input">
 
-                                <label class="custom-control-label" for="paystack">{{trans('lang.pay_stack')}}</label>
+                                <label class="custom-control-label"
+                                    for="paystack">{{ trans('lang.pay_stack') }}</label>
 
                                 <input type="hidden" id="paystack_isEnabled">
 
@@ -192,7 +198,7 @@ $countriesJs[$key] = $value;
                                     class="custom-control-input">
 
                                 <label class="custom-control-label"
-                                    for="flutterwave">{{trans('lang.flutter_wave')}}</label>
+                                    for="flutterwave">{{ trans('lang.flutter_wave') }}</label>
 
                                 <input type="hidden" id="flutterWave_isEnabled">
 
@@ -213,7 +219,7 @@ $countriesJs[$key] = $value;
                                     class="custom-control-input">
 
                                 <label class="custom-control-label"
-                                    for="mercadopago">{{trans('lang.mercadopago')}}</label>
+                                    for="mercadopago">{{ trans('lang.mercadopago') }}</label>
 
                                 <input type="hidden" id="mercadopago_isEnabled">
 
@@ -230,13 +236,13 @@ $countriesJs[$key] = $value;
                                 <input type="hidden" id="unit_price">
                             </div>
 
-                            <div class="custom-control custom-radio border-bottom py-2" style="display:none;" id="xendit_box">
+                            <div class="custom-control custom-radio border-bottom py-2" style="display:none;"
+                                id="xendit_box">
 
                                 <input type="radio" name="payment_method" id="xendit" value="xendit"
                                     class="custom-control-input">
 
-                                <label class="custom-control-label"
-                                    for="xendit">{{trans('lang.xendit')}}</label>
+                                <label class="custom-control-label" for="xendit">{{ trans('lang.xendit') }}</label>
 
                                 <input type="hidden" id="xendit_enable">
                                 <input type="hidden" id="xendit_apiKey">
@@ -244,13 +250,14 @@ $countriesJs[$key] = $value;
                                 <input type="hidden" id="xendit_isSandbox">
                             </div>
 
-                            <div class="custom-control custom-radio border-bottom py-2" style="display:none;" id="midtrans_box">
+                            <div class="custom-control custom-radio border-bottom py-2" style="display:none;"
+                                id="midtrans_box">
 
                                 <input type="radio" name="payment_method" id="midtrans" value="midtrans"
                                     class="custom-control-input">
 
                                 <label class="custom-control-label"
-                                    for="midtrans">{{trans('lang.midtrans')}}</label>
+                                    for="midtrans">{{ trans('lang.midtrans') }}</label>
 
                                 <input type="hidden" id="midtrans_enable">
                                 <input type="hidden" id="midtrans_serverKey">
@@ -258,13 +265,14 @@ $countriesJs[$key] = $value;
                                 <input type="hidden" id="midtrans_isSandbox">
                             </div>
 
-                            <div class="custom-control custom-radio border-bottom py-2" style="display:none;" id="orangepay_box">
+                            <div class="custom-control custom-radio border-bottom py-2" style="display:none;"
+                                id="orangepay_box">
 
                                 <input type="radio" name="payment_method" id="orangepay" value="orangepay"
                                     class="custom-control-input">
 
                                 <label class="custom-control-label"
-                                    for="orangepay">{{trans('lang.orangepay')}}</label>
+                                    for="orangepay">{{ trans('lang.orangepay') }}</label>
 
                                 <input type="hidden" id="orangepay_auth">
                                 <input type="hidden" id="orangepay_clientId">
@@ -286,13 +294,12 @@ $countriesJs[$key] = $value;
             </div>
             <div class="modal-footer p-0 border-0">
                 <div class="col-6 m-0 p-0">
-                    <button type="button" class="btn border-top btn-lg btn-block" data-dismiss="modal">{{
-                        trans('lang.close')}}</button>
+                    <button type="button" class="btn border-top btn-lg btn-block"
+                        data-dismiss="modal">{{ trans('lang.close') }}</button>
                 </div>
                 <div class="col-6 m-0 p-0">
                     <button type="button" onclick="finalCheckout()"
-                        class="btn btn-primary btn-lg btn-block change_user_password remove_hover">{{
-                        trans('lang.next')}}</button>
+                        class="btn btn-primary btn-lg btn-block change_user_password remove_hover">{{ trans('lang.next') }}</button>
                 </div>
             </div>
         </div>
@@ -306,8 +313,6 @@ $countriesJs[$key] = $value;
 
 
 <script type="text/javascript">
-
-
     var ref = database.collection('wallet_transaction').where('userId', '==', user_uuid).orderBy('createdDate', 'desc');
 
     var cityToCountry = '<?php echo json_encode($countriesJs); ?>';
@@ -330,7 +335,7 @@ $countriesJs[$key] = $value;
     var PaymentSettings = database.collection('settings').doc('payment');;
     taxSetting = [];
     var reftaxSetting = database.collection('tax').where('country', '==', userCountry).where('enable', '==', true);
-    reftaxSetting.get().then(async function (snapshots) {
+    reftaxSetting.get().then(async function(snapshots) {
         if (snapshots.docs.length > 0) {
             snapshots.docs.forEach((val) => {
                 val = val.data();
@@ -352,7 +357,7 @@ $countriesJs[$key] = $value;
     var currencyAtRight = false;
     var refCurrency = database.collection('currencies').where('isActive', '==', true);
     var currencyData = "";
-    refCurrency.get().then(async function (snapshots) {
+    refCurrency.get().then(async function(snapshots) {
         currencyData = snapshots.docs[0].data();
         currentCurrency = currencyData.symbol;
         currencyAtRight = currencyData.symbolAtRight;
@@ -363,10 +368,11 @@ $countriesJs[$key] = $value;
         $('.currentCurrency').html(currentCurrency);
     });
 
-    $(document).ready(async function () {
-        await refMinDeposite.get().then(async function (snapshot) {
+    $(document).ready(async function() {
+        await refMinDeposite.get().then(async function(snapshot) {
             var data = snapshot.data();
-            if (data.hasOwnProperty('minimumAmountToDeposit') && data.minimumAmountToDeposit != null && data.minimumAmountToDeposit != '') {
+            if (data.hasOwnProperty('minimumAmountToDeposit') && data.minimumAmountToDeposit !=
+                null && data.minimumAmountToDeposit != '') {
                 minimumAmountToDeposit = data.minimumAmountToDeposit;
             }
         });
@@ -378,7 +384,8 @@ $countriesJs[$key] = $value;
             (amountsnapshot) => {
                 var paymentDatas = amountsnapshot.docs[0].data();
 
-                if (paymentDatas.hasOwnProperty('walletAmount') && paymentDatas.walletAmount != null && !isNaN(paymentDatas.walletAmount)) {
+                if (paymentDatas.hasOwnProperty('walletAmount') && paymentDatas.walletAmount != null &&
+                    !isNaN(paymentDatas.walletAmount)) {
 
                     totalPayment = parseFloat(paymentDatas.walletAmount);
 
@@ -391,13 +398,13 @@ $countriesJs[$key] = $value;
                 }
 
             });
-        jQuery("#total_payment").html('{{trans("lang.wallet_amount")}} : ' + totalPayment);
+        jQuery("#total_payment").html('{{ trans('lang.wallet_amount') }} : ' + totalPayment);
 
 
         append_list = document.getElementById('append_list1');
         append_list.innerHTML = '';
 
-        ref.limit(pagesize).get().then(async function (snapshots) {
+        ref.limit(pagesize).get().then(async function(snapshots) {
             if (snapshots != undefined) {
                 var html = '';
                 html = await buildHTML(snapshots);
@@ -422,7 +429,7 @@ $countriesJs[$key] = $value;
     });
 
     function getPaymentGateways() {
-        PaymentSettings.get().then(async function (razorpaySettingsSnapshots) {
+        PaymentSettings.get().then(async function(razorpaySettingsSnapshots) {
 
             razorpaySetting = razorpaySettingsSnapshots.data().razorpay;
 
@@ -451,7 +458,7 @@ $countriesJs[$key] = $value;
 
         });
 
-        PaymentSettings.get().then(async function (stripeSettingsSnapshots) {
+        PaymentSettings.get().then(async function(stripeSettingsSnapshots) {
 
             stripeSetting = stripeSettingsSnapshots.data().strip;
 
@@ -478,7 +485,7 @@ $countriesJs[$key] = $value;
 
         });
 
-        PaymentSettings.get().then(async function (paypalSettingsSnapshots) {
+        PaymentSettings.get().then(async function(paypalSettingsSnapshots) {
 
             paypalSetting = paypalSettingsSnapshots.data().paypal;
             if (paypalSetting.enable) {
@@ -504,7 +511,7 @@ $countriesJs[$key] = $value;
 
         });
 
-        PaymentSettings.get().then(async function (payfastSettingsSnapshots) {
+        PaymentSettings.get().then(async function(payfastSettingsSnapshots) {
 
             payFastSetting = payfastSettingsSnapshots.data().payfast;
 
@@ -544,7 +551,7 @@ $countriesJs[$key] = $value;
 
         });
 
-        PaymentSettings.get().then(async function (payStackSettingsSnapshots) {
+        PaymentSettings.get().then(async function(payStackSettingsSnapshots) {
 
             payStackSetting = payStackSettingsSnapshots.data().payStack;
 
@@ -572,7 +579,7 @@ $countriesJs[$key] = $value;
 
         });
 
-        PaymentSettings.get().then(async function (flutterWaveSettingsSnapshots) {
+        PaymentSettings.get().then(async function(flutterWaveSettingsSnapshots) {
 
             flutterWaveSetting = flutterWaveSettingsSnapshots.data().flutterWave;
 
@@ -604,7 +611,7 @@ $countriesJs[$key] = $value;
 
         });
 
-        PaymentSettings.get().then(async function (MercadoPagoSettingsSnapshots) {
+        PaymentSettings.get().then(async function(MercadoPagoSettingsSnapshots) {
 
             MercadoPagoSetting = MercadoPagoSettingsSnapshots.data().mercadoPago;
 
@@ -632,7 +639,7 @@ $countriesJs[$key] = $value;
 
         });
 
-        PaymentSettings.get().then(async function (XenditSettingsSnapshots) {
+        PaymentSettings.get().then(async function(XenditSettingsSnapshots) {
             XenditSetting = XenditSettingsSnapshots.data().xendit;
             if (XenditSetting.enable) {
 
@@ -657,7 +664,7 @@ $countriesJs[$key] = $value;
             }
         });
 
-        PaymentSettings.get().then(async function (Midtrans_settingsSnapshots) {
+        PaymentSettings.get().then(async function(Midtrans_settingsSnapshots) {
             Midtrans_setting = Midtrans_settingsSnapshots.data().midtrans;
             if (Midtrans_setting.enable) {
 
@@ -682,7 +689,7 @@ $countriesJs[$key] = $value;
             }
         });
 
-        PaymentSettings.get().then(async function (OrangePaySettingsSnapshots) {
+        PaymentSettings.get().then(async function(OrangePaySettingsSnapshots) {
             OrangePaySetting = OrangePaySettingsSnapshots.data().orangePay;
             if (OrangePaySetting.enable) {
                 $("#orangepay_enable").val(OrangePaySetting.enable);
@@ -730,15 +737,13 @@ $countriesJs[$key] = $value;
                 var orderStatus = await getOrderDetail(val.orderId);
 
                 if (orderStatus == "InProcess") {
-                    var view_details = "{{ route('pending_order', ':id')}}";
+                    var view_details = "{{ route('pending_order', ':id') }}";
                     view_details = view_details.replace(':id', 'id=' + val.orderId)
-                }
-                else if (orderStatus == "InTransit") {
-                    var view_details = "{{ route('intransit_order', ':id')}}";
+                } else if (orderStatus == "InTransit") {
+                    var view_details = "{{ route('intransit_order', ':id') }}";
                     view_details = view_details.replace(':id', 'id=' + val.orderId)
-                }
-                else if (orderStatus == "Delivered") {
-                    var view_details = "{{ route('completed_order', ':id')}}";
+                } else if (orderStatus == "Delivered") {
+                    var view_details = "{{ route('completed_order', ':id') }}";
                     view_details = view_details.replace(':id', 'id=' + val.orderId)
                 } else {
                     view_details = 'javascript:void(0)';
@@ -749,30 +754,41 @@ $countriesJs[$key] = $value;
             }
 
 
-            html = html + '<div class="transactions-list-wrap mt-4"><a href="' + view_details + '"><div class="bg-white px-4 py-3 border rounded-lg mb-3 transactions-list-view shadow-sm"><div class="gold-members d-flex align-items-center transactions-list">';
+            html = html + '<div class="transactions-list-wrap mt-4"><a href="' + view_details +
+                '"><div class="bg-white px-4 py-3 border rounded-lg mb-3 transactions-list-view shadow-sm"><div class="gold-members d-flex align-items-center transactions-list">';
 
             var desc = '';
 
-            if ((val.hasOwnProperty('isCredit') && val.isCredit) || (val.payment_method == "Cancelled Order Payment")) {
-                price_val = '<div class="float-right ml-auto"><span class="price font-weight-bold h4">+ ' + price_val + '</span>';
+            if ((val.hasOwnProperty('isCredit') && val.isCredit) || (val.payment_method ==
+                    "Cancelled Order Payment")) {
+                price_val =
+                    '<div class="float-right ml-auto"><span class="price font-weight-bold h4">+ ' +
+                    price_val + '</span>';
                 desc = "Wallet Topup";
             } else if (val.hasOwnProperty('isCredit') && !val.isCredit) {
 
-                price_val = '<div class="float-right ml-auto"><span class="font-weight-bold h4" style="color: red"> ' + price_val + '</span>';
+                price_val =
+                    '<div class="float-right ml-auto"><span class="font-weight-bold h4" style="color: red"> ' +
+                    price_val + '</span>';
                 desc = "Order amount debit";
             } else {
-                price_val = '<div class="float-right ml-auto"><span class="font-weight-bold h4">' + price_val + '</span>';
+                price_val = '<div class="float-right ml-auto"><span class="font-weight-bold h4">' +
+                    price_val + '</span>';
 
             }
 
 
-            html = html + '<div class="media transactions-list-left"><div class="mr-3 font-weight-bold card-icon"><span><i class="fa fa-credit-card"></i></span></div><div class="media-body"><h6 class="date">' + desc + '</h6><h6>' + date + ' ' + time + '</h6><p class="text-muted mb-0">' + order_id + '</p><p class="text-muted mb-0">' + val.paymentType + '</p></div></div>';
+            html = html +
+                '<div class="media transactions-list-left"><div class="mr-3 font-weight-bold card-icon"><span><i class="fa fa-credit-card"></i></span></div><div class="media-body"><h6 class="date">' +
+                desc + '</h6><h6>' + date + ' ' + time + '</h6><p class="text-muted mb-0">' +
+                order_id + '</p><p class="text-muted mb-0">' + val.paymentType + '</p></div></div>';
 
 
             html = html + price_val;
 
 
-            html = html + '<span class="go-arror text-dark btn-block text-right mt-2"><i class="fa fa-angle-right"></i></span>';
+            html = html +
+                '<span class="go-arror text-dark btn-block text-right mt-2"><i class="fa fa-angle-right"></i></span>';
 
 
             html = html + '</div></div></div></a></div>';
@@ -786,7 +802,7 @@ $countriesJs[$key] = $value;
     }
     async function getOrderDetail(orderId) {
         var status = '';
-        await database.collection('orders').where("id", "==", orderId).get().then(async function (snapshot) {
+        await database.collection('orders').where("id", "==", orderId).get().then(async function(snapshot) {
             if (snapshot.docs.length > 0) {
 
                 var data = snapshot.docs[0].data();
@@ -855,11 +871,16 @@ $countriesJs[$key] = $value;
         var amount = $('.wallet_amount').val();
         if (amount < parseFloat(minimumAmountToDeposit)) {
             if (currencyAtRight) {
-                minDepAmountHtml = parseFloat(minimumAmountToDeposit).toFixed(decimal_digits) + '' + currentCurrency;
+                minDepAmountHtml = parseFloat(minimumAmountToDeposit).toFixed(decimal_digits) + '' +
+                    currentCurrency;
             } else {
-                minDepAmountHtml = currentCurrency + '' + parseFloat(minimumAmountToDeposit).toFixed(decimal_digits);
+                minDepAmountHtml = currentCurrency + '' + parseFloat(minimumAmountToDeposit).toFixed(
+                    decimal_digits);
             }
-            Swal.fire({ text: "{{trans('lang.min_deposite_amount_err')}} " + minDepAmountHtml, icon: "error" });
+            Swal.fire({
+                text: "{{ trans('lang.min_deposite_amount_err') }} " + minDepAmountHtml,
+                icon: "error"
+            });
             return false;
 
         }
@@ -869,7 +890,7 @@ $countriesJs[$key] = $value;
         const userDetailsJSON = JSON.stringify(userDetails);
         var payment_method = $('input[name="payment_method"]:checked').val();
 
-        if (payment_method == "razorpay") {
+        if (payment_method == "razorpay" && userDetails.name != undefined && userDetails.name != '') {
 
             var razorpayKey = $("#razorpayKey").val();
             var razorpaySecret = $("#razorpaySecret").val();
@@ -880,21 +901,22 @@ $countriesJs[$key] = $value;
                 url: "<?php echo route('wallet-proccessing'); ?>",
 
                 data: {
-                    _token: '<?php echo csrf_token() ?>',
+                    _token: '<?php echo csrf_token(); ?>',
                     amount: amount,
                     razorpaySecret: razorpaySecret,
                     razorpayKey: razorpayKey,
                     payment_method: payment_method,
                     author: userDetailsJSON
                 },
-                success: function (data) {
+                success: function(data) {
                     window.location.href = "<?php echo route('pay-wallet'); ?>";
                 }
 
             });
 
 
-        } else if (payment_method == "mercadopago") {
+        } else if (payment_method == "mercadopago" && userDetailsJSON.name != undefined && userDetailsJSON.name !=
+            '') {
 
             var mercadopago_public_key = $("#mercadopago_public_key").val();
             var mercadopago_access_token = $("#mercadopago_access_token").val();
@@ -908,7 +930,7 @@ $countriesJs[$key] = $value;
                 url: "<?php echo route('wallet-proccessing'); ?>",
 
                 data: {
-                    _token: '<?php echo csrf_token() ?>',
+                    _token: '<?php echo csrf_token(); ?>',
                     amount: amount,
                     mercadopago_public_key: mercadopago_public_key,
                     mercadopago_access_token: mercadopago_access_token,
@@ -918,12 +940,12 @@ $countriesJs[$key] = $value;
                     author: userDetailsJSON
                 },
 
-                success: function (data) {
+                success: function(data) {
                     window.location.href = "<?php echo route('pay-wallet'); ?>";
                 }
 
             });
-        } else if (payment_method == "stripe") {
+        } else if (payment_method == "stripe" && userDetails.name != undefined && userDetails.name != '') {
 
 
             var stripeKey = $("#stripeKey").val();
@@ -937,7 +959,7 @@ $countriesJs[$key] = $value;
                 url: "<?php echo route('wallet-proccessing'); ?>",
 
                 data: {
-                    _token: '<?php echo csrf_token() ?>',
+                    _token: '<?php echo csrf_token(); ?>',
                     amount: amount,
                     stripeKey: stripeKey,
                     stripeSecret: stripeSecret,
@@ -946,14 +968,14 @@ $countriesJs[$key] = $value;
                     author: userDetailsJSON
                 },
 
-                success: function (data) {
+                success: function(data) {
                     window.location.href = "<?php echo route('pay-wallet'); ?>";
                 }
 
             });
 
 
-        } else if (payment_method == "paypal") {
+        } else if (payment_method == "paypal" && userDetails.name != undefined && userDetails.name != '') {
 
 
             var paypalKey = $("#paypalKey").val();
@@ -969,7 +991,7 @@ $countriesJs[$key] = $value;
                 url: "<?php echo route('wallet-proccessing'); ?>",
 
                 data: {
-                    _token: '<?php echo csrf_token() ?>',
+                    _token: '<?php echo csrf_token(); ?>',
                     paypalKey: paypalKey,
                     paypalSecret: paypalSecret,
                     payment_method: payment_method,
@@ -978,14 +1000,14 @@ $countriesJs[$key] = $value;
                     ispaypalSandboxEnabled: ispaypalSandboxEnabled,
                 },
 
-                success: function (data) {
+                success: function(data) {
                     window.location.href = "<?php echo route('pay-wallet'); ?>";
                 }
 
             });
 
 
-        } else if (payment_method == "payfast") {
+        } else if (payment_method == "payfast" && userDetails.name != undefined && userDetails.name != '') {
 
             var payfast_merchant_key = $("#payfast_merchant_key").val();
             var payfast_merchant_id = $("#payfast_merchant_id").val();
@@ -1001,7 +1023,7 @@ $countriesJs[$key] = $value;
                 url: "<?php echo route('wallet-proccessing'); ?>",
 
                 data: {
-                    _token: '<?php echo csrf_token() ?>',
+                    _token: '<?php echo csrf_token(); ?>',
                     author: userDetailsJSON,
                     amount: amount,
                     payfast_merchant_key: payfast_merchant_key,
@@ -1013,13 +1035,14 @@ $countriesJs[$key] = $value;
                     payfast_cancel_url: payfast_cancel_url,
                 },
 
-                success: function (data) {
+                success: function(data) {
                     window.location.href = "<?php echo route('pay-wallet'); ?>";
                 }
 
             });
 
-        } else if (payment_method == "paystack") {
+        } else if (payment_method == "paystack" && userDetailsJSON.name != undefined && userDetailsJSON.name !=
+            '') {
 
             var paystack_public_key = $("#paystack_public_key").val();
             var paystack_secret_key = $("#paystack_secret_key").val();
@@ -1032,7 +1055,7 @@ $countriesJs[$key] = $value;
                 url: "<?php echo route('wallet-proccessing'); ?>",
 
                 data: {
-                    _token: '<?php echo csrf_token() ?>',
+                    _token: '<?php echo csrf_token(); ?>',
                     author: userDetailsJSON,
                     amount: amount,
                     payment_method: payment_method,
@@ -1041,14 +1064,15 @@ $countriesJs[$key] = $value;
                     paystack_secret_key: paystack_secret_key,
                     email: userDetails.email
                 },
-                success: function (data) {
+                success: function(data) {
                     window.location.href = "<?php echo route('pay-wallet'); ?>";
                 }
 
             });
 
 
-        } else if (payment_method == "flutterwave") {
+        } else if (payment_method == "flutterwave" && userDetailsJSON.name != undefined && userDetailsJSON.name !=
+            '') {
 
             var flutterwave_isenabled = $("#flutterWave_isEnabled").val();
             var flutterWave_encryption_key = $("#flutterWave_encryption_key").val();
@@ -1063,7 +1087,7 @@ $countriesJs[$key] = $value;
                 url: "<?php echo route('wallet-proccessing'); ?>",
 
                 data: {
-                    _token: '<?php echo csrf_token() ?>',
+                    _token: '<?php echo csrf_token(); ?>',
                     author: userDetailsJSON,
                     amount: amount,
                     payment_method: payment_method,
@@ -1075,15 +1099,15 @@ $countriesJs[$key] = $value;
                     currencyData: currencyData,
                     email: userDetails.email
                 },
-                success: function (data) {
+                success: function(data) {
                     window.location.href = "<?php echo route('pay-wallet'); ?>";
                 }
 
             });
 
-        } else if (payment_method == "xendit") {
+        } else if (payment_method == "xendit" && userDetails.name != undefined && userDetails.name != '') {
 
-            if (!['IDR', 'PHP', 'USD', 'VND', 'THB', 'MYR', 'SGD'].includes(currencyData.code)){
+            if (!['IDR', 'PHP', 'USD', 'VND', 'THB', 'MYR', 'SGD'].includes(currencyData.code)) {
                 alert("Currency restriction");
                 return false;
             }
@@ -1099,7 +1123,7 @@ $countriesJs[$key] = $value;
                 url: "<?php echo route('wallet-proccessing'); ?>",
 
                 data: {
-                    _token: '<?php echo csrf_token() ?>',
+                    _token: '<?php echo csrf_token(); ?>',
                     amount: amount,
                     payment_method: payment_method,
                     xendit_enable: xendit_enable,
@@ -1109,13 +1133,14 @@ $countriesJs[$key] = $value;
                     author: userDetailsJSON
                 },
 
-                success: function (data) {
+                success: function(data) {
                     window.location.href = "<?php echo route('pay-wallet'); ?>";
                 }
 
             });
 
-        } else if (payment_method == "midtrans") {
+        } else if (payment_method == "midtrans" && userDetailsJSON.name != undefined && userDetailsJSON.name !=
+            '') {
 
             var midtrans_enable = $("#midtrans_enable").val();
             var midtrans_serverKey = $("#midtrans_serverKey").val();
@@ -1129,7 +1154,7 @@ $countriesJs[$key] = $value;
                 url: "<?php echo route('wallet-proccessing'); ?>",
 
                 data: {
-                    _token: '<?php echo csrf_token() ?>',
+                    _token: '<?php echo csrf_token(); ?>',
                     amount: amount,
                     payment_method: payment_method,
                     author: userDetailsJSON,
@@ -1139,13 +1164,14 @@ $countriesJs[$key] = $value;
                     midtrans_isSandbox: midtrans_isSandbox,
                 },
 
-                success: function (data) {
+                success: function(data) {
                     window.location.href = "<?php echo route('pay-wallet'); ?>";
                 }
 
             });
 
-        } else if (payment_method == "orangepay") {
+        } else if (payment_method == "orangepay" && userDetailsJSON.name != undefined && userDetailsJSON.name !=
+            '') {
 
             var orangepay_enable = $("#orangepay_enable").val();
             var orangepay_auth = $("#orangepay_auth").val();
@@ -1165,7 +1191,7 @@ $countriesJs[$key] = $value;
                 url: "<?php echo route('wallet-proccessing'); ?>",
 
                 data: {
-                    _token: '<?php echo csrf_token() ?>',
+                    _token: '<?php echo csrf_token(); ?>',
                     amount: amount,
                     payment_method: payment_method,
                     author: userDetailsJSON,
@@ -1181,13 +1207,17 @@ $countriesJs[$key] = $value;
                     orangepay_cancelUrl: orangepay_cancelUrl,
                 },
 
-                success: function (data) {
+                success: function(data) {
                     window.location.href = "<?php echo route('pay-wallet'); ?>";
                 }
 
             });
 
         } else {
+            $("#errors").html(
+                `<p class="error" id="field_error" style="background-color: rgba(179, 24, 24, 0.625);color:white;padding:5px;">Please complete you're profile to move forward with your payment!</p>`
+            );
+            // $("#field_error").addClass('p-2');
         }
 
     }
