@@ -62,7 +62,7 @@ a {
     outline: none !important;
 }
 .dropdown-item.active, .dropdown-item:active{background-color: #ff6d40;}
-.border-primary { 
+.border-primary {
     border-color: #e23844!important;
 }
 
@@ -139,7 +139,7 @@ height: 80px;
     margin: auto;
     -webkit-filter: saturate(200%);
     filter: saturate(200%);
-    
+
 object-fit: cover;
 border-radius: 50px;
 }
@@ -1338,7 +1338,7 @@ footer .text-muted {
     .hc-nav-trigger span::after {
         background: #ffffff !important;
     }
-   
+
     .login-page .px-5.col-10.mx-auto {
         margin: 0px !important;
         padding: 0px !important;

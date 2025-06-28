@@ -580,7 +580,7 @@
         var view_product = "{{ route('productlist.all') }}";
 
         html = html + '<div class="col-md-3 top-cat-list"><a href="' + view_product +
-            '" class="d-block text-center cat-link"><span class="cat-img"><img alt="#" src="' + photo +
+            '" class="d-block text-center cat-link rounded border"><span class="cat-img"><img alt="#" src="' + photo +
             '"  onerror="this.onerror=null;this.src=\'' + placeholderImage +
             '\'" class="img-fluid mb-2"></span><h4 class="m-0">Browse All</h4><h6>' + itemCount +
             '</h6></a></div>';
@@ -619,7 +619,7 @@
             var itemCatCount = await getTotalItem(val.id, category_id);
 
             html = html + '<div class="col-md-3 top-cat-list"><a href="' + view_product_details +
-                '" class="d-block text-center cat-link"><span class="cat-img"><img alt="#" src="' + photo +
+                '" class="d-block text-center cat-link rounded border"><span class="cat-img"><img alt="#" src="' + photo +
                 '"  onerror="this.onerror=null;this.src=\'' + placeholderImage +
                 '\'" class="img-fluid mb-2"></span><h4 class="m-0">' + val.title + '</h4><h6>' + itemCatCount +
                 '</h6></a></div>';

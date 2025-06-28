@@ -278,23 +278,9 @@ body.hc-nav-open {
     display: none;
 }
 
-.hc-nav-trigger {
-    position: absolute;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    display: none;
-    /* top: 18px; */
-    /* width: 30px; */
-    min-height: 24px;
-    /* right: 8px; */
-}
-
 .hc-nav-trigger span {
     width: 30px;
-    top: 0;
+    /* top: 0; */
     transform: translateY(-50%);
     transform-origin: 50% 50%
 }
@@ -304,7 +290,7 @@ body.hc-nav-open {
 .hc-nav-trigger span::after {
     display: block;
     position: absolute;
-    left: 0;
+    /* left: 0; */
     height: 5px;
     border-radius: 2px;
     background: rgba(76, 165, 76, 0.724);

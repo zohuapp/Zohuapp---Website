@@ -35,7 +35,7 @@
 
         await globalSettingsRef.get().then(async function(globalSettingsSnapshots) {
 
-            var globalSettingsData = globalSettingsSnapshots.data();
+            var globalSettingsData = globalSettingsSnapshots.data();    
 
             var src_new = globalSettingsData.appLogo;
 

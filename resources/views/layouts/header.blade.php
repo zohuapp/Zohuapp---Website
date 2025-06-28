@@ -1,11 +1,11 @@
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 <header class="section-header">
-    <section class="header-main shadow-sm bg-white">
+    <section class="header-main">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-2">
                     <a href="{{ url('/') }}" class="brand-wrap mb-0">
-                        <img alt="#" class="" style="width: 130px;" src="{{ asset('img/logo_web.png') }}"
+                        <img alt="#" class="" style="width: 120px;" src="{{ asset('img/logo_web.png') }}"
                             id="logo_web">
                     </a>
                 </div>
@@ -81,59 +81,59 @@
                                     aria-labelledby="dropdownNotificationMenuButton"></div>
                             </div>
 
-                        {{-- user profile icon --}}
-                        <div class="dropdown m-none">
-                            <a href="#"
-                                class="dropdown-toggle text-dark d-block border border-secondary rounded-pill p-1 d-flex align-items-center"
-                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
+                            {{-- user profile icon --}}
+                            <div class="dropdown m-none">
+                                <a href="#"
+                                    class="dropdown-toggle text-dark d-block border border-secondary rounded-pill p-1 d-flex align-items-center"
+                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
 
-                            </a>
-                            {{-- dropdown menu --}}
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                @auth
+                                </a>
+                                {{-- dropdown menu --}}
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                    @auth
 
-                                    <a class="dropdown-item"
-                                        href="{{ url('profile') }}">{{ trans('lang.my_account') }}</a>
-                                    <a class="dropdown-item"
-                                        href="{{ url('notification') }}">{{ trans('lang.notification') }}</a>
+                                        <a class="dropdown-item"
+                                            href="{{ url('profile') }}">{{ trans('lang.my_account') }}</a>
+                                        <a class="dropdown-item"
+                                            href="{{ url('notification') }}">{{ trans('lang.notification') }}</a>
 
-                                    <a class="dropdown-item"
-                                        href="{{ route('faq') }}">{{ trans('lang.delivery_support') }}</a>
-                                    <a class="dropdown-item"
-                                        href="{{ url('contact-us') }}">{{ trans('lang.contact_us') }}</a>
-                                    <a class="dropdown-item"
-                                        href="{{ route('aboutus') }}">{{ trans('lang.about_us') }}</a>
+                                        <a class="dropdown-item"
+                                            href="{{ route('faq') }}">{{ trans('lang.delivery_support') }}</a>
+                                        <a class="dropdown-item"
+                                            href="{{ url('contact-us') }}">{{ trans('lang.contact_us') }}</a>
+                                        <a class="dropdown-item"
+                                            href="{{ route('aboutus') }}">{{ trans('lang.about_us') }}</a>
 
-                                    <a class="dropdown-item" href="{{ url('help') }}"></i>{{ trans('lang.help') }}</a>
-                                    <a class="dropdown-item" href="{{ route('terms') }}">{{ trans('lang.terms_use') }}</a>
-                                    <a class="dropdown-item"
-                                        href="{{ route('privacy') }}">{{ trans('lang.privacy_policy') }}</a>
-                                    <a class="dropdown-item"
-                                        href="{{ route('refund') }}">{{ trans('lang.refund_policy') }}</a>
+                                        <a class="dropdown-item" href="{{ url('help') }}"></i>{{ trans('lang.help') }}</a>
+                                        <a class="dropdown-item" href="{{ route('terms') }}">{{ trans('lang.terms_use') }}</a>
+                                        <a class="dropdown-item"
+                                            href="{{ route('privacy') }}">{{ trans('lang.privacy_policy') }}</a>
+                                        <a class="dropdown-item"
+                                            href="{{ route('refund') }}">{{ trans('lang.refund_policy') }}</a>
 
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault();
+                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                            onclick="event.preventDefault();
                                         document.getElementById('logout-form').submit();">{{ trans('lang.logout') }}</a>
-                                @else
-                                    <a class="dropdown-item"
-                                        href="{{ route('faq') }}">{{ trans('lang.delivery_support') }}</a>
-                                    <a class="dropdown-item"
-                                        href="{{ url('contact-us') }}">{{ trans('lang.contact_us') }}</a>
-                                    <a class="dropdown-item"
-                                        href="{{ route('aboutus') }}">{{ trans('lang.about_us') }}</a>
-                                    <a class="dropdown-item" href="{{ url('help') }}"></i>{{ trans('lang.help') }}</a>
-                                    <a class="dropdown-item"
-                                        href="{{ route('terms') }}">{{ trans('lang.terms_use') }}</a>
-                                    <a class="dropdown-item"
-                                        href="{{ route('privacy') }}">{{ trans('lang.privacy_policy') }}</a>
-                                    <a class="dropdown-item"
-                                        href="{{ route('refund') }}">{{ trans('lang.refund_policy') }}</a>
-                                @endauth
+                                    @else
+                                        <a class="dropdown-item"
+                                            href="{{ route('faq') }}">{{ trans('lang.delivery_support') }}</a>
+                                        <a class="dropdown-item"
+                                            href="{{ url('contact-us') }}">{{ trans('lang.contact_us') }}</a>
+                                        <a class="dropdown-item"
+                                            href="{{ route('aboutus') }}">{{ trans('lang.about_us') }}</a>
+                                        <a class="dropdown-item" href="{{ url('help') }}"></i>{{ trans('lang.help') }}</a>
+                                        <a class="dropdown-item"
+                                            href="{{ route('terms') }}">{{ trans('lang.terms_use') }}</a>
+                                        <a class="dropdown-item"
+                                            href="{{ route('privacy') }}">{{ trans('lang.privacy_policy') }}</a>
+                                        <a class="dropdown-item"
+                                            href="{{ route('refund') }}">{{ trans('lang.refund_policy') }}</a>
+                                    @endauth
 
 
+                                </div>
                             </div>
-                        </div>
 
                         @endauth
 
@@ -148,18 +148,19 @@
             </div>
         </div>
     </section>
+    <hr class="m-0 p-0">
 </header>
 
 {{-- mobile resolution menu --}}
 <div class="d-none">
-    <div class="bg-primary p-3 row align-items-center">
-        <div class="col-4 logo-mobile p-0 m-0">
-            <a href="{{ route('home') }}" class="mobile-logo brand-wrap mb-0">
+    <div class="bg-primary p-4 row align-items-center">
+        <div class="col-4 logo-mobile">
+            <a href="{{ route('home') }}" class="mobile-logo brand-wrap">
                 <img alt="#" class="img-fluid" src="{{ asset('img/logo_web.png') }}">
             </a>
         </div>
 
-        <div class="col-6 mobile-set-location d-flex align-items-center head-search">
+        <div class="col-6 mobile-set-location head-search">
             <div class="dropdown">
                 <a class="text-dark dropdown-toggle d-flex align-items-center p-0" href="javascript:void(0)"
                     id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -173,8 +174,8 @@
             </div>
         </div>
 
-        <div class="col-2 burger-menu-mobile ms-auto">
-            <a class="toggle" href="#">
+        <div class="col-2 burger-menu-mobile">
+            <a class="toggle" href="javascript:void(0)">
                 <span></span>
             </a>
         </div>
