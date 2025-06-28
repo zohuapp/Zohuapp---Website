@@ -80,7 +80,7 @@
                 </div>
             </div>
 
-            <div class="py-2 mb-3 related-products mt-4" id="related_products">
+            <div class="container py-2 mb-3 related-products mt-4" id="related_products">
 
             </div>
 
@@ -649,7 +649,7 @@
 
         database.collection('favorite_item').where('product_id', '==', product_id).where('user_id', '==',
             user_id).get().then(async function(favoriteItemsnapshots) {
-                //
+            //
             if (favoriteItemsnapshots.docs.length > 0) {
                 var id = favoriteItemsnapshots.docs[0].id;
                 database.collection('favorite_item').doc(id).delete().then(function() {
@@ -676,15 +676,18 @@
 
     async function buildHTML(snapshots) {
 
+        // get the placeholder image URL
+        const placeholderImage = await getPlaceholderImage();
+
         var vendorProduct = snapshots.data();
         if (vendorProduct != undefined) {
             var productID = vendorProduct.id;
 
-           <?php if (Auth::check()) { ?>
+            <?php if (Auth::check()) { ?>
             setTimeout(() => {
                 checkFavoriteProduct(productID);
             }, 3000);
-           <?php } ?>
+            <?php } ?>
             getOverview(vendorProduct, true);
 
             getRelatedProducts(vendorProduct);
@@ -1015,29 +1018,35 @@
     async function getRelatedProducts(vendorProduct) {
         var html = '';
 
+        // get the placeholder image URL
+        const placeholderImage = await getPlaceholderImage();
+
+        // Fetch related products from the database using product category id
         database.collection('vendor_products').where('categoryID', "==", vendorProduct.categoryID).where("publish",
             "==", true).where('id', "!=", vendorProduct.id).limit(4).get().then(async function(snapshots) {
+
             if (snapshots.docs.length > 0) {
-                html = buildHTMLRelatedProducts(snapshots, vendorProduct.categoryID);
-                slickcatCarousel("related_product");
+                html = buildHTMLRelatedProducts(snapshots, vendorProduct.categoryID, placeholderImage);
+                // slickcatCarousel("related_product");
             }
+
             var append_list = document.getElementById('related_products');
 
             if (html != '') {
                 append_list.innerHTML = html;
             } else {
                 html = html +
-                    '<div class="title d-flex align-items-center"><h3>{{ trans('lang.related_products') }}</h3></div>';
-                html = html + '<div class="row">';
-                html = html + '<p class="font-weight-bold">{{ trans('lang.not_product_found') }}</p>';
-                html = html + '</div>';
-                append_list.innerHTML = html;
+                        '<div class="title d-flex align-items-center"><h3>{{ trans('lang.related_products') }}</h3></div>';
+                    html = html + '<div class="row">';
+                    html = html + '<p class="font-weight-bold">{{ trans('lang.not_product_found') }}</p>';
+                    html = html + '</div>';
+                    append_list.innerHTML = html;
             }
         });
 
     }
 
-    function buildHTMLRelatedProducts(snapshots, cat_id) {
+    function buildHTMLRelatedProducts(snapshots, cat_id, placeholderImage) {
 
         var html = '';
 
@@ -1062,6 +1071,7 @@
             '">{{ trans('lang.view_all') }}</a></span></div>';
         html = html + '<div class="row">';
 
+        // Loop through each product and build the HTML
         alldata.forEach((listval) => {
 
             var val = listval;
@@ -1079,7 +1089,7 @@
             }
 
             html = html +
-                '<div class="col-md-3 product-list"><div class="list-card position-relative"><div class="list-card-image">';
+                '<div class="mb-4 mb-lg-0 col-md-6 col-lg-3 product-list"><div class="list-card position-relative"><div class="list-card-image">';
 
             if (val.photo) {
                 photo = val.photo;
