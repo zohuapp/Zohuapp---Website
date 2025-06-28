@@ -1,7 +1,8 @@
 @include('auth.default')
 
-<div class="login-page vh-100">
-    <div class="d-flex align-items-center justify-content-center vh-100">
+<div class="login-page">
+    <div class="d-flex align-items-center justify-content-center" style="height: 93vh">
+
         <div class="col-md-6">
             <div class="col-10 mx-auto card p-3">
                 <h3 class="text-dark text-center my-0 mb-3">{{ trans('lang.login') }}</h3>
@@ -67,7 +68,22 @@
             </div>
         </div>
     </div>
+    {{--  --}}
+    <section class="footer-copyright border-top py-3 bg-light">
+        <div class="container d-flex align-items-center">
+            <p class="mb-0">©2025 <a href="/">Zohu</a> . All right reserved</p>
+            <p class="text-dark mb-0 ml-auto d-flex align-items-center">
+                <a href="#" class="d-block">
+                    <img alt="#" src="https://Zohu.siswebapp.com/img/appstore.png" height="40">
+                </a>
+                <a href="#" class="d-block ml-3">
+                    <img alt="#" src="https://Zohu.siswebapp.com/img/playmarket.png" height="40">
+                </a>
+            </p>
+        </div>
+    </section>
 </div>
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="{{ asset('vendor/select2/dist/js/select2.min.js') }}"></script>
