@@ -153,7 +153,7 @@
 
 {{-- mobile resolution menu --}}
 <div class="d-none">
-    <div class="bg-primary p-4 row align-items-center">
+    <div class="bg-primary p-4 d-flex align-items-center">
         <div class="col-4 logo-mobile">
             <a href="{{ route('home') }}" class="mobile-logo brand-wrap">
                 <img alt="#" class="img-fluid" src="{{ asset('img/logo_web.png') }}">

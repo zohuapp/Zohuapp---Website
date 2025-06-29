@@ -247,9 +247,9 @@ a {
     border: none !important;
 }
 
-.slick-dots {
-    bottom: 20px !important;
-}
+/* .slick-dots {
+    top: 60px !important;
+} */
 
 .slick-prev,
 .slick-prev:hover,
@@ -663,9 +663,9 @@ line-height: 24px;
     text-decoration: none !important;
 }
 
-.slick-dots {
+/* .slick-dots {
     bottom: 20px !important;
-}
+} */
 
 
 /* Landing Page */
@@ -1328,6 +1328,7 @@ footer .text-muted {
     padding-bottom: 15px;
     margin-bottom: 15px;
     position: relative;
+    color: #000;
 }
 
 .footer-top .title:before, .footer-top .title:after {
@@ -4434,7 +4435,7 @@ a.restaurant_direction {
     height: 10px;
 }
 
-.slick-dots li button::before {
+/* .slick-dots li button::before {
     opacity: .8;
     color: #fff;
     font-size: 15px;
@@ -4443,12 +4444,12 @@ a.restaurant_direction {
     background: #fff;
     border-radius: 50px;
     content: "";
-}
-.most-selling-section .slick-dots li button::before{background: #000;}
+} */
+/* .most-selling-section .slick-dots li button::before{background: #000;}
 .slick-dots li.slick-active button::before {
     color: #FF6C40 !important;
     background: #FF6C40 !important;
-}
+} */
 
 
 .pac-container {
@@ -6891,7 +6892,7 @@ padding: 30px;}
     .multi-vendore-content #most_sale1 .list-card .list-card-image img{height: auto;}
 
     .ecommerce-content .title h3{font-size: 20px;}
-    .slick-dots {bottom: 0px !important;}
+    .slick-dots {bottom: -50px !important;}
 
     .ltn__banner-item:hover img {
   -ms-transform: scale(1);

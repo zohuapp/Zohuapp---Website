@@ -1504,13 +1504,6 @@
             <?php echo $_COOKIE['section_color']; ?>;
     }
 
-    .slick-dots li.slick-active button::before {
-        color:
-            <?php echo $_COOKIE['section_color']; ?> !important;
-        background:
-            <?php echo $_COOKIE['section_color']; ?> !important;
-    }
-
     .footer-top .title::after,
     .product-list .list-card .list-card-image .discount-price {
         background:
