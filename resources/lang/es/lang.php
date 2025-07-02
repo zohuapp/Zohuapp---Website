@@ -376,6 +376,7 @@ return [
     'driver' => 'Conductor',
     'car_number' => 'Número de auto',
     'coupons_list' => 'Lista de cupones',
+    'coupons' => 'cupones',
     'nothing_found' => 'No se encontró nada',
     'please_try_again' => 'No pudimos encontrar nada que coincida con su solicitud de búsqueda. Inténtelo nuevamente.',
     'coupon_code_copied' => 'Código de cupón copiado',

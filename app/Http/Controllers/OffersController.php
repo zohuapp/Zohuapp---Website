@@ -13,7 +13,7 @@ class OffersController extends Controller
      */
     public function __construct()
     {
-         
+
     }
     /**
      * Show the application dashboard.
@@ -22,6 +22,8 @@ class OffersController extends Controller
      */
     public function index()
     {
-        return view('offers.offers');
+        $offerCards = [];
+
+        return view('offers.offers', compact('offerCards'));
     }
 }

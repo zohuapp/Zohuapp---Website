@@ -160,18 +160,46 @@
             </a>
         </div>
 
-        <div class="col-6 mobile-set-location head-search">
-            <div class="dropdown">
-                <a class="text-dark dropdown-toggle d-flex align-items-center p-0" href="javascript:void(0)"
-                    id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                    <div class="head-loc" onclick="getCurrentLocation('reload')">
-                        <i class="feather-map-pin mr-2 bg-light rounded-pill p-2 icofont-size"></i>
+        <div class="col-6 mobile-set-location text-right head-search">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn text-white" data-toggle="modal" data-target="#modelId">
+                <i class="fa fa-search fa-2x" aria-hidden="true"></i>
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+                aria-hidden="true">
+                <div class="modal-dialog model-dialog-search-input-location" role="document">
+                    <div class="modal-content">
+                        {{-- <div class="modal-header">
+                            <h5 class="modal-title">Modal title</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                        </div> --}}
+                        <div class="modal-body">
+                            <div class="dropdown">
+                                <a class="text-dark dropdown-toggle d-flex align-items-center p-0"
+                                    href="javascript:void(0)" id="navbarDropdown" role="button"
+                                    aria-haspopup="true" aria-expanded="false">
+                                    <div class="head-loc" onclick="getCurrentLocation('reload')">
+                                        <i class="feather-map-pin mr-2 bg-light rounded-pill p-2 icofont-size"></i>
+                                    </div>
+                                    <div>
+                                        <input id="user_locationnew_mobile" type="text" size="50"
+                                            class="pac-target-input">
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        {{-- <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save</button>
+                        </div> --}}
                     </div>
-                    <div>
-                        <input id="user_locationnew_mobile" type="text" size="50" class="pac-target-input">
-                    </div>
-                </a>
+                </div>
             </div>
+
         </div>
 
         <div class="col-2 burger-menu-mobile">

@@ -376,6 +376,7 @@ return [
     'driver' => 'Conductor',
     'car_number' => 'Número de cotxe',
     'coupons_list' => 'Llista de cupons',
+    'coupons' => 'cupons',
     'nothing_found' => 'No s ha trobat res',
     'please_try_again' => 'No hem trobat res que coincideixi amb la vostra sol·licitud de cerca. Torneu-ho a provar.',
     'coupon_code_copied' => 'Codi de cupó copiat',

@@ -376,6 +376,7 @@ return [
     'driver' => 'Driver',
     'car_number' => 'Car Number',
     'coupons_list' => 'Coupons list',
+    'coupons' => 'Coupons',
     'nothing_found' => 'Nothing found',
     'please_try_again' => 'We could not find anything that would match your search request, Please try again.',
     'coupon_code_copied' => 'Coupon code copied',

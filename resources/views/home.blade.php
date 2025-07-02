@@ -631,6 +631,8 @@
     }
 
     async function getCouponsList() {
+        const placeholderImage = await getPlaceholderImage();
+
         var html = '';
         var couponsRef2 = database.collection('coupons').where('isEnabled', '==', true).where('expiresAt', '>=',
             new Date()).limit(3);

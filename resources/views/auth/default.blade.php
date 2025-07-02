@@ -118,9 +118,9 @@
             color:<?php echo $_COOKIE['section_color']; ?>;
         }
 
-        .transactions-banner {
+        /* .transactions-banner {
             background:<?php echo $_COOKIE['section_color']; ?>;
-        }
+        } */
 
         .transactions-list .media-body .app-off-btn a:hover,
         .rating-stars .feather-star.star_active,
