@@ -33,26 +33,32 @@
         </div>
     </div>
 
-    <section class="vendor-offer-section py-5">
+    <section class="vendor-offer-section">
 
-        <div class="container section-content">
-            <div class="row ltn__custom-gutter justify-content-center">
-                <div class="col-lg-6 col-md-6 offer-left">
-                    <div class="ltn__banner-item">
+        <div class="section-content">
+            <div class="ltn__custom-gutter justify-content-center">
+                <div class="offer-left bg-light">
+                    <div class="container ltn__banner-item d-flex justify-content-between align-items-center">
                         <div class="hm-offer-content">
-                            <h3 class="coupon_description_left"></h3>
-                            <span class="offer-price offer-price_left"></span>
-                            <a href="{{ route('productlist.all') }}" class="btn btn-primary remove_hover">Shop Now</a>
+                            <h1 class="coupon_description_left"></h1>
+                            <div class="py-4">
+                                <h3 class="offer-price offer-price_left"></h3>
+
+                            </div>
+                            <div>
+                                <a href="{{ route('productlist.all') }}" class="btn btn-primary remove_hover">Shop
+                                    Now</a>
+                            </div>
                         </div>
-                        <div class="ltn__banner-img  text-right">
-                            <a href="{{ route('productlist.all') }}" class="coupon_image_left"></a>
+                        <div class="ltn__banner-img">
+                            {{-- <a href="{{ route('productlist.all') }}" class="coupon_image_left"></a> --}}
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-6 ">
+                {{-- <div class="col-lg-6 col-md-6 ">
                     <div class="row offer-right" id="offer-right">
                     </div>
-                </div>
+                </div> --}}
             </div>
 
 
@@ -580,7 +586,8 @@
         var view_product = "{{ route('productlist.all') }}";
 
         html = html + '<div class="col-md-3 top-cat-list"><a href="' + view_product +
-            '" class="d-block text-center cat-link rounded border"><span class="cat-img"><img alt="#" src="' + photo +
+            '" class="d-block text-center cat-link rounded border"><span class="cat-img"><img alt="#" src="' +
+            photo +
             '"  onerror="this.onerror=null;this.src=\'' + placeholderImage +
             '\'" class="img-fluid mb-2"></span><h4 class="m-0">Browse All</h4><h6>' + itemCount +
             '</h6></a></div>';
@@ -619,7 +626,8 @@
             var itemCatCount = await getTotalItem(val.id, category_id);
 
             html = html + '<div class="col-md-3 top-cat-list"><a href="' + view_product_details +
-                '" class="d-block text-center cat-link rounded border"><span class="cat-img"><img alt="#" src="' + photo +
+                '" class="d-block text-center cat-link rounded border"><span class="cat-img"><img alt="#" src="' +
+                photo +
                 '"  onerror="this.onerror=null;this.src=\'' + placeholderImage +
                 '\'" class="img-fluid mb-2"></span><h4 class="m-0">' + val.title + '</h4><h6>' + itemCatCount +
                 '</h6></a></div>';
@@ -679,12 +687,15 @@
                     if (index === 0) {
                         $(".coupon_description_left").text(coupon_description);
                         $(".offer-price_left").text(coupon_discount);
-                        $(".coupon_image_left").html('<img src="' + photo + '">');
+                        // $(".coupon_image_left").html('<img src="' + photo + '">');
+                        $(".ltn__banner-img").html('<img class="rounded-circle" src="' + photo +
+                            '">');
                     } else {
                         html = html +
-                            '<div class="col-lg-12"><div class="ltn__banner-item"><div class="ltn__banner-item-inner d-flex align-items-center">';
+                            '<div class="col-lg-12"><div class="ltn__banner-item d-flex justify-content-between align-items-center"><div class="ltn__banner-item-inner d-flex align-items-center">';
                         html = html + '<div class="ltn__banner-img mr-3"><a href="' +
-                            view_product + '"><img src="' + photo + '"></a></div>';
+                            view_product + '"><img class="rounded-circle" src="' + photo +
+                            '"></a></div>';
                         html = html +
                             '<div class="hm-offer-content"><h3 class="coupon_description">' +
                             coupon_description + '</h3><span class="offer-price">' +
@@ -693,8 +704,8 @@
                         html = html + '</div></div></div>';
                     }
                 });
-                coupons_right = document.getElementById('offer-right');
-                coupons_right.innerHTML = html;
+                // coupons_right = document.getElementById('offer-right');
+                // coupons_right.innerHTML = html;
             }
         })
     }
@@ -816,14 +827,16 @@
 
                 html = html +
                     '<div class="member-plan position-absolute"><span class="badge badge-dark open">' +
-                    product_badge + '</span></div><a href="' + view_vendor_details + '"><img alt="#" src="' +
+                    product_badge + '</span></div><a href="' + view_vendor_details +
+                    '"><img alt="#" src="' +
                     photo + '"  onerror="this.onerror=null;this.src=\'' + placeholderImage +
                     '\'" class="img-fluid item-img w-100"></a><div class="product-badge">\n' +
                     '                                                </div></div><div class="py-2 position-relative">' +
                     '<div class="rating-info ml-auto d-flex">';
 
                 html = html + '</div>' +
-                    '<div class="list-card-body"><h6 class="mb-1 popul-title"><a href="' + view_vendor_details +
+                    '<div class="list-card-body"><h6 class="mb-1 popul-title"><a href="' +
+                    view_vendor_details +
                     '" class="text-black">' + val.name + '</a></h6>';
                 html = html + '<h6 class="text-gray mb-1 cat-title" id="popular_food_category_' + val
                     .categoryID + '_' + val.id + '"></h6>';
@@ -842,10 +855,12 @@
                 }
 
                 if (dis_price == 0 || dis_price == null || dis_price == ' ' || dis_price == undefined) {
-                    html = html + '<div class="car-det-price ml-auto"><h6 class="text-gray mb-1">' + or_price +
+                    html = html + '<div class="car-det-price ml-auto"><h6 class="text-gray mb-1">' +
+                        or_price +
                         '</h6>';
                 } else {
-                    html = html + '<div class="car-det-price ml-auto"><h6 class="text-gray mb-1">' + dis_price +
+                    html = html + '<div class="car-det-price ml-auto"><h6 class="text-gray mb-1">' +
+                        dis_price +
                         '  <s>' + or_price + '</s></h6>';
                 }
 

@@ -32,11 +32,11 @@
             <li><a href="{{ url('contact-us') }}"><i class="feather-user mr-2"></i>{{ trans('lang.contact_us') }}</a></li>
 
             <li><a href="{{ url('login') }}"><i class="feather-user mr-2"></i>{{ trans('lang.login') }}</a></li>
-            <li><a href="{{ url('signup') }}"><i class="feather-user mr-2"></i>{{ trans('lang.register') }}</a></li>
+            <li><a href="{{ url('register') }}"><i class="feather-user mr-2"></i>{{ trans('lang.register') }}</a></li>
         @endauth
 
         <li>
-            <p class="web_version"></p>
+            <p class="web_version d-none"></p>
         </li>
 
     </ul>

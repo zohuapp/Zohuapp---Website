@@ -6,8 +6,8 @@
 <div class="siddhi-favorites">
 
     <div class="container  py-5 section-content">
-        <h2 class="font-weight-bold mb-3">{{trans('lang.favorite_products')}}</h2>
-        <div class="text-center py-5 not_found_div d-none"><img src="{{asset('img/no-result.png')}}"></div>
+        <h2 class="font-weight-bold mb-3">{{ trans('lang.favorite_products') }}</h2>
+        <div class="text-center py-5 not_found_div d-none"><img src="{{ asset('img/no-result.png') }}"></div>
         <div class="product-list">
         </div>
 
@@ -16,15 +16,15 @@
 
     <div class="row fu-loadmore-btn section-content ">
         <a class="page-link loadmore-btn" href="javascript:void(0);" id="loadmore" onclick="moreload()" data-dt-idx="0"
-            tabindex="0">{{trans('lang.load_more')}} </a>
+            tabindex="0">{{ trans('lang.load_more') }} </a>
     </div>
- <div class="zone-error m-5 p-5" style="display: none;">
+    <div class="zone-error m-5 p-5" style="display: none;">
         <div class="zone-image text-center">
-            <img src="{{asset('img/zone_logo.png')}}" width="100">
+            <img src="{{ asset('img/zone_logo.png') }}" width="100">
         </div>
         <div class="zone-content text-center text-center font-weight-bold text-danger">
-            <h3 class="title">{{trans('lang.zone_error_title')}}</h3>
-            <h6 class="text">{{trans('lang.zone_error_text')}}</h6>
+            <h3 class="title">{{ trans('lang.zone_error_title') }}</h3>
+            <h6 class="text">{{ trans('lang.zone_error_text') }}</h6>
         </div>
     </div>
 </div>
@@ -37,7 +37,6 @@
 
 
 <script type="text/javascript">
-
     var newdate = new Date();
     var todaydate = new Date(newdate.setHours(23, 59, 59, 999));
     var ref = database.collection('favorite_item').where('user_id', '==', user_uuid);
@@ -56,10 +55,11 @@
     var address_lng = getCookie('address_lng');
     var place_image = '';
     var ref_placeholder_image = database.collection('settings').doc("placeHolderImage");
-    ref_placeholder_image.get().then(async function (snapshots) {
+    ref_placeholder_image.get().then(async function(snapshots) {
         var placeimg = snapshots.data();
         place_image = placeimg.image;
     });
+
     function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
         var R = 6371; // Radius of the earth in km
         var dLat = deg2rad(lat2 - lat1);
@@ -77,16 +77,19 @@
         return deg * (Math.PI / 180);
     }
 
-    $(document).ready(async function () {
-        await vendorRadiusRef.get().then(async function (snapshot) {
+    $(document).ready(async function() {
+        await vendorRadiusRef.get().then(async function(snapshot) {
             var data = snapshot.data();
-            if (data.hasOwnProperty('vendorRadius') && data.vendorRadius != null && data.vendorRadius != '') {
+            if (data.hasOwnProperty('vendorRadius') && data.vendorRadius != null && data
+                .vendorRadius != '') {
                 vendorRadius = data.vendorRadius;
             }
         });
-        if (address_lat != null && address_lat != '' && address_lat != NaN && address_lng != null && address_lng != '' && address_lng != NaN) {
+        if (address_lat != null && address_lat != '' && address_lat != NaN && address_lng != null &&
+            address_lng != '' && address_lng != NaN) {
 
-            var distance = await getDistanceFromLatLonInKm(vendor_lat, vendor_long, address_lat, address_lng);
+            var distance = await getDistanceFromLatLonInKm(vendor_lat, vendor_long, address_lat,
+                address_lng);
 
             if (distance <= vendorRadius) {
                 jQuery("#loadmore").hide();
@@ -94,13 +97,16 @@
                 append_list = document.getElementById('append_list1');
                 append_list.innerHTML = '';
 
-                ref.limit(pagesize).get().then(async function (snapshots) {
+                ref.limit(pagesize).get().then(async function(snapshots) {
+
+                    // get the placeholder image URL
+                    const placeholderImage = await getPlaceholderImage();
 
                     if (snapshots != undefined) {
                         var html = '';
-                        html = buildHTML(snapshots);
+                        html = buildHTML(snapshots, placeholderImage);
                         jQuery("#overlay").hide();
-                        
+
                         if (html != '') {
                             jQuery('.not_found_div').hide();
                             append_list.innerHTML = html;
@@ -137,7 +143,7 @@
     })
 
 
-    function buildHTML(snapshots) {
+    function buildHTML(snapshots, placeholderImage) {
         var html = '';
         var alldata = [];
         var number = [];
@@ -162,19 +168,23 @@
                 const product_name = productName(val.product_id);
             }
 
-            html = html + '<div class="col-md-3 mb-3 product-list check-product-'+ val.product_id +'"><div class="list-card bg-white h-100 rounded overflow-hidden position-relative shadow-sm grid-card">';
+            html = html + '<div class="col-md-3 mb-3 product-list check-product-' + val.product_id +
+                '"><div class="list-card bg-white h-100 rounded overflow-hidden position-relative shadow-sm grid-card">';
 
             html = html + '<div class="list-card-image">';
 
             var fav = [val.user_id, val.product_id];
-            html = html + '<div class="favourite-heart text-danger position-absolute"><a href="javascript:void(0);"  onclick="unFeveroute(`' + fav + '`)"><i class="fa fa-heart" style="color:red"></i></a></div>';
+            html = html +
+                '<div class="favourite-heart text-danger position-absolute"><a href="javascript:void(0);"  onclick="unFeveroute(`' +
+                fav + '`)"><i class="fa fa-heart" style="color:red"></i></a></div>';
 
             html = html + '<a href="#" class="rurl_' + val.product_id + '"></a>';
             html = html + '</div>';
 
             html = html + '<div class="py-2 position-relative">';
 
-            html = html + '<div class="list-card-body"><h6 class="mb-1"><a href="#" class="text-black rtitle_' + val.product_id + '"></a></h6>';
+            html = html + '<div class="list-card-body"><h6 class="mb-1"><a href="#" class="text-black rtitle_' +
+                val.product_id + '"></a></h6>';
 
             html = html + '<span class="text-gray mb-0 pro-price rprice_' + val.product_id + '"></span>';
 
@@ -229,7 +239,8 @@
         var product_price = '';
         var rating = 0;
         var reviewsCount = 0
-        await database.collection('vendor_products').where("id", "==", productID).get().then(async function (snapshotss) {
+        await database.collection('vendor_products').where("id", "==", productID).get().then(async function(
+            snapshotss) {
 
             if (snapshotss.docs[0]) {
 
@@ -241,7 +252,7 @@
                 } else {
                     product_photo = place_image;
                 }
-                product_url = "{{ route('productDetail', ':id')}}";
+                product_url = "{{ route('productDetail', ':id') }}";
                 product_url = product_url.replace(':id', product.id);
                 product.price = parseFloat(product.price);
                 if (currencyAtRight) {
@@ -250,27 +261,32 @@
                     var or_price = currentCurrency + "" + product.price.toFixed(decimal_degits);
                 }
 
-                if (product.hasOwnProperty('discount') && product.discount != '' && product.discount != '0') {
+                if (product.hasOwnProperty('discount') && product.discount != '' && product.discount !=
+                    '0') {
                     product.discountPrice = parseFloat(product.discount);
                     product.discountPrice = (product.price * product.discountPrice) / 100;
                     product.discountPrice = product.price - product.discountPrice;
 
 
                     if (currencyAtRight) {
-                        var dis_price = product.discountPrice.toFixed(decimal_degits) + "" + currentCurrency;
+                        var dis_price = product.discountPrice.toFixed(decimal_degits) + "" +
+                            currentCurrency;
 
                     } else {
-                        var dis_price = currentCurrency + "" + product.discountPrice.toFixed(decimal_degits);
+                        var dis_price = currentCurrency + "" + product.discountPrice.toFixed(
+                            decimal_degits);
                     }
 
-                    jQuery(".rprice_" + productID).html('<span>' + dis_price + '  <s>' + or_price + '</s></span>');
+                    jQuery(".rprice_" + productID).html('<span>' + dis_price + '  <s>' + or_price +
+                        '</s></span>');
 
                 } else {
                     jQuery(".rprice_" + productID).html('<span>' + or_price + '</span>');
                 }
 
 
-                if (product.hasOwnProperty('reviewsSum') && product.reviewsSum != 0 && product.hasOwnProperty('reviewsCount') && product.reviewsCount != 0) {
+                if (product.hasOwnProperty('reviewsSum') && product.reviewsSum != 0 && product
+                    .hasOwnProperty('reviewsCount') && product.reviewsCount != 0) {
                     rating = (product.reviewsSum / product.reviewsCount);
                     rating = Math.round(rating * 10) / 10;
                     reviewsCount = product.reviewsCount;
@@ -279,13 +295,15 @@
                 jQuery(".rtitle_" + productID).html(productName);
                 jQuery(".rtitle_" + productID).attr('href', product_url);
                 jQuery(".rurl_" + productID).attr('href', product_url);
-                jQuery(".rurl_" + productID).html('<img alt="#" src="' + product_photo + '" onerror="this.onerror=null;this.src=\'' + place_image + '\'" class="img-fluid item-img w-100 rimage_' + product.product_id + '">');
+                jQuery(".rurl_" + productID).html('<img alt="#" src="' + product_photo +
+                    '" onerror="this.onerror=null;this.src=\'' + place_image +
+                    '\'" class="img-fluid item-img w-100 rimage_' + product.product_id + '">');
                 jQuery(".rreview_" + productID).append(rating + '(' + reviewsCount + '+)');
 
             } else {
-                
-                $('.check-product-'+productID).remove();
-               
+
+                $('.check-product-' + productID).remove();
+
             }
         });
         return productName;
@@ -296,14 +314,13 @@
         var user_id = data[0];
         var product_id = data[1];
 
-        const doc = await database.collection('favorite_item').where('user_id', '==', user_id).where('product_id', '==', product_id).get();
+        const doc = await database.collection('favorite_item').where('user_id', '==', user_id).where('product_id',
+            '==', product_id).get();
         doc.forEach(element => {
-            element.ref.delete().then(function (result) {
+            element.ref.delete().then(function(result) {
                 window.location.href = '{{ url()->current() }}';
             });
 
         });
     }
-
-
 </script>
