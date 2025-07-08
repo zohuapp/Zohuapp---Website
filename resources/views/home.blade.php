@@ -38,7 +38,7 @@
         <div class="section-content">
             <div class="ltn__custom-gutter justify-content-center">
                 <div class="offer-left bg-light">
-                    <div class="container ltn__banner-item d-flex justify-content-between align-items-center">
+                    <div class="container ltn__banner-item py-2 d-flex justify-content-between align-items-center">
                         <div class="hm-offer-content">
                             <h1 class="coupon_description_left"></h1>
                             <div class="py-4">
